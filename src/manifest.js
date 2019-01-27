@@ -10,10 +10,6 @@ module.exports = {
     '16': 'icons/16.png',
     '128': 'icons/128.png'
   },
-  browser_action: {
-    default_title: 'title',
-    default_popup: 'pages/popup.html'
-  },
   /**
    * @see {@link https://developer.chrome.com/extensions/declare_permissions}
    */
@@ -29,7 +25,6 @@ module.exports = {
       "https://github.com/*"
     ],
     js: [
-      "js/manifest.js",
       "js/vendor.js",
       "js/content.js"
     ]
