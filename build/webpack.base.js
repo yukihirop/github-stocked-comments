@@ -86,7 +86,12 @@ module.exports = {
     }]
   },
   plugins: [
-		new CleanWebpackPlugin(['*'], { root: path.join(rootDir, 'dist') }),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery'
+    }),
+    new CleanWebpackPlugin(['*'], { root: path.join(rootDir, 'dist') }),
     // Customize your extension structure.
     htmlPage('home', 'app', ['vendor', 'tab']),
     htmlPage('popup', 'popup', ['vendor', 'popup']),
