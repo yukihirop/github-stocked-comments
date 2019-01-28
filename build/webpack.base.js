@@ -16,6 +16,7 @@ module.exports = {
     options: resolve('./options'),
     content: resolve('./content'),
     background: resolve('./background'),
+    inject: resolve('./inject')
   },
   output: {
     path: path.join(rootDir, 'dist'),

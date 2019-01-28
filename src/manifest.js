@@ -10,10 +10,18 @@ module.exports = {
     '16': 'icons/16.png',
     '128': 'icons/128.png'
   },
+  background: {
+    scripts: [
+      'js/vendor.js',
+      'js/background.js'
+    ],
+    persistent: false
+  },
   /**
    * @see {@link https://developer.chrome.com/extensions/declare_permissions}
    */
   permissions: [
+    '*://*/*',
     'activeTab',
     'tabs'
   ],
@@ -28,7 +36,7 @@ module.exports = {
     ]
   }],
   manifest_version: 2,
-  content_security_policy: "script-src 'self'; object-src 'self'",
+  content_security_policy: `script-src 'self' ${(process.env.NODE_ENV === 'development') ? '\'unsafe-eval\'' : ''}; object-src 'self'"`,
   web_accessible_resources: [
     'js/content.js'
   ]

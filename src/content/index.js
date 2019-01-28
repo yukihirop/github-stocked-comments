@@ -6,6 +6,7 @@ $(() => {
     let header = new Header()
     header.attachStockedCommentsLink()
     header.loadStyleSheet()
+
     resolve()
   })
 

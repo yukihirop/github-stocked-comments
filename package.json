@@ -14,7 +14,7 @@
   },
   "scripts": {
     "lint": "eslint --ext .js,.vue src",
-    "dev": "webpack --config ./build/webpack.dev.js --hide-modules",
+    "dev": "NODE_ENV=development webpack --config ./build/webpack.dev.js --hide-modules",
     "build": "webpack --config ./build/webpack.prod.js -p --progress  --hide-modules --colors"
   },
   "devDependencies": {
