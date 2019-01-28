@@ -1,15 +1,19 @@
 <template>
   <span>
-    <ul>
-      <li>test</li>
-      <li>test</li>
-      <li>test</li>
-    </ul>
+    <top-title />
+    <explore-container />
   </span>
 </template>
 
 <script>
+import TopTitle from '@/inject/components/TopTitle'
+import ExploreContainer from '@/inject/components/ExploreContainer'
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    TopTitle: TopTitle,
+    ExploreContainer: ExploreContainer
+  }
 }
 </script>
