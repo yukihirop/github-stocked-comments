@@ -4,7 +4,7 @@
     <!-- </textarea></xmp> -->
     <form data-pjax="true" class="col-sm-6 mb-3 mb-sm-0" action="/stars" accept-charset="UTF-8" method="get">
       <input name="utf8" type="hidden" value="&#10003;">
-      <input type="text" name="q" value="" class="form-control col-12" placeholder="Search stars…" aria-label="Search stars…" autocapitalize="off" autocomplete="off">
+      <input type="text" name="q" value="" class="form-control col-12" placeholder="Search comments…" aria-label="Search comments…" autocapitalize="off" autocomplete="off">
     </form>
     <select-details-menu />
   </div>
