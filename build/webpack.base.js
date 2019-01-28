@@ -91,6 +91,13 @@ module.exports = {
       jQuery: 'jquery',
       'window.jQuery': 'jquery'
     }),
+    new CopyWebpackPlugin(
+      [{
+        from: path.join(__dirname, 'src', 'css', '**/*'),
+        to: path.join(__dirname, 'dist'),
+        context: 'css'
+      }]
+    ),
     new CleanWebpackPlugin(['*'], { root: path.join(rootDir, 'dist') }),
     // Customize your extension structure.
     htmlPage('home', 'app', ['vendor', 'tab']),

@@ -19,17 +19,17 @@ module.exports = {
   ],
   content_scripts: [{
     matches: [
-      "https://github.com/",
-      "https://github.com/*"
+      'https://github.com/',
+      'https://github.com/*'
     ],
     js: [
-      "js/vendor.js",
-      "js/content.js"
+      'js/vendor.js',
+      'js/content.js'
     ]
   }],
   manifest_version: 2,
   content_security_policy: "script-src 'self'; object-src 'self'",
   web_accessible_resources: [
-    "js/content.js"
+    'js/content.js'
   ]
 }
