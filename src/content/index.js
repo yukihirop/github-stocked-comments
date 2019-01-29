@@ -1,10 +1,14 @@
 import * as event from '@/content/event'
 import Header from '@/content/github/components/Header'
+import IssueComment from '@/content/github/components/IssueComment'
 
 $(() => {
   const main = new Promise((resolve) => {
     let header = new Header()
+    let comment = new IssueComment()
+
     header.attachStockedCommentsLink()
+    comment.attachStockedCommentsButton()
 
     resolve()
   })

@@ -23,7 +23,8 @@ module.exports = {
   permissions: [
     '*://*/*',
     'activeTab',
-    'tabs'
+    'tabs',
+    'storage'
   ],
   content_scripts: [{
     matches: [
