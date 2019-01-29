@@ -5,12 +5,14 @@ $(() => {
   const main = new Promise((resolve) => {
     let header = new Header()
     header.attachStockedCommentsLink()
-    header.loadStyleSheet()
 
     resolve()
   })
 
   main.then(() => {
     event.addHashChangeListener()
+    event.addBrowserReloadListener()
+    event.addStockedCommentsClickListener()
+    event.addOnLoadListener()
   })
 })
