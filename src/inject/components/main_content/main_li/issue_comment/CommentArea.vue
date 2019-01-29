@@ -4,7 +4,7 @@
       <comment-header />
       <div class="edit-comment-hide">
         <comment-content />
-        <comment-reaction />
+        <repository-info />
       </div>
     </div>
   </div>
@@ -13,14 +13,14 @@
 <script>
 import CommentHeader from '@/inject/components/main_content/main_li/issue_comment/CommentHeader'
 import CommentContent from '@/inject/components/main_content/main_li/issue_comment/CommentContent'
-import CommentReaction from '@/inject/components/main_content/main_li/issue_comment/CommentReaction'
+import RepositoryInfo from '@/inject/components/main_content/main_li/RepositoryInfo'
 
 export default {
   name: 'CommnetArea',
   components: {
     CommentHeader: CommentHeader,
     CommentContent: CommentContent,
-    CommentReaction: CommentReaction
+    RepositoryInfo: RepositoryInfo
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <ul class="filter-list" data-pjax="">
     <li>
       <a href="https://github.com/stars?direction=desc&amp;sort=created" class="filter-item selected" rel="public, li.private">
-        <span class="count">50</span>All stars
+        <span class="count">50</span>All comments
       </a>
     </li>
     <li>
