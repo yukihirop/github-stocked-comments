@@ -1,21 +1,27 @@
 'use strict'
 
-export default class Storage {
-  constructor () {
-    this.storageKey = 'github-stocked-comments'
-    // TODO: change from local to sync.
-    this.remote = chrome.storage.local
-  }
+var storageKey = 'github-stocked-comments'
+// TODO: change from local to sync.
+var remote = chrome.storage.local
 
+export default {
+  storageKey () {
+    return storageKey
+  },
+  onChangeData (callback) {
+    chrome.storage.onChanged.addListener((changes, namespace) => {
+      callback(changes, namespace)
+    })
+  },
   saveCommentMetaData (data) {
     return new Promise((resolve, reject) => {
-      this.remote.get(this.storageKey, (result) => {
+      remote.get(storageKey, (result) => {
         if (chrome.runtime.lastError) {
           reject(chrome.runtime.lastError)
         } else {
           let dataFromStorage = {}
-          if (result[this.storageKey] !== void 0) {
-            dataFromStorage = JSON.parse(result[this.storageKey])
+          if (result[storageKey] !== void 0) {
+            dataFromStorage = JSON.parse(result[storageKey])
           }
           resolve(dataFromStorage)
         }
@@ -23,30 +29,29 @@ export default class Storage {
     }).then((dataFromStorage) => {
       return new Promise((resolve, reject) => {
         Object.assign(dataFromStorage, data)
-        this.remote.set({ [this.storageKey]: JSON.stringify(dataFromStorage) }, () => {
+        remote.set({ [storageKey]: JSON.stringify(dataFromStorage) }, () => {
           if (chrome.runtime.lastError) {
             reject(chrome.runtime.lastError)
           } else {
-            this.remote.get([this.storageKey], (result) => {
+            remote.get([storageKey], (result) => {
               if (chrome.runtime.lastError) {
                 reject(chrome.runtime.lastError)
               } else {
-                resolve(JSON.parse(result[this.storageKey]))
+                resolve(JSON.parse(result[storageKey]))
               }
             })
           }
         })
       })
     })
-  }
-
+  },
   getCommentMetaData () {
     return new Promise((resolve, reject) => {
-      this.remote.get(this.storageKey, (result) => {
+      remote.get(storageKey, (result) => {
         if (chrome.runtime.lastError) {
           reject(chrome.runtime.lastError)
         } else {
-          let dataFromStorage = JSON.parse(result[this.storageKey])
+          let dataFromStorage = JSON.parse(result[storageKey])
           resolve(dataFromStorage)
         }
       })

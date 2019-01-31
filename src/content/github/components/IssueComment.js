@@ -1,6 +1,6 @@
 'use strict'
 
-import Storage from '@/ext/storage.js'
+import storage from '@/ext/storage'
 
 export default class IssueComment {
   constructor () {
@@ -30,10 +30,9 @@ export default class IssueComment {
       let $this = $(event.currentTarget)
 
       let commentData = new IssueCommentData($this)
-      var data = commentData.createStorageData()
+      var saveData = commentData.createStorageData()
 
-      let storage = new Storage()
-      storage.saveCommentMetaData(data).then((data) => {
+      storage.saveCommentMetaData(saveData).then((data) => {
         console.log(data)
       })
     })
@@ -56,12 +55,12 @@ class IssueCommentData {
     let uniqueKey = this.createChromeStorageUniqueKey(...this.params())
     var [copyLinkURLType, copyLinkURL] = this.createCommentCopyLinkURL(...this.params())
     var [apiURLType, apiURL] = this.createCommentAPIURL(...this.params())
-    var [userName, repoName, issueId, type, commentId] = this.params()
+    var [repoUserName, repoName, issueId, type, commentId] = this.params()
 
     return {
       [uniqueKey]: {
-        userName: `${userName}`,
-        repoNmae: `${repoName}`,
+        repoUserName: `${repoUserName}`,
+        repoName: `${repoName}`,
         issueId: `${issueId}`,
         type: `${type}`,
         commentId: `${commentId}`,
@@ -75,33 +74,33 @@ class IssueCommentData {
   }
 
   params () {
-    var [_, userName, repoName] = this.userRepoName.split('/')
+    var [_, repoUserName, repoName] = this.userRepoName.split('/')
     var [_, _, issueId] = this.issueHashNum.split('#')
 
     // type is 「#issue」 or 「#issuecomment」.
     // if type is issue, commentId is useless.
     var [type, commentId] = this.commentAreaHashId.split('-')
 
-    return [userName, repoName, issueId, type, commentId]
+    return [repoUserName, repoName, issueId, type, commentId]
   }
 
-  createChromeStorageUniqueKey (userName, repoName, issueId, type, commentId) {
-    return `${userName}-${repoName}-${issueId}-${type}-${commentId}`
+  createChromeStorageUniqueKey (repoUserName, repoName, issueId, type, commentId) {
+    return `${repoUserName}-${repoName}-${issueId}-${type}-${commentId}`
   }
 
-  createCommentCopyLinkURL (userName, repoName, issueId, type, commentId) {
-    const baseURL = 'https://github.com/'
-    let copyLink = `${baseURL}/${userName}/${repoName}/issues/${issueId}#${type}-${commentId}`
+  createCommentCopyLinkURL (repoUserName, repoName, issueId, type, commentId) {
+    const baseURL = 'https://github.com'
+    let copyLink = `${baseURL}/${repoUserName}/${repoName}/issues/${issueId}#${type}-${commentId}`
     return [type, copyLink]
   }
 
-  createCommentAPIURL (userName, repoName, issueId, type, commentId) {
+  createCommentAPIURL (repoUserName, repoName, issueId, type, commentId) {
     let apiURL
     const baseURL = 'https://api.github.com/repos'
     if (type === 'issuecomment') {
-      apiURL = `${baseURL}/${userName}/${repoName}/issues/comments/${commentId}`
+      apiURL = `${baseURL}/${repoUserName}/${repoName}/issues/comments/${commentId}`
     } else if (type === 'issue') {
-      apiURL = `${baseURL}/${userName}/${repoName}/issues/${issueId}`
+      apiURL = `${baseURL}/${repoUserName}/${repoName}/issues/${issueId}`
     }
     return [type, apiURL]
   }

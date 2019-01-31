@@ -1,20 +1,43 @@
 <template>
   <ul class="repo-list list-style-none js-navigation-container js-active-navigation-container">
     <!-- <li class="py-4 border-bottom public source "><main-list /></li> -->
-    <li class="py-4 public source "><main-li /></li>
-    <li class="py-4 public source "><main-li /></li>
-    <li class="py-4 public source "><main-li /></li>
-    <li class="py-4 public source "><main-li /></li>
+    <!-- <li class="py-4 public source "><main-li /></li> -->
+    <!-- <li class="py-4 public source "><main-li /></li> -->
+    <span v-for="(commentMeta, _) in commentMetaData" :key="commentMeta.id" >
+      <li class="py-4 public source "><main-li :comment-meta="commentMeta" /></li>
+    </span>
   </ul>
 </template>>
 
 <script>
 import MainLi from '@/inject/components/main_content/MainLi'
+import storage from '@/ext/storage'
 
 export default {
   name: 'MainUl',
   components: {
     MainLi: MainLi
+  },
+  data () {
+    return {
+      commentMetaData: this.getDataFromStorage()
+    }
+  },
+  created () {
+    storage.onChangeData((changes, namespace) => {
+      Object.keys(changes).forEach((key) => {
+        if (key === storage.storageKey()) {
+          this.getDataFromStorage()
+        }
+      })
+    })
+  },
+  methods: {
+    getDataFromStorage () {
+      storage.getCommentMetaData().then((data) => {
+        this.commentMetaData = data
+      })
+    }
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <span>
     <div class="js-timeline-item js-timeline-progressive-focus-container">
       <avatar-image :src="src" :userName="userName" />
-      <comment-area :commentObject="issueComment" />
+      <comment-area :commentObject="issue" />
     </div>
   </span>
 </template>
@@ -10,27 +10,27 @@
 <script>
 import AvatarImage from '@/inject/components/main_content/main_li/shared/AvatarImage'
 import CommentArea from '@/inject/components/main_content/main_li/shared/CommentArea'
-import IssueCommentValidator from '@/inject/validators/main_content/main_li/IssueCommentValidator'
+import IssueValidator from '@/inject/validators/main_content/main_li/IssueValidator'
 
 export default {
-  name: 'IssueComment',
+  name: 'Issue',
   components: {
     AvatarImage: AvatarImage,
     CommentArea: CommentArea
   },
   props: {
-    issueComment: {
+    issue: {
       type: Object,
       required: true,
       validator (val) {
-        return IssueCommentValidator.isValid(val)
+        return IssueValidator.isValid(val)
       }
     }
   },
   data () {
     return {
-      src: this.issueComment.postUserAvatarURL,
-      userName: this.issueComment.postUserName
+      src: this.issue.postUserAvatarURL,
+      userName: this.issue.postUserName
     }
   }
 }
