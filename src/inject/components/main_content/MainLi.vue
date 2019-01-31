@@ -18,6 +18,10 @@ export default {
     IssueComment: IssueComment
   },
   props: {
+    id: {
+      type: String,
+      required: true
+    },
     commentMeta: {
       type: Object,
       required: true,
@@ -41,7 +45,7 @@ export default {
   },
   methods: {
     initialize () {
-      this.api = new MainLi(this.commentMeta)
+      this.api = new MainLi(this.id, this.commentMeta)
       if (this.api.isIssue()) {
         this.isIssue = true
         this.issue = this.api.issue()

@@ -1,42 +1,73 @@
 'use strict'
 
-import Octokit from '@octokit/rest'
+import Base from '@/inject/apis/main_content/main_li/Base'
+import storage from '@/ext/storage'
 
-export default class Issue {
-  constructor (issueMeta) {
-    this.repoUserName = issueMeta.repoUserName
-    this.repoName = issueMeta.repoName
-    this.issueId = issueMeta.issueId
-    this.type = issueMeta.type
-    this.commentId = issueMeta.commentId
-    this.copyLinkURL = issueMeta.copyLinkURL
-    this.apiURL = issueMeta.apiURL
-    this.octokit = new Octokit()
-  }
-
-  // https://medium.com/datafire-io/es6-promises-patterns-and-anti-patterns-bbb21a5d0918
-  fetchData (callback) {
+export default class Issue extends Base {
+  // private
+  fetchDataFromGitHub (callback) {
     this.octokit.issues.get({
       owner: `${this.repoUserName}`,
       repo: `${this.repoName}`,
       number: `${Number(this.issueId)}`
     })
       .then((issueData) => {
-        this.postUserIssue = new PostUserIssue(issueData)
-        let postUserIssue = this.postUserIssue
-
-        this.postUserName = postUserIssue.userName
-        this.postUserAvatarURL = postUserIssue.avatarURL
-        this.postUserUserURL = postUserIssue.userURL
-        this.body = postUserIssue.body
-        this.createdAt = postUserIssue.createdAt
-        this.updatedAt = postUserIssue.updatedAt
+        this.setProperties(issueData, () => {
+          storage.updateCommentData(this.id, this.data())
+        })
 
         setTimeout(_ => callback(null, true))
       })
       .catch((error) => {
         setTimeout(_ => callback(error))
       })
+  }
+
+  // private
+  setProperties (issueData, callback = () => {}) {
+    this.postUserIssue = new PostUserIssue(issueData)
+    let postUserIssue = this.postUserIssue
+
+    this.postUserName = postUserIssue.userName
+    this.postUserAvatarURL = postUserIssue.avatarURL
+    this.postUserUserURL = postUserIssue.userURL
+    this.body = postUserIssue.body
+    this.createdAt = postUserIssue.createdAt
+    this.updatedAt = postUserIssue.updatedAt
+
+    callback()
+  }
+
+  // private
+  data () {
+    let error = new Error('postUserIssue should not be null')
+    if (!this.postUserIssue) throw error
+    return {
+      repoUserName: `${this.repoUserName}`,
+      repoName: `${this.repoName}`,
+      issueId: `${this.issueId}`,
+      type: `${this.type}`,
+      commentId: `${this.commentId}`,
+      copyLinkURL: `${this.copyLinkURL}`,
+      apiURL: `${this.apiURL}`,
+      reactions: [],
+      tags: [],
+      memo: '',
+      cache: true,
+      data: {
+        title: `${this.postUserIssue.title}`,
+        body: `${this.postUserIssue.body}`,
+        created_at: `${this.postUserIssue.createdAt}`,
+        updated_at: `${this.postUserIssue.updatedAt}`,
+        user: {
+          login: `${this.postUserIssue.userName}`,
+          avatar_url: `${this.postUserIssue.avatarURL}`,
+          gravatar_id: `${this.postUserIssue.gravatarId}`,
+          url: `${this.postUserIssue.userURL}`,
+          site_admin: `${this.postUserIssue.siteAdmin}`
+        }
+      }
+    }
   }
 }
 

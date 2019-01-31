@@ -56,5 +56,37 @@ export default {
         }
       })
     })
+  },
+  updateCommentData (id, data) {
+    return new Promise((resolve, reject) => {
+      remote.get(storageKey, (result) => {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError)
+        } else {
+          let dataFromStorage = {}
+          if (result[storageKey] !== void 0) {
+            dataFromStorage = JSON.parse(result[storageKey])
+          }
+          resolve(dataFromStorage)
+        }
+      })
+    }).then((dataFromStorage) => {
+      return new Promise((resolve, reject) => {
+        dataFromStorage[id] = data
+        remote.set({ [storageKey]: JSON.stringify(dataFromStorage) }, () => {
+          if (chrome.runtime.lastError) {
+            reject(chrome.runtime.lastError)
+          } else {
+            remote.get([storageKey], (result) => {
+              if (chrome.runtime.lastError) {
+                reject(chrome.runtime.lastError)
+              } else {
+                resolve(JSON.parse(result[storageKey]))
+              }
+            })
+          }
+        })
+      })
+    })
   }
 }

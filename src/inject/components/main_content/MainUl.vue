@@ -3,8 +3,8 @@
     <!-- <li class="py-4 border-bottom public source "><main-list /></li> -->
     <!-- <li class="py-4 public source "><main-li /></li> -->
     <!-- <li class="py-4 public source "><main-li /></li> -->
-    <span v-for="(commentMeta, _) in commentMetaData" :key="commentMeta.id" >
-      <li class="py-4 public source "><main-li :comment-meta="commentMeta" /></li>
+    <span v-for="(commentMeta, id) in commentMetaData" :key="commentMeta.id" >
+      <li class="py-4 public source "><main-li :id="id" :comment-meta="commentMeta" /></li>
     </span>
   </ul>
 </template>>

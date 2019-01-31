@@ -68,7 +68,21 @@ class IssueCommentData {
         apiURL: `${apiURL}`,
         reactions: [],
         tags: [],
-        memo: ''
+        memo: '',
+        cache: false,
+        data: {
+          title: '',
+          body: '',
+          created_at: '',
+          updated_at: '',
+          user: {
+            login: '',
+            avatar_url: '',
+            gravatar_id: '',
+            url: '',
+            site_admin: ''
+          }
+        }
       }
     }
   }
