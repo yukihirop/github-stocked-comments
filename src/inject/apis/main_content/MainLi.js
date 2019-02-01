@@ -2,28 +2,34 @@
 
 import Issue from '@/inject/apis/main_content/main_li/Issue'
 import IssueComment from '@/inject/apis/main_content/main_li/IssueComment'
+import storage from '@/ext/storage'
 
 export default class MainLi {
+  fetchCommentData (callback) {
+    storage.fetchCommentData()
+      .then((dataFromStorage) => {
+        let payload = {}
+        Object.keys(dataFromStorage).forEach((id) => {
+          let data = dataFromStorage[id]
+          let factory = new Factory(id, data)
+          factory.setProperties()
+
+          payload[id] = factory
+        })
+        setTimeout(_ => callback(null, payload))
+      })
+      .catch((error) => {
+        setTimeout(_ => callback(error))
+      })
+  }
+}
+
+class Factory {
   constructor (id, data) {
-    this.id = id
-    this.data = data
-  }
-
-  issue () {
-    return new Issue(this.id, this.data)
-  }
-
-  issueComment () {
-    return new IssueComment(this.id, this.data)
-  }
-
-  isIssue () {
-    console.log('MainLi#isIssue')
-    console.log(this.data)
-    return this.data.type === 'issue'
-  }
-
-  isIssueComment () {
-    return this.data.type === 'issuecomment'
+    if (data.type === 'issue') {
+      return new Issue(id, data)
+    } else if (data.type === 'issuecomment') {
+      return new IssueComment(id, data)
+    }
   }
 }

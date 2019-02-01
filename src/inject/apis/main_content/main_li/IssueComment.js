@@ -3,9 +3,8 @@
 import Base from '@/inject/apis/main_content/main_li/Base'
 
 export default class IssueComment extends Base {
-  // private
-  setProperties (commentData, callback = () => {}) {
-    this.postUserComment = new PostUserComment(commentData)
+  setProperties () {
+    this.postUserComment = new PostUserComment(this.data)
     let postUserComment = this.postUserComment
 
     this.postUserName = postUserComment.userName
@@ -14,8 +13,6 @@ export default class IssueComment extends Base {
     this.body = postUserComment.body
     this.createdAt = postUserComment.createdAt
     this.updatedAt = postUserComment.updatedAt
-
-    callback()
   }
 }
 

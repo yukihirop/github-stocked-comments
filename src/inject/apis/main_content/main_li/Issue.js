@@ -3,9 +3,8 @@
 import Base from '@/inject/apis/main_content/main_li/Base'
 
 export default class Issue extends Base {
-  // private
-  setProperties (issueData, callback = () => {}) {
-    this.postUserIssue = new PostUserIssue(issueData)
+  setProperties () {
+    this.postUserIssue = new PostUserIssue(this.data)
     let postUserIssue = this.postUserIssue
 
     this.postUserName = postUserIssue.userName
@@ -14,8 +13,6 @@ export default class Issue extends Base {
     this.body = postUserIssue.body
     this.createdAt = postUserIssue.createdAt
     this.updatedAt = postUserIssue.updatedAt
-
-    callback()
   }
 }
 
