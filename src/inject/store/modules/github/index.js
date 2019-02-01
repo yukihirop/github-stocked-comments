@@ -4,7 +4,7 @@ import MainLi from '@/inject/apis/main_content/MainLi'
 const namespaced = true
 
 const state = {
-  commentData: {},
+  commentData: [],
   loading: false
 }
 

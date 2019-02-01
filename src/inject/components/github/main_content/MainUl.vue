@@ -1,7 +1,7 @@
 <template>
   <span v-if="loading">
     <ul class="repo-list list-style-none js-navigation-container js-active-navigation-container">
-      <span v-for="(data, id) in commentData" :key="data.id" >
+      <span v-for="(data, _) in commentData" :key="data.id" >
         <li class="py-4 public source "><main-li :comment-data="data" /></li>
       </span>
     </ul>

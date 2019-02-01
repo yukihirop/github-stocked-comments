@@ -8,13 +8,14 @@ export default class MainLi {
   fetchCommentData (callback) {
     storage.fetchCommentData()
       .then((dataFromStorage) => {
-        let payload = {}
+        let payload = []
         Object.keys(dataFromStorage).forEach((id) => {
           let data = dataFromStorage[id]
           let factory = new Factory(id, data)
           factory.setProperties()
 
-          payload[id] = factory
+          let json = JSON.parse(JSON.stringify(factory))
+          payload.push(json)
         })
         setTimeout(_ => callback(null, payload))
       })
@@ -24,6 +25,7 @@ export default class MainLi {
   }
 }
 
+// private
 class Factory {
   constructor (id, data) {
     if (data.type === 'issue') {
