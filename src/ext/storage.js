@@ -13,7 +13,7 @@ export default {
       callback(changes, namespace)
     })
   },
-  saveCommentMetaData (data) {
+  saveCommentData (data) {
     return new Promise((resolve, reject) => {
       remote.get(storageKey, (result) => {
         if (chrome.runtime.lastError) {
@@ -45,7 +45,7 @@ export default {
       })
     })
   },
-  getCommentMetaData () {
+  fetchCommentData () {
     return new Promise((resolve, reject) => {
       remote.get(storageKey, (result) => {
         if (chrome.runtime.lastError) {

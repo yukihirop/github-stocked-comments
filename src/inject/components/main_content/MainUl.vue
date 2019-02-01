@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     getDataFromStorage () {
-      storage.getCommentMetaData().then((data) => {
+      storage.fetchCommentData().then((data) => {
         this.commentMetaData = data
       })
     }

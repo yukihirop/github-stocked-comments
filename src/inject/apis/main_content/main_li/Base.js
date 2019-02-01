@@ -28,7 +28,7 @@ export default class Base {
   // private
   // https://medium.com/datafire-io/es6-promises-patterns-and-anti-patterns-bbb21a5d0918
   fetchDataFromStorage (callback) {
-    storage.getCommentMetaData()
+    storage.fetchCommentData()
       .then((data) => {
         let commentMetaData = data[this.id]
         this.setProperties(commentMetaData)

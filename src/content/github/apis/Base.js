@@ -19,7 +19,7 @@ export default class Base {
         let data = {}
         data[this.id] = issueData
         data[this.id]['type'] = this.type
-        storage.saveCommentMetaData(data).then((data) => {
+        storage.saveCommentData(data).then((data) => {
           console.log(data)
         })
 
