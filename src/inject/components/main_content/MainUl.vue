@@ -3,8 +3,8 @@
     <!-- <li class="py-4 border-bottom public source "><main-list /></li> -->
     <!-- <li class="py-4 public source "><main-li /></li> -->
     <!-- <li class="py-4 public source "><main-li /></li> -->
-    <span v-for="(commentMeta, id) in commentMetaData" :key="commentMeta.id" >
-      <li class="py-4 public source "><main-li :id="id" :comment-meta="commentMeta" /></li>
+    <span v-for="(data, id) in commentData" :key="data.id" >
+      <li class="py-4 public source "><main-li :id="id" :comment-data="data" /></li>
     </span>
   </ul>
 </template>>
@@ -20,22 +20,22 @@ export default {
   },
   data () {
     return {
-      commentMetaData: this.getDataFromStorage()
+      commentData: this.fetchDataFromStorage()
     }
   },
   created () {
     storage.onChangeData((changes, namespace) => {
       Object.keys(changes).forEach((key) => {
         if (key === storage.storageKey()) {
-          this.getDataFromStorage()
+          this.fetchDataFromStorage()
         }
       })
     })
   },
   methods: {
-    getDataFromStorage () {
+    fetchDataFromStorage () {
       storage.fetchCommentData().then((data) => {
-        this.commentMetaData = data
+        this.commentData = data
       })
     }
   }

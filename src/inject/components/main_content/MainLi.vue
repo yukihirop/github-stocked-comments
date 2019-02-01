@@ -8,7 +8,7 @@
 <script>
 import Issue from '@/inject/components/main_content/main_li/Issue'
 import IssueComment from '@/inject/components/main_content/main_li/IssueComment'
-import CommentMetaValidator from '@/inject/validators/main_content/CommentMetaValidator'
+import CommentDataValidator from '@/inject/validators/main_content/CommentDataValidator'
 import MainLi from '@/inject/apis/main_content/MainLi'
 
 export default {
@@ -22,11 +22,11 @@ export default {
       type: String,
       required: true
     },
-    commentMeta: {
+    commentData: {
       type: Object,
       required: true,
       validator (val) {
-        return CommentMetaValidator.isValid(val)
+        return CommentDataValidator.isValid(val)
       }
     }
   },
@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     initialize () {
-      this.api = new MainLi(this.id, this.commentMeta)
+      this.api = new MainLi(this.id, this.commentData)
       if (this.api.isIssue()) {
         this.isIssue = true
         this.issue = this.api.issue()
