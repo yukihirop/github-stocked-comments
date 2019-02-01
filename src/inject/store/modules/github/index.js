@@ -5,6 +5,7 @@ const namespaced = true
 
 const state = {
   commentData: [],
+  currentCommentData: [],
   loading: false
 }
 
@@ -27,6 +28,7 @@ const actions = {
 const mutations = {
   [types.FETCH_COMMENT_DATA] (state, payload) {
     state.commentData = payload
+    state.currentCommentData = payload
     state.loading = true
   }
 }

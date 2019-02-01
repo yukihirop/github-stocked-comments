@@ -1,7 +1,7 @@
 <template>
   <span v-if="loading">
     <ul class="repo-list list-style-none js-navigation-container js-active-navigation-container">
-      <span v-for="(data, _) in commentData" :key="data.id" >
+      <span v-for="(data, _) in currentCommentData" :key="data.id" >
         <li class="py-4 public source "><main-li :comment-data="data" /></li>
       </span>
     </ul>
@@ -11,7 +11,7 @@
 <script>
 import MainLi from '@/inject/components/github/main_content/MainLi'
 import storage from '@/ext/storage'
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'MainUl',
@@ -19,12 +19,9 @@ export default {
     MainLi: MainLi
   },
   computed: {
-    ...mapState('githubModule', [
+    ...mapState([
       'loading',
-      'commentData'
-    ]),
-    ...mapGetters('githubModule', [
-      'allCommentData'
+      'currentCommentData'
     ])
   },
   created () {
@@ -38,7 +35,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions('githubModule', [
+    ...mapActions([
       'fetchDataFromStorage'
     ])
   }

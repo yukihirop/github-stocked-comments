@@ -1,14 +1,24 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import githubModule from '@/inject/store/modules/github'
+
+import * as getters from './getters'
+import actions from './actions'
+import mutations from './mutations'
 
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
 
+const initialState = {
+  commentData: [],
+  currentCommentData: [],
+  loading: false
+}
+
 export default new Vuex.Store({
   strct: debug,
-  modules: {
-    githubModule
-  }
+  state: initialState,
+  getters,
+  actions,
+  mutations
 })
