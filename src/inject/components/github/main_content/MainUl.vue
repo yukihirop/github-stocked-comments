@@ -12,16 +12,20 @@
 <script>
 import MainLi from '@/inject/components/github/main_content/MainLi'
 import storage from '@/ext/storage'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'MainUl',
   components: {
     MainLi: MainLi
   },
-  data () {
-    return {
-      commentData: this.fetchDataFromStorage()
-    }
+  computed: {
+    ...mapState('githubModule', [
+      'commentData'
+    ]),
+    ...mapGetters('githubModule', [
+      'allCommentData'
+    ])
   },
   created () {
     storage.onChangeData((changes, namespace) => {
@@ -31,13 +35,12 @@ export default {
         }
       })
     })
+    this.fetchDataFromStorage()
   },
   methods: {
-    fetchDataFromStorage () {
-      storage.fetchCommentData().then((data) => {
-        this.commentData = data
-      })
-    }
+    ...mapActions('githubModule', [
+      'fetchDataFromStorage'
+    ])
   }
 }
 </script>

@@ -1,0 +1,1 @@
+export const FETCH_COMMENT_DATA = 'FETCH_COMMENT_DATA'
