@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import SelectDetailsMenu from '@/inject/components/main_content/SelectDetailsMenu'
+import SelectDetailsMenu from '@/inject/components/github/main_content/SelectDetailsMenu'
 
 export default {
   name: 'SearchForm',

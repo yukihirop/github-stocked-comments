@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import AvatarImage from '@/inject/components/main_content/main_li/shared/AvatarImage'
-import CommentArea from '@/inject/components/main_content/main_li/shared/CommentArea'
+import AvatarImage from '@/inject/components/github/main_content/main_li/shared/AvatarImage'
+import CommentArea from '@/inject/components/github/main_content/main_li/shared/CommentArea'
 import IssueValidator from '@/inject/validators/main_content/main_li/IssueValidator'
 
 export default {

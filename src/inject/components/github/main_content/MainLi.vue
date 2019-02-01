@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import Issue from '@/inject/components/main_content/main_li/Issue'
-import IssueComment from '@/inject/components/main_content/main_li/IssueComment'
+import Issue from '@/inject/components/github/main_content/main_li/Issue'
+import IssueComment from '@/inject/components/github/main_content/main_li/IssueComment'
 import CommentDataValidator from '@/inject/validators/main_content/CommentDataValidator'
 import MainLi from '@/inject/apis/main_content/MainLi'
 

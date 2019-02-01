@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import FilterList from '@/inject/components/sidebar_content/FilterList'
-import FilterListByLanguages from '@/inject/components/sidebar_content/FilterListByLanguages'
-import JumpToaFriend from '@/inject/components/sidebar_content/JumpToaFriend'
+import FilterList from '@/inject/components/github/sidebar_content/FilterList'
+import FilterListByLanguages from '@/inject/components/github/sidebar_content/FilterListByLanguages'
+import JumpToaFriend from '@/inject/components/github/sidebar_content/JumpToaFriend'
 
 export default {
   name: 'SidebarContent',

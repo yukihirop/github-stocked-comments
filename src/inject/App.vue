@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import TopTitle from '@/inject/components/TopTitle'
-import ExploreContainer from '@/inject/components/ExploreContainer'
+import TopTitle from '@/inject/components/github/TopTitle'
+import ExploreContainer from '@/inject/components/github/ExploreContainer'
 
 export default {
   name: 'App',

@@ -10,7 +10,7 @@
 </template>>
 
 <script>
-import MainLi from '@/inject/components/main_content/MainLi'
+import MainLi from '@/inject/components/github/main_content/MainLi'
 import storage from '@/ext/storage'
 
 export default {

@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import MainContent from '@/inject/components/MainContent'
-import SidebarContent from '@/inject/components/SidebarContent'
+import MainContent from '@/inject/components/github/MainContent'
+import SidebarContent from '@/inject/components/github/SidebarContent'
 
 export default {
   name: 'ExploreContainar',

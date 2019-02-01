@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import CommentHeader from '@/inject/components/main_content/main_li/shared/CommentHeader'
-import CommentContent from '@/inject/components/main_content/main_li/shared/CommentContent'
+import CommentHeader from '@/inject/components/github/main_content/main_li/shared/CommentHeader'
+import CommentContent from '@/inject/components/github/main_content/main_li/shared/CommentContent'
 
 export default {
   name: 'CommnetArea',

@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import SearchForm from '@/inject/components/main_content/SearchForm'
-import MainUl from '@/inject/components/main_content/MainUl'
+import SearchForm from '@/inject/components/github/main_content/SearchForm'
+import MainUl from '@/inject/components/github/main_content/MainUl'
 
 export default {
   name: 'MainContent',
