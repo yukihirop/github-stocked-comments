@@ -4,24 +4,26 @@ import Issue from '@/inject/apis/main_content/main_li/Issue'
 import IssueComment from '@/inject/apis/main_content/main_li/IssueComment'
 
 export default class MainLi {
-  constructor (id, metaData) {
+  constructor (id, data) {
     this.id = id
-    this.metaData = metaData
+    this.data = data
   }
 
   issue () {
-    return new Issue(this.id, this.metaData)
+    return new Issue(this.id, this.data)
   }
 
   issueComment () {
-    return new IssueComment(this.id, this.metaData)
+    return new IssueComment(this.id, this.data)
   }
 
   isIssue () {
-    return this.metaData.type === 'issue'
+    console.log('MainLi#isIssue')
+    console.log(this.data)
+    return this.data.type === 'issue'
   }
 
   isIssueComment () {
-    return this.metaData.type === 'issuecomment'
+    return this.data.type === 'issuecomment'
   }
 }
