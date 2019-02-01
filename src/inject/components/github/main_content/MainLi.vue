@@ -1,15 +1,11 @@
 <template>
-  <span v-if="loading">
-    <issue v-if="isIssue" :issue="issue" />
-    <issue-comment v-else-if="isIssueComment" :issue-comment="issueComment" />
-  </span>
+  <issue v-if="isIssue" :issue="commentData" />
+  <issue-comment v-else-if="isIssueComment" :issue-comment="commentData" />
 </template>
 
 <script>
 import Issue from '@/inject/components/github/main_content/main_li/Issue'
 import IssueComment from '@/inject/components/github/main_content/main_li/IssueComment'
-import CommentDataValidator from '@/inject/validators/main_content/CommentDataValidator'
-import MainLi from '@/inject/apis/main_content/MainLi'
 
 export default {
   name: 'MainLi',
@@ -18,49 +14,15 @@ export default {
     IssueComment: IssueComment
   },
   props: {
-    id: {
-      type: String,
-      required: true
-    },
     commentData: {
       type: Object,
-      required: true,
-      validator (val) {
-        return CommentDataValidator.isValid(val)
-      }
+      required: true
     }
   },
   data () {
     return {
-      api: null,
-      issue: null,
-      issueComment: null,
-      isIssue: false,
-      isIssueComment: false,
-      loading: false
-    }
-  },
-  created () {
-    this.initialize()
-  },
-  methods: {
-    initialize () {
-      this.api = new MainLi(this.id, this.commentData)
-      if (this.api.isIssue()) {
-        this.isIssue = true
-        this.issue = this.api.issue()
-        this.issue.fetchData((error, loading) => {
-          if (error) throw error
-          this.loading = loading
-        })
-      } else if (this.api.isIssueComment()) {
-        this.isIssueComment = true
-        this.issueComment = this.api.issueComment()
-        this.issueComment.fetchData((error, loading) => {
-          if (error) throw error
-          this.loading = loading
-        })
-      }
+      isIssue: this.commentData.type === 'issue',
+      isIssueComment: this.commentData.type === 'issuecomment'
     }
   }
 }

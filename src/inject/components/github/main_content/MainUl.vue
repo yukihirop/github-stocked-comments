@@ -1,12 +1,11 @@
 <template>
-  <ul class="repo-list list-style-none js-navigation-container js-active-navigation-container">
-    <!-- <li class="py-4 border-bottom public source "><main-list /></li> -->
-    <!-- <li class="py-4 public source "><main-li /></li> -->
-    <!-- <li class="py-4 public source "><main-li /></li> -->
-    <span v-for="(data, id) in commentData" :key="data.id" >
-      <li class="py-4 public source "><main-li :id="id" :comment-data="data" /></li>
-    </span>
-  </ul>
+  <span v-if="loading">
+    <ul class="repo-list list-style-none js-navigation-container js-active-navigation-container">
+      <span v-for="(data, id) in commentData" :key="data.id" >
+        <li class="py-4 public source "><main-li :comment-data="data" /></li>
+      </span>
+    </ul>
+  </span>
 </template>>
 
 <script>
@@ -21,6 +20,7 @@ export default {
   },
   computed: {
     ...mapState('githubModule', [
+      'loading',
       'commentData'
     ]),
     ...mapGetters('githubModule', [
@@ -28,6 +28,7 @@ export default {
     ])
   },
   created () {
+    this.fetchDataFromStorage()
     storage.onChangeData((changes, namespace) => {
       Object.keys(changes).forEach((key) => {
         if (key === storage.storageKey()) {
@@ -35,7 +36,6 @@ export default {
         }
       })
     })
-    this.fetchDataFromStorage()
   },
   methods: {
     ...mapActions('githubModule', [

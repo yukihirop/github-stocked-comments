@@ -1,10 +1,11 @@
 import * as types from './mutation-types'
-import storage from '@/ext/storage'
+import MainLi from '@/inject/apis/main_content/MainLi'
 
 const namespaced = true
 
 const state = {
-  commentData: {}
+  commentData: {},
+  loading: false
 }
 
 const getters = {
@@ -15,8 +16,10 @@ const getters = {
 
 const actions = {
   fetchDataFromStorage ({ commit }) {
-    storage.fetchCommentData().then((data) => {
-      commit(types.FETCH_COMMENT_DATA, data)
+    let api = new MainLi()
+    api.fetchCommentData((error, payload) => {
+      if (error) throw error
+      commit(types.FETCH_COMMENT_DATA, payload)
     })
   }
 }
@@ -24,6 +27,7 @@ const actions = {
 const mutations = {
   [types.FETCH_COMMENT_DATA] (state, payload) {
     state.commentData = payload
+    state.loading = true
   }
 }
 
