@@ -3,8 +3,7 @@
     <!-- '"` -->
     <!-- </textarea></xmp> -->
     <form data-pjax="true" class="col-sm-6 mb-3 mb-sm-0" accept-charset="UTF-8">
-      <input name="utf8" type="hidden" value="&#10003;">
-      <input type="text" @keyup="searchTimeOut" class="form-control col-12" placeholder="Search comments…" aria-label="Search comments…" autocapitalize="off" autocomplete="off">
+      <input type="text" name="searchForm" @keyup="searchTimeOut" class="form-control col-12" placeholder="Search comments…" aria-label="Search comments…" autocapitalize="off" autocomplete="off">
     </form>
     <select-details-menu />
   </div>
@@ -13,6 +12,7 @@
 <script>
 import SelectDetailsMenu from '@/inject/components/github/main_content/SelectDetailsMenu'
 import { mapActions } from 'vuex'
+import Mark from 'mark.js'
 
 // https://forum.vuejs.org/t/delay-keyup/31487/2
 let timeout = null
@@ -35,9 +35,25 @@ export default {
       this.searchText = e.target.value
       clearTimeout(timeout)
 
-      timeout = setTimeout(() => {
-        this.searchCommentData(this.searchText)
-      }, 300)
+      // eslint-disable-next-line no-new
+      new Promise(resolve => {
+        timeout = setTimeout(() => {
+          this.searchCommentData(this.searchText)
+          this.textHighlight(this.searchText)
+          resolve()
+        }, 200)
+      })
+    },
+    textHighlight (keyword) {
+      var context = document.querySelectorAll('.githubStockedCommentsMainContent')
+      var instance = new Mark(context)
+      var options = {
+        separateWorldSearch: true,
+        diacritics: true
+      }
+
+      instance.unmark(options)
+      instance.mark(keyword, options)
     }
   }
 }

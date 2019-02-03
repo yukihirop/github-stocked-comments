@@ -13,7 +13,6 @@ export default {
   },
   searchCommentData ({ commit, state }, text) {
     let data = state.commentData.filter(comment => {
-      console.log(comment.body.toLowerCase())
       return comment.body.toLowerCase().includes(text.toLowerCase())
     })
     commit(types.SEARCH_COMMENT_DATA, data)

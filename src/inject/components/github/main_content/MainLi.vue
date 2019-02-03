@@ -1,6 +1,8 @@
 <template>
-  <issue v-if="isIssue" :issue="commentData" />
-  <issue-comment v-else-if="isIssueComment" :issue-comment="commentData" />
+  <span class="githubStockedCommentsMainContent">
+    <issue v-if="isIssue" :issue="commentData" />
+    <issue-comment v-else-if="isIssueComment" :issue-comment="commentData" />
+  </span>
 </template>
 
 <script>
