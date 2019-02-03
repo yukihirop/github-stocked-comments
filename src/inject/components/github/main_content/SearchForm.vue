@@ -1,8 +1,6 @@
 <template>
   <div class="d-sm-flex flex-justify-between border-bottom pb-3 pb-sm-5">
-    <!-- '"` -->
-    <!-- </textarea></xmp> -->
-    <form data-pjax="true" class="col-sm-6 mb-3 mb-sm-0" accept-charset="UTF-8">
+    <form class="col-sm-6 mb-3 mb-sm-0" accept-charset="UTF-8">
       <input type="text" name="searchForm" @keyup="searchTimeOut" class="form-control col-12" placeholder="Search comments…" aria-label="Search comments…" autocapitalize="off" autocomplete="off">
     </form>
     <select-details-menu />
@@ -35,14 +33,12 @@ export default {
       this.searchText = e.target.value
       clearTimeout(timeout)
 
-      // eslint-disable-next-line no-new
-      new Promise(resolve => {
-        timeout = setTimeout(() => {
-          this.searchCommentData(this.searchText)
+      timeout = setTimeout(() => {
+        this.searchCommentData(this.searchText)
+        this.$nextTick(() => {
           this.textHighlight(this.searchText)
-          resolve()
-        }, 200)
-      })
+        })
+      }, 300)
     },
     textHighlight (keyword) {
       var context = document.querySelectorAll('.githubStockedCommentsMainContent')
