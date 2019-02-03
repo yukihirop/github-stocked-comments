@@ -1,7 +1,7 @@
 <template>
   <div class="d-sm-flex flex-justify-between border-bottom pb-3 pb-sm-5">
     <form class="col-sm-6 mb-3 mb-sm-0" accept-charset="UTF-8">
-      <input type="text" name="searchForm" @keyup="searchTimeOut" class="form-control col-12" placeholder="Search comments…" aria-label="Search comments…" autocapitalize="off" autocomplete="off">
+      <input type="text" name="searchForm" @keyup="searchTimeOut" @keydown.self.prevent.enter class="form-control col-12" placeholder="Search comments…" aria-label="Search comments…">
     </form>
     <select-details-menu />
   </div>

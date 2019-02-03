@@ -9,42 +9,36 @@ export var createPaginatePlugin = (pager) => {
       let canPrevPage = state.canPrevPage
       let canNextPage = state.canNextPage
 
-      if (isFetchOrSearch(mutation)) {
-        data = pager.resetPage(state.commentData)
-        canPrevPage = pager.hasPrev()
-        canNextPage = pager.hasNext()
+      switch (mutation.type) {
+        case types.FETCH_COMMENT_DATA:
+          data = pager.resetPage(state.commentData)
+          canPrevPage = pager.hasPrev()
+          canNextPage = pager.hasNext()
 
-        store.commit(types.UPDATE_CURRENT_COMMENT_DATA, { data: data, canPrevPage: canPrevPage, canNextPage: canNextPage })
-      } else if (isPrevPage(mutation)) {
-        if (pager.hasPrev()) {
+          store.commit(types.UPDATE_CURRENT_COMMENT_DATA, { data: data, canPrevPage: canPrevPage, canNextPage: canNextPage })
+          break
+        case types.SEARCH_COMMENT_DATA:
+          data = pager.resetPage(state.currentCommentData)
+          canPrevPage = pager.hasPrev()
+          canNextPage = pager.hasNext()
+
+          store.commit(types.UPDATE_CURRENT_COMMENT_DATA, { data: data, canPrevPage: canPrevPage, canNextPage: canNextPage })
+          break
+        case types.PREV_PAGE:
           data = pager.prev()
           canPrevPage = pager.hasPrev()
           canNextPage = pager.hasNext()
 
           store.commit(types.UPDATE_CURRENT_COMMENT_DATA, { data: data, canPrevPage: canPrevPage, canNextPage: canNextPage })
-        }
-      } else if (isNextPage(mutation)) {
-        if (pager.hasNext()) {
+          break
+        case types.NEXT_PAGE:
           data = pager.next()
           canPrevPage = pager.hasPrev()
           canNextPage = pager.hasNext()
 
           store.commit(types.UPDATE_CURRENT_COMMENT_DATA, { data: data, canPrevPage: canPrevPage, canNextPage: canNextPage })
-        }
+          break
       }
     })
   }
-}
-
-var isFetchOrSearch = (mutation) => {
-  return mutation.type === types.FETCH_COMMENT_DATA ||
-         mutation.type === types.SEARCH_COMMENT_DATA
-}
-
-var isPrevPage = (mutation) => {
-  return mutation.type === types.PREV_PAGE
-}
-
-var isNextPage = (mutation) => {
-  return mutation.type === types.NEXT_PAGE
 }

@@ -13,6 +13,7 @@ export default {
     state.loading = true
   },
   [types.SEARCH_COMMENT_DATA] (state, payload) {
+    state.currentCommentData = payload
   },
   [types.PREV_PAGE] (state) {
   },
