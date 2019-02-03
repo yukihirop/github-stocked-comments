@@ -16,9 +16,11 @@ var paginatePlugin = plugin.createPaginatePlugin(pager)
 const initialState = {
   commentData: [],
   currentCommentData: [],
+  searchText: '',
   canPrevPage: false,
   canNextPage: true,
-  loading: false
+  loading: false,
+  eventHub: new Vue()
 }
 
 export default new Vuex.Store({

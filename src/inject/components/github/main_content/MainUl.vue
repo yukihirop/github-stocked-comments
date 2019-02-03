@@ -14,6 +14,7 @@ import MainLi from '@/inject/components/github/main_content/MainLi'
 import Paginate from '@/inject/components/github/main_content/Paginate'
 import storage from '@/ext/storage'
 import { mapState, mapActions } from 'vuex'
+import Mark from 'mark.js'
 
 export default {
   name: 'MainUl',
@@ -24,7 +25,8 @@ export default {
   computed: {
     ...mapState([
       'loading',
-      'currentCommentData'
+      'currentCommentData',
+      'eventHub'
     ])
   },
   created () {
@@ -37,10 +39,26 @@ export default {
       })
     })
   },
+  mounted () {
+    this.eventHub.$on('text-highlight', this.setTextHighlight)
+  },
   methods: {
     ...mapActions([
       'fetchDataFromStorage'
-    ])
+    ]),
+    setTextHighlight (keyword) {
+      this.$nextTick(() => {
+        var context = document.querySelectorAll('.githubStockedCommentsMainContent')
+        var instance = new Mark(context)
+        var options = {
+          separateWorldSearch: true,
+          diacritics: true
+        }
+
+        instance.unmark(options)
+        instance.mark(keyword, options)
+      })
+    }
   }
 }
 </script>

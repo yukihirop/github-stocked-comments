@@ -10,7 +10,6 @@
 <script>
 import SelectDetailsMenu from '@/inject/components/github/main_content/SelectDetailsMenu'
 import { mapActions } from 'vuex'
-import Mark from 'mark.js'
 
 // https://forum.vuejs.org/t/delay-keyup/31487/2
 let timeout = null
@@ -35,22 +34,15 @@ export default {
 
       timeout = setTimeout(() => {
         this.searchCommentData(this.searchText)
-        this.$nextTick(() => {
-          this.textHighlight(this.searchText)
-        })
+        // this.$nextTick(() => {
+        //   this.setTextHighlight(this.searchText)
+        // })
       }, 300)
-    },
-    textHighlight (keyword) {
-      var context = document.querySelectorAll('.githubStockedCommentsMainContent')
-      var instance = new Mark(context)
-      var options = {
-        separateWorldSearch: true,
-        diacritics: true
-      }
-
-      instance.unmark(options)
-      instance.mark(keyword, options)
     }
+    // setTextHighlight (keyword) {
+    //   var context = document.querySelectorAll('.githubStockedCommentsMainContent')
+    //   this.textHighlight(context, keyword)
+    // }
   }
 }
 </script>

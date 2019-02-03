@@ -39,6 +39,8 @@ export var createPaginatePlugin = (pager) => {
           store.commit(types.UPDATE_CURRENT_COMMENT_DATA, { data: data, canPrevPage: canPrevPage, canNextPage: canNextPage })
           break
       }
+
+      state.eventHub.$emit('text-highlight', state.searchText)
     })
   }
 }

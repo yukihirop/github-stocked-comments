@@ -8,14 +8,14 @@ export default {
     let api = new MainLi()
     api.fetchCommentData((error, payload) => {
       if (error) throw error
-      commit(types.FETCH_COMMENT_DATA, payload)
+      commit(types.FETCH_COMMENT_DATA, { data: payload })
     })
   },
   searchCommentData ({ commit, state }, text) {
     let data = state.commentData.filter(comment => {
       return comment.body.toLowerCase().includes(text.toLowerCase())
     })
-    commit(types.SEARCH_COMMENT_DATA, data)
+    commit(types.SEARCH_COMMENT_DATA, { data: data, searchText: text })
   },
   prevPage ({ commit }) {
     commit(types.PREV_PAGE)
