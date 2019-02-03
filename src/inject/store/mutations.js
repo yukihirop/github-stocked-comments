@@ -7,5 +7,8 @@ export default {
     state.commentData = payload
     state.currentCommentData = payload
     state.loading = true
+  },
+  [types.SEARCH_COMMENT_DATA] (state, payload) {
+    state.currentCommentData = payload
   }
 }
