@@ -5,18 +5,21 @@
         <li class="py-4 public source "><main-li :comment-data="data" /></li>
       </span>
     </ul>
+    <paginate />
   </span>
 </template>>
 
 <script>
 import MainLi from '@/inject/components/github/main_content/MainLi'
+import Paginate from '@/inject/components/github/main_content/Paginate'
 import storage from '@/ext/storage'
 import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'MainUl',
   components: {
-    MainLi: MainLi
+    MainLi: MainLi,
+    Paginate: Paginate
   },
   computed: {
     ...mapState([
