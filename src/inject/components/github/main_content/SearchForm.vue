@@ -34,15 +34,8 @@ export default {
 
       timeout = setTimeout(() => {
         this.searchCommentData(this.searchText)
-        // this.$nextTick(() => {
-        //   this.setTextHighlight(this.searchText)
-        // })
       }, 300)
     }
-    // setTextHighlight (keyword) {
-    //   var context = document.querySelectorAll('.githubStockedCommentsMainContent')
-    //   this.textHighlight(context, keyword)
-    // }
   }
 }
 </script>

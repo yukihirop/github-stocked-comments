@@ -48,15 +48,17 @@ export default {
     ]),
     setTextHighlight (keyword) {
       this.$nextTick(() => {
-        var context = document.querySelectorAll('.githubStockedCommentsMainContent')
-        var instance = new Mark(context)
-        var options = {
-          separateWorldSearch: true,
-          diacritics: true
-        }
+        Promise.resolve().then(() => {
+          var context = document.querySelectorAll('.githubStockedCommentsMainContent')
+          var instance = new Mark(context)
+          var options = {
+            separateWorldSearch: true,
+            diacritics: true
+          }
 
-        instance.unmark(options)
-        instance.mark(keyword, options)
+          instance.unmark(options)
+          instance.mark(keyword, options)
+        })
       })
     }
   }
