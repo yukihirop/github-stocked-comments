@@ -7,6 +7,7 @@ export default {
     state.currentCommentData = payload.data
     state.canPrevPage = payload.canPrevPage
     state.canNextPage = payload.canNextPage
+    state.totalPageCount = payload.totalPageCount
   },
   [types.FETCH_COMMENT_DATA] (state, payload) {
     state.commentData = payload.data
@@ -16,8 +17,13 @@ export default {
     state.currentCommentData = payload.data
     state.searchText = payload.searchText
   },
-  [types.PREV_PAGE] (state) {
+  [types.PREV_PAGE] (state, payload) {
+    state.currentPageNum = payload.currentPageNum
   },
-  [types.NEXT_PAGE] (state) {
+  [types.NEXT_PAGE] (state, payload) {
+    state.currentPageNum = payload.currentPageNum
+  },
+  [types.PAGE] (state, payload) {
+    state.currentPageNum = payload.currentPageNum
   }
 }

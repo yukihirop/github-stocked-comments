@@ -62,14 +62,14 @@ export default class Pager {
   }
 
   hasNext () {
-    return this.currentPageIndex < this.pageCount() - 1
+    return this.currentPageIndex < this.totalPageCount() - 1
   }
 
   hasPrev () {
     return this.currentPageIndex > 0
   }
 
-  pageCount () {
+  totalPageCount () {
     return this.dataDividedByPage().length
   }
 

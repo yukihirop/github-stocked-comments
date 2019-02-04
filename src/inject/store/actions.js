@@ -17,10 +17,13 @@ export default {
     })
     commit(types.SEARCH_COMMENT_DATA, { data: data, searchText: text })
   },
-  prevPage ({ commit }) {
-    commit(types.PREV_PAGE)
+  prevPage ({ commit, state }) {
+    if (state.pager.hasPrev()) commit(types.PREV_PAGE, { currentPageNum: state.currentPageNum - 1 })
   },
-  nextPage ({ commit }) {
-    commit(types.NEXT_PAGE)
+  nextPage ({ commit, state }) {
+    if (state.pager.hasNext()) commit(types.NEXT_PAGE, { currentPageNum: state.currentPageNum + 1 })
+  },
+  page ({ commit }, pageNum) {
+    commit(types.PAGE, { currentPageNum: pageNum })
   }
 }

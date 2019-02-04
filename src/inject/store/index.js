@@ -11,7 +11,7 @@ Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
 var pager = new Pager([], 5)
-var paginatePlugin = plugin.createPaginatePlugin(pager)
+var paginatePlugin = plugin.createPaginatePlugin()
 
 const initialState = {
   commentData: [],
@@ -19,7 +19,10 @@ const initialState = {
   searchText: '',
   canPrevPage: false,
   canNextPage: true,
+  totalPageCount: 1,
+  currentPageNum: 1,
   loading: false,
+  pager: pager,
   eventHub: new Vue()
 }
 
