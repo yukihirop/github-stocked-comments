@@ -17,7 +17,8 @@
   "scripts": {
     "lint": "eslint --ext .js,.vue src",
     "dev": "NODE_ENV=development webpack --config ./build/webpack.dev.js --hide-modules",
-    "build": "webpack --config ./build/webpack.prod.js -p --progress  --hide-modules --colors"
+    "build": "webpack --config ./build/webpack.prod.js -p --progress  --hide-modules --colors",
+    "test": "jest"
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.29",
