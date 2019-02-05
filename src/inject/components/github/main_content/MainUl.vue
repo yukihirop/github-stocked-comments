@@ -1,17 +1,23 @@
 <template>
   <span v-if="loading">
-    <ul class="repo-list list-style-none js-navigation-container js-active-navigation-container">
-      <span v-for="(data, _) in currentCommentData" :key="data.id" >
-        <li class="py-4 public source "><main-li :comment-data="data" /></li>
-      </span>
-    </ul>
-    <paginate />
+    <span v-if="!isDisplaySorryPanel()">
+      <ul class="repo-list list-style-none js-navigation-container js-active-navigation-container">
+        <span v-for="(data, _) in currentCommentData" :key="data.id" >
+          <li class="py-4 public source "><main-li :comment-data="data" /></li>
+        </span>
+      </ul>
+      <paginate />
+    </span>
+    <span v-if="isDisplaySorryPanel()">
+      <sorry-panel />
+    </span>
   </span>
 </template>>
 
 <script>
 import MainLi from '@/inject/components/github/main_content/MainLi'
 import Paginate from '@/inject/components/github/main_content/Paginate'
+import SorryPanel from '@/inject/components/github/main_content/SorryPanel'
 import storage from '@/ext/storage'
 import { mapState, mapActions } from 'vuex'
 import Mark from 'mark.js'
@@ -20,7 +26,8 @@ export default {
   name: 'MainUl',
   components: {
     MainLi: MainLi,
-    Paginate: Paginate
+    Paginate: Paginate,
+    SorryPanel: SorryPanel
   },
   computed: {
     ...mapState([
@@ -46,6 +53,9 @@ export default {
     ...mapActions([
       'fetchDataFromStorage'
     ]),
+    isDisplaySorryPanel(){
+      return this.currentCommentData.length === 0
+    },
     setTextHighlight (keyword) {
       this.$nextTick(() => {
         Promise.resolve().then(() => {
