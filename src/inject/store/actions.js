@@ -16,14 +16,5 @@ export default {
       return comment.body.toLowerCase().includes(text.toLowerCase())
     })
     commit(types.SEARCH_COMMENT_DATA, { data: data, searchText: text })
-  },
-  prevPage ({ commit, state }) {
-    if (state.pager.hasPrev()) commit(types.PREV_PAGE, { currentPageNum: state.currentPageNum - 1 })
-  },
-  nextPage ({ commit, state }) {
-    if (state.pager.hasNext()) commit(types.NEXT_PAGE, { currentPageNum: state.currentPageNum + 1 })
-  },
-  page ({ commit }, pageNum) {
-    commit(types.PAGE, { currentPageNum: pageNum })
   }
 }
