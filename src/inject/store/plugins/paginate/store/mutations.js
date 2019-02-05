@@ -20,5 +20,8 @@ export default {
     let pager = state.pager
     let data = payload.data
     state.pageData = pager.resetPage(data)
+  },
+  [mutationTypes.OVERRIDE_RESOURCE]: (state, { payload }) => {
+    payload.rootState[payload.resourceName] = payload.pageData
   }
 }

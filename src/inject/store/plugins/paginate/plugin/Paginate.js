@@ -7,11 +7,12 @@ import * as actionTypes from '../store/action-types'
 import mutations from '../store/mutations'
 
 class Paginate {
-  constructor ({ store, resourceName, perPage }) {
+  constructor ({ store, resourceName, perPage, overrideResource }) {
     this._moduleName = Paginate.moduleName
     this._store = store
     this._resourceName = resourceName
     this._perPage = perPage
+    this._overrideResource = overrideResource
     store.paginate = this
 
     this._initModule()
@@ -23,7 +24,9 @@ class Paginate {
 
     let initialState = {
       pageData: pager.page(1),
-      pager: pager
+      pager: pager,
+      overrideResource: this._overrideResource,
+      paginate: this
     }
 
     this._store.registerModule(this._moduleName, {
@@ -67,7 +70,7 @@ class Paginate {
     const innerModuleState = store.state[this._moduleName]
     const namespace = this._getNamespace(this._moduleName)
 
-    store.dispatch(`${namespace}${actionTypes.page}`, pageNum)
+    store.dispatch(`${namespace}${actionTypes.page}`, { innerModuleState, pageNum })
   }
 
   resetPage(data) {
@@ -75,7 +78,19 @@ class Paginate {
     const innerModuleState = store.state[this._moduleName]
     const namespace = this._getNamespace(this._moduleName)
 
-    store.dispatch(`${namespace}${actionTypes.resetPage}`, data)
+    store.dispatch(`${namespace}${actionTypes.resetPage}`, { innerModuleState, data })
+  }
+
+  _overrideResourceAction(){
+    const store = this._store
+    const namespace = this._getNamespace(this._moduleName)
+
+    store.dispatch(`${namespace}${actionTypes._overrideResource}`, {
+      rootState: store.state,
+      resourceName: this._resourceName,
+      overrideResource: this._overrideResource,
+      pageData: this.pageData
+    })
   }
 }
 
