@@ -2,23 +2,12 @@
 
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
-  parserOptions: {
-    sourceType: 'module'
-  },
   globals: {
      "chrome": true,
      "$": true
   },
-  env: {
-    browser: true,
-  },
   // https://github.com/standard/standard/blob/master/docs/RULES-en.md
-  extends: 'standard',
-  // required to lint *.vue files
-  plugins: [
-    'html'
-  ],
+  extends: [ 'plugin:vue/recommended' ],
   // add your custom rules here
   'rules': {
     // allow paren-less arrow functions
@@ -26,6 +15,18 @@ module.exports = {
     // allow async-await
     'generator-star-spacing': 0,
     // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+    'vue/max-attributes-per-line': 0,
+    'vue/singleline-html-element-content-newline': 0,
+    'vue/html-indent': 0,
+    'vue/html-self-closing': 0,
+    'vue/attribute-hyphenation': 0,
+    'vue/html-closing-bracket-spacing': 0,
+    'vue/attributes-order': 0,
+    'vue/no-v-html': 0,
+    'vue/require-v-for-key': 0,
+    'vue/multiline-html-element-content-newline': 0,
+    'vue/no-unused-vars': 0,
+    'vue/order-in-components': 0
   }
 }
