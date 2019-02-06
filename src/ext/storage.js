@@ -46,14 +46,18 @@ export default {
       })
     })
   },
-  fetchCommentData () {
+  fetchData (categories) {
     return new Promise((resolve, reject) => {
       remote.get(storageKey, (result) => {
         if (chrome.runtime.lastError) {
           reject(chrome.runtime.lastError)
         } else {
           let dataFromStorage = JSON.parse(result[storageKey])
-          resolve(dataFromStorage)
+          let data = {}
+          categories.forEach(category => {
+            Object.assign(data, dataFromStorage[category])
+          })
+          resolve(data)
         }
       })
     })

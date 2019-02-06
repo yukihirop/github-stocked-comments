@@ -5,10 +5,11 @@ import IssueComment from '@/inject/apis/main_content/main_li/IssueComment'
 import storage from '@/ext/storage'
 
 export default class MainLi {
-  fetchCommentData (callback) {
-    storage.fetchCommentData()
+  fetchData (categories, callback) {
+    storage.fetchData(categories)
       .then((dataFromStorage) => {
         let payload = []
+        
         Object.keys(dataFromStorage).forEach((id) => {
           let data = dataFromStorage[id]
           let factory = new Factory(id, data)
