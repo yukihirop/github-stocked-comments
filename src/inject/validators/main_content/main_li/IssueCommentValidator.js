@@ -1,6 +1,6 @@
 'use strict'
 
-import IssueComment from '@/inject/apis/main_content/main_li/IssueComment'
+import IssueComment from '@/inject/models/main_content/main_li/IssueComment'
 
 export default {
   isValid (issueComment) {

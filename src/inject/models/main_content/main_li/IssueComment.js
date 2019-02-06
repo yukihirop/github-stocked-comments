@@ -1,6 +1,6 @@
 'use strict'
 
-import Base from '@/inject/apis/main_content/main_li/Base'
+import Base from './Base'
 
 export default class IssueComment extends Base {
   setProperties () {

@@ -1,7 +1,7 @@
 'use strict'
 
-import Issue from '@/inject/apis/main_content/main_li/Issue'
-import IssueComment from '@/inject/apis/main_content/main_li/IssueComment'
+import Issue from '@/inject/models/main_content/main_li/Issue'
+import IssueComment from '@/inject/models/main_content/main_li/IssueComment'
 import storage from '@/ext/storage'
 
 export default class MainLi {

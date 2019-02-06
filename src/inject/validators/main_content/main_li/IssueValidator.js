@@ -1,6 +1,6 @@
 'use strict'
 
-import Issue from '@/inject/apis/main_content/main_li/Issue'
+import Issue from '@/inject/models/main_content/main_li/Issue'
 
 export default {
   isValid (issue) {
