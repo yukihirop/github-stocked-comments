@@ -13,7 +13,7 @@ export default {
       callback(changes, namespace)
     })
   },
-  saveCommentData (data) {
+  saveData(categories, data){
     return new Promise((resolve, reject) => {
       remote.get(storageKey, (result) => {
         if (chrome.runtime.lastError) {
@@ -28,7 +28,8 @@ export default {
       })
     }).then((dataFromStorage) => {
       return new Promise((resolve, reject) => {
-        Object.assign(dataFromStorage, data)
+        dataFromStorage = this.merge(categories, dataFromStorage, data)
+
         remote.set({ [storageKey]: JSON.stringify(dataFromStorage) }, () => {
           if (chrome.runtime.lastError) {
             reject(chrome.runtime.lastError)
@@ -88,5 +89,13 @@ export default {
         })
       })
     })
+  },
+  merge(categories, dataFromStorage, data) {
+    categories.forEach(category => {
+      dataFromStorage[category] = (dataFromStorage[category] === undefined) ?  {} : dataFromStorage[category]
+      data[category] = (data[category] === undefined) ? {} : data[category]
+      Object.assign(dataFromStorage[category], data[category])
+    })
+    return dataFromStorage
   }
 }

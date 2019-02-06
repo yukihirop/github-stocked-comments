@@ -60,19 +60,13 @@ class IssueCommentData {
     // type is 「#issue」 or 「#issuecomment」.
     // if type is issue, commentId is useless.
     var [type, commentId] = this.commentAreaHashId.split('-')
-    var uniqueKey = this.createChromeStorageUniqueKey(repoUserName, repoName, issueId, type, commentId)
 
     return {
-      id: `${uniqueKey}`,
       repoUserName: `${repoUserName}`,
       repoName: `${repoName}`,
       issueId: `${issueId}`,
       type: `${type}`,
       commentId: `${commentId}`
     }
-  }
-
-  createChromeStorageUniqueKey (repoUserName, repoName, issueId, type, commentId) {
-    return `${repoUserName}-${repoName}-${issueId}-${type}-${commentId}`
   }
 }
