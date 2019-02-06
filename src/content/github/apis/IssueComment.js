@@ -10,7 +10,7 @@ export default class IssueComment extends Base {
 
   // private
   dataFromOctokit () {
-    return this.octokit.issues.getComment({
+    return this.authClient.issues.getComment({
       owner: `${this.repoUserName}`,
       repo: `${this.repoName}`,
       comment_id: `${Number(this.commentId)}`

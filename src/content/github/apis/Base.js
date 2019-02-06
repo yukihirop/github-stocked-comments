@@ -1,6 +1,6 @@
 'use strict'
 
-import Octokit from '@octokit/rest'
+import createOctokitAuthClient from '@/content/authClient'
 import storage from '@/ext/storage'
 
 export default class Base {
@@ -9,7 +9,7 @@ export default class Base {
     this.repoUserName = params.repoUserName
     this.repoName = params.repoName
     this.type = params.type
-    this.octokit = new Octokit()
+    this.authClient = createOctokitAuthClient()
   }
 
   // https://medium.com/datafire-io/es6-promises-patterns-and-anti-patterns-bbb21a5d0918

@@ -10,7 +10,7 @@ export default class Issue extends Base {
 
   // private
   dataFromOctokit () {
-    return this.octokit.issues.get({
+    return this.authClient.issues.get({
       owner: `${this.repoUserName}`,
       repo: `${this.repoName}`,
       number: `${Number(this.issueId)}`
