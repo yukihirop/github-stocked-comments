@@ -4,6 +4,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 const ChromeReloadPlugin = require('wcer')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { cssLoaders, htmlPage } = require('./tools')
+require('dotenv').config()
 
 const rootDir = path.resolve(__dirname, '..')
 
@@ -87,6 +88,12 @@ module.exports = {
     }]
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        'CLIENT_ID': JSON.stringify(process.env.CLIENT_ID),
+        'CLIENT_SECRET': JSON.stringify(process.env.CLIENT_SECRET)
+      }
+    }),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
