@@ -101,7 +101,7 @@ module.exports = {
     }),
     new CopyWebpackPlugin(
       [{
-        from: path.join(__dirname, 'src', 'css', '**/*'),
+        from: path.join(__dirname, 'src', 'assets', 'css', '**/*'),
         to: path.join(__dirname, 'dist'),
         context: 'css'
       }]
