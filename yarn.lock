@@ -4993,6 +4993,11 @@ kleur@^3.0.0:
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-3.0.1.tgz#4f5b313f5fa315432a400f19a24db78d451ede62"
   integrity sha512-P3kRv+B+Ra070ng2VKQqW4qW7gd/v3iD8sy/zOdcYRsfiD+QBokQNOps/AfP6Hr48cBhIIBFWckB9aO+IZhrWg==
 
+language-badge@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/language-badge/-/language-badge-1.0.1.tgz#cb98cb29ed9609dad3e38c920d3736559d5a2383"
+  integrity sha512-tcQrWdQgToLVXPm76V/DsEKLbvqagd6iXvx9bip+bPHf/C8dd6ePgh8aNGltonFPdZtiddBSggcTnVT2yuLq7Q==
+
 last-call-webpack-plugin@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/last-call-webpack-plugin/-/last-call-webpack-plugin-2.1.2.tgz#ad80c6e310998294d2ed2180a68e9589e4768c44"
