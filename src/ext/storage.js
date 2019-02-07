@@ -46,17 +46,21 @@ export default {
       })
     })
   },
-  fetchData (categories) {
+  fetchData (categories, relationshipCategories) {
     return new Promise((resolve, reject) => {
       remote.get(storageKey, (result) => {
         if (chrome.runtime.lastError) {
           reject(chrome.runtime.lastError)
         } else {
+          
           let dataFromStorage = JSON.parse(result[storageKey])
           let data = {}
           categories.forEach(category => {
             Object.assign(data, dataFromStorage[category])
           })
+
+          data = this.mergeRelationshipCategories(relationshipCategories, dataFromStorage, data)
+          
           resolve(data)
         }
       })
@@ -101,5 +105,23 @@ export default {
       Object.assign(dataFromStorage[category], data[category])
     })
     return dataFromStorage
+  },
+  mergeRelationshipCategories(relationshipCategories, dataFromStorage, data){
+    let result = Object.keys(data).reduce((base, key) => {
+      let value = data[key]
+      let relationships = {}
+      relationshipCategories.forEach(category => {
+        let foreignKey = value[category + '_id']
+        let relationshipData = dataFromStorage[category][foreignKey]
+        relationships[category] = relationshipData
+      })
+
+      Object.assign(data[key], relationships)
+      Object.assign(base, data)
+
+      return base
+    },{})
+
+    return result
   }
 }

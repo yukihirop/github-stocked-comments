@@ -3,7 +3,6 @@
 export default class Base {
   constructor (id, data) {
     this.id = id
-    this.type = data.type
     this.data = data
   }
 

@@ -6,7 +6,7 @@ import MainLi from '@/inject/apis/main_content/MainLi'
 export default {
   fetchDataFromStorage ({ commit, state }) {
     let api = new MainLi()
-    api.fetchData(['issuecomment', 'issue'], (error, payload) => {
+    api.fetchData(['issuecomment', 'issue'], ['repo_language'], (error, payload) => {
       if (error) throw error
       commit(types.FETCH_COMMENT_DATA, { data: payload })
     })

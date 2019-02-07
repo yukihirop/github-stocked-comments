@@ -24,6 +24,9 @@ export default class Base {
 
   buildSaveData(){
     let result = {}
+    this.data.id = this.id
+    this.data.repoUserName = this.repoUserName
+    this.data.repoName = this.repoName
     result[this.id] = this.data
     return result
   }

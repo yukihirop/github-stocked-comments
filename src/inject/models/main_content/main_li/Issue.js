@@ -1,11 +1,27 @@
 'use strict'
 
 import Base from './Base'
+import RepoLanguage from './RepoLanguage'
 
 export default class Issue extends Base {
+  constructor(id, data){
+    super(id, data)
+    this.type = data.type
+    this.repoUserName = data.repoUserName
+    this.repoName = data.repoName
+    // foreign key
+    this.repo_language_id = this.data.repo_language_id
+  }
+
   setProperties () {
-    this.postUserIssue = new PostUserIssue(this.data)
-    let postUserIssue = this.postUserIssue
+    this.setPostUserIssueProperties()
+    this.setRepoLanguageProperties()
+  }
+
+  // private
+  setPostUserIssueProperties(){
+    let postUserIssue = new PostUserIssue(this.data)
+    this.postUserIssue = postUserIssue
 
     this.postUserName = postUserIssue.userName
     this.postUserAvatarURL = postUserIssue.avatarURL
@@ -13,6 +29,15 @@ export default class Issue extends Base {
     this.body = postUserIssue.body
     this.createdAt = postUserIssue.createdAt
     this.updatedAt = postUserIssue.updatedAt
+  }
+
+  // private
+  setRepoLanguageProperties(){
+    let repoLanguage = new RepoLanguage(this.repo_language_id, this.data['repo_language'])
+    repoLanguage.setProperties()
+
+    this.repoLanguage = repoLanguage
+    this.mainLanguage = repoLanguage.mainLanguage
   }
 }
 
