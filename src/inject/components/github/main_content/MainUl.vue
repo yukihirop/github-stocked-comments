@@ -18,7 +18,7 @@
 import MainLi from '@/inject/components/github/main_content/MainLi'
 import Paginate from '@/inject/components/github/main_content/Paginate'
 import SorryPanel from '@/inject/components/github/main_content/SorryPanel'
-import storage from '@/ext/storage'
+import Storage from '@/ext/Storage'
 import { mapState, mapActions } from 'vuex'
 import Mark from 'mark.js'
 
@@ -38,9 +38,9 @@ export default {
   },
   created () {
     this.fetchDataFromStorage()
-    storage.onChangeData((changes, namespace) => {
+    chrome.storage.onChanged.addListener((changes, namespace) => {
       Object.keys(changes).forEach((key) => {
-        if (key === storage.storageKey()) {
+        if ((key === 'github-stocked-comments.github.issue') || (key === 'github-stocked-comments.github.issuecomment')){
           this.fetchDataFromStorage()
         }
       })

@@ -2,27 +2,46 @@
 
 import Issue from '@/inject/models/main_content/main_li/Issue'
 import IssueComment from '@/inject/models/main_content/main_li/IssueComment'
-import storage from '@/ext/storage'
+import Storage from '@/ext/Storage'
 
 export default class MainLi {
-  fetchData (categories, relationshipCategories, callback) {
-    storage.fetchData(categories, relationshipCategories)
+  fetchData (resources, relationshipResources, callback) {
+
+    let promises = resources.reduce((base, resourceName) => {
+      base.push(this.fetchResourceData(resourceName, relationshipResources))
+      return base
+    },[])
+
+    Promise.all(promises)
       .then((dataFromStorage) => {
         let payload = []
 
-        Object.keys(dataFromStorage).forEach((id) => {
-          let data = dataFromStorage[id]
+        let mergedData = dataFromStorage.reduce((base, resource) => {
+          Object.assign(base, resource)
+          return base
+        },{})
+
+        Object.keys(mergedData).forEach((id) => {
+
+          let data = mergedData[id]
           let factory = new Factory(id, data)
           factory.setProperties()
 
           let json = JSON.parse(JSON.stringify(factory))
           payload.push(json)
         })
+
         setTimeout(_ => callback(null, payload))
+
       })
       .catch((error) => {
         setTimeout(_ => callback(error))
       })
+  }
+
+  fetchResourceData(resourceName, relationshipResources) {
+    let storage = new Storage(resourceName)
+    return storage.fetchData(relationshipResources)
   }
 }
 

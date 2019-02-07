@@ -1,6 +1,6 @@
 'use strict'
 
-import storage from '@/ext/storage'
+import Storage from '@/ext/Storage'
 import Issue from '@/content/github/models/Issue'
 import IssueComment from '@/content/github/models/IssueComment'
 import RepoLanguage from '@/content/github/models/RepoLanguage'
@@ -18,11 +18,13 @@ export default class StockedComment {
   // https://medium.com/datafire-io/es6-promises-patterns-and-anti-patterns-bbb21a5d0918
   saveData (callback) {
     this.dataFromOctokit()
-      .then((models) => {
-        let data = this.buildSaveData(models)
-        let categories = this.buildCategories(models)
+      .then((result) => {
+        let resourceName = Object.keys(result.base)[0]
+        let data = result.base[resourceName]
+        let relationshipResourcesData = result.relationshipResourcesData
 
-        storage.saveData(categories, data).then((data) => {
+        let storage = new Storage(resourceName)
+        storage.saveData(data, relationshipResourcesData).then((data) => {
           console.log(data)
         })
 
@@ -37,28 +39,16 @@ export default class StockedComment {
     return new Promise(resolve => {
       let repoLanguage = new RepoLanguage(this.params)
 
-      Promise.all( [ this.baseModel.dataFromOctokit(), repoLanguage.dataFromOctokit() ] ).then((result) => {
+      Promise.all( [ this.baseModel.dataFromOctokit(), repoLanguage.dataFromOctokit() ] ).then(() => {
         this.baseModel.appendForeignKeys([repoLanguage])
 
-        resolve([this.baseModel, repoLanguage])
+        let result = {}
+        result.base = {}
+        result.relationshipResourcesData = {}
+        result.base[this.baseModel.resourceName] = this.baseModel.buildSaveData()
+        result.relationshipResourcesData[repoLanguage.resourceName] = repoLanguage.buildSaveData()
+        resolve(result)
       })
     })
-  }
-
-  // private
-  buildSaveData(models){
-    let result = {}
-    models.forEach(model => {
-      result[model.category] = model.buildSaveData()
-    })
-    return result
-  }
-
-  buildCategories(models){
-    let result = []
-    models.forEach(model => {
-      result.push(model.category)
-    })
-    return result
   }
 }

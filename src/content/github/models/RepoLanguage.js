@@ -6,7 +6,7 @@ export default class RepoLanguage extends Base {
   constructor (params) {
     super(params)
     this.id = this.createId(params)
-    this.category = 'repo_language'
+    this.resourceName = 'repo_language'
     this.foreignKey = 'repo_language_id'
   }
 

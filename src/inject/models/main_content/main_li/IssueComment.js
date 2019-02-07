@@ -33,7 +33,7 @@ export default class IssueComment extends Base {
 
   // private
   setRepoLanguageProperties(){
-    let repoLanguage = new RepoLanguage(this.repo_language_id, this.data['repo_language'])
+    let repoLanguage = new RepoLanguage(this.repo_language_id, this.data.relationships.repo_language)
     repoLanguage.setProperties()
 
     this.repoLanguage = repoLanguage

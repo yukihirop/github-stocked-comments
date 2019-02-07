@@ -8,7 +8,7 @@ export default class IssueComment extends Base {
     this.id = this.createId(params)
     this.type = params.type
     this.commentId = params.commentId
-    this.category = 'issuecomment'
+    this.resourceName = 'issuecomment'
     this.foreignKey = 'issuecomment_id'
   }
 
