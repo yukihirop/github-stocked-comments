@@ -5,43 +5,67 @@ import IssueComment from '@/inject/models/main_content/main_li/IssueComment'
 import Storage from '@/ext/Storage'
 
 export default class MainLi {
-  fetchData (resources, relationshipResources, callback) {
+  constructor(){
+    this.payload = []
+  }
 
-    let promises = resources.reduce((base, resourceName) => {
-      base.push(this.fetchResourceData(resourceName, relationshipResources))
-      return base
-    },[])
+  fetchData (resources, callback) {
+    this.payload = []
 
-    Promise.all(promises)
-      .then((dataFromStorage) => {
-        let payload = []
-
-        let mergedData = dataFromStorage.reduce((base, resource) => {
-          Object.assign(base, resource)
-          return base
-        },{})
-
-        Object.keys(mergedData).forEach((id) => {
-
-          let data = mergedData[id]
-          let factory = new Factory(id, data)
-          factory.setProperties()
-
-          let json = JSON.parse(JSON.stringify(factory))
-          payload.push(json)
-        })
-
-        setTimeout(_ => callback(null, payload))
-
+    resources.reduce((promise, resource, index) => {
+      return promise.then(() => {
+        if (index === resources.length - 1) {
+          this.createFetchResoruceDataPromise(resource).then(() => {
+            setTimeout(_ => callback(null, this.payload))
+          })
+        } else {
+          this.createFetchResoruceDataPromise(resource)
+        }
       })
-      .catch((error) => {
-        setTimeout(_ => callback(error))
+    },Promise.resolve())
+  }
+
+  // private
+  createFetchResoruceDataPromise(resource){
+    return new Promise((resolve, reject) => {
+      this.fetchResourceData(resource)
+        .then(dataFromStorage => {
+
+          let dataWithRelationsihp = resource.createDataWithRelationship(dataFromStorage)
+
+          Object.keys(dataWithRelationsihp).forEach((id, index) => {
+            let data = dataWithRelationsihp[id]
+            let factory = new Factory(id, data)
+            let json = JSON.parse(JSON.stringify(factory))
+            
+            this.payload.push(json)
+          })
+
+          resolve()
+        })
+        .catch((error) => {
+          setTimeout(_ => callback(error))
+        })
       })
   }
 
-  fetchResourceData(resourceName, relationshipResources) {
-    let storage = new Storage(resourceName)
-    return storage.fetchData(relationshipResources)
+  // private
+  fetchResourceData(resource) {
+    let promises = this.fetchResourcesName(resource).reduce((base, resourceName) => {
+      let storage = new Storage(resourceName)
+      base.push(storage.fetchData())
+      return base
+    },[])
+
+    return Promise.all(promises)
+  }
+
+  // private
+  fetchResourcesName(resource){
+    let result = []
+    result.push(resource.name)
+    resource.relationships.forEach(relationship => { result.push(relationship.name) })
+    return result
   }
 }
 

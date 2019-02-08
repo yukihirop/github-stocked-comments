@@ -7,7 +7,6 @@ import RepoLanguage from '@/content/github/models/RepoLanguage'
 
 export default class StockedComment {
   constructor (params) {
-    this.params = params
     if (params.type === 'issue') {
       this.baseModel = new Issue(params)
     } else if (params.type === 'issuecomment') {
@@ -15,40 +14,34 @@ export default class StockedComment {
     }
   }
 
+  dataFromOctokit(){
+    return new Promise(resolve => {
+      this.baseModel.dataFromOctokitWithRelations().then(() => {
+        resolve(this.baseModel)
+      })
+    })
+  }
+
   // https://medium.com/datafire-io/es6-promises-patterns-and-anti-patterns-bbb21a5d0918
   saveData (callback) {
     this.dataFromOctokit()
-      .then((result) => {
-        let resourceName = Object.keys(result.base)[0]
-        let data = result.base[resourceName]
-        let relationshipResourcesData = result.relationshipResourcesData
-
-        let storage = new Storage(resourceName)
-        storage.saveData(data, relationshipResourcesData).then((data) => {
-          console.log(data)
-        })
-
-        setTimeout(_ => callback(null, true))
-      })
-      .catch((error) => {
-        setTimeout(_ => callback(error))
+      .then((resource) => {
+        this.saveResourceData(resource, callback)
       })
   }
 
-  dataFromOctokit(){
-    return new Promise(resolve => {
-      let repoLanguage = new RepoLanguage(this.params)
+  saveResourceData(resource, callback){
+    resource.linkedResources().forEach(resource => {
+      let storage = new Storage(resource.name)
+      let data = resource.buildSaveData()
 
-      Promise.all( [ this.baseModel.dataFromOctokit(), repoLanguage.dataFromOctokit() ] ).then(() => {
-        this.baseModel.appendForeignKeys([repoLanguage])
-
-        let result = {}
-        result.base = {}
-        result.relationshipResourcesData = {}
-        result.base[this.baseModel.resourceName] = this.baseModel.buildSaveData()
-        result.relationshipResourcesData[repoLanguage.resourceName] = repoLanguage.buildSaveData()
-        resolve(result)
-      })
+      storage.saveData(data)
+        .then(dataFromStorage => {
+          setTimeout(_ => callback(null, true))
+        })
+        .catch((error) => {
+          setTimeout(_ => callback(error))
+        })
     })
   }
 }

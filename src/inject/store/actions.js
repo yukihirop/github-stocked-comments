@@ -2,11 +2,15 @@
 
 import * as types from './mutation-types'
 import MainLi from '@/inject/apis/main_content/MainLi'
+import Issue from '@/inject/apis/main_content/main_li/Issue'
+import IssueComment from '@/inject/apis/main_content/main_li/IssueComment'
 
 export default {
   fetchDataFromStorage ({ commit, state }) {
     let api = new MainLi()
-    api.fetchData(['issuecomment', 'issue'], ['repo_language'], (error, payload) => {
+    let issue = new Issue()
+    let issuecomment = new IssueComment()
+    api.fetchData([issuecomment, issue], (error, payload) => {
       if (error) throw error
       commit(types.FETCH_COMMENT_DATA, { data: payload })
     })

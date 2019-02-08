@@ -11,6 +11,8 @@ export default class Issue extends Base {
     this.repoName = data.repoName
     // foreign key
     this.repo_language_id = this.data.repo_language_id
+
+    this.setProperties()
   }
 
   setProperties () {
@@ -21,7 +23,6 @@ export default class Issue extends Base {
   // private
   setPostUserIssueProperties(){
     let postUserIssue = new PostUserIssue(this.data)
-    this.postUserIssue = postUserIssue
 
     this.postUserName = postUserIssue.userName
     this.postUserAvatarURL = postUserIssue.avatarURL
@@ -33,10 +34,8 @@ export default class Issue extends Base {
 
   // private
   setRepoLanguageProperties(){
-    let repoLanguage = new RepoLanguage(this.repo_language_id, this.data.relationships.repo_language)
-    repoLanguage.setProperties()
+    let repoLanguage = new RepoLanguage(this.repo_language_id, this.data.relationships.repo_language.data)
 
-    this.repoLanguage = repoLanguage
     this.mainLanguage = repoLanguage.mainLanguage
   }
 }
@@ -44,7 +43,14 @@ export default class Issue extends Base {
 // private class
 class PostUserIssue {
   constructor (issueData) {
-    let data = issueData.data
+    this.data = issueData.data
+
+    this.setProperties()
+  }
+
+  setProperties(){
+    let data = this.data
+
     this.userName = data.user.login
     this.avatarURL = data.user.avatar_url
     this.gravatarId = data.user.gravatar_id

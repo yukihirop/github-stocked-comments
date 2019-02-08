@@ -8,6 +8,11 @@ export default class RepoLanguage extends Base {
     this.id = this.createId(params)
     this.resourceName = 'repo_language'
     this.foreignKey = 'repo_language_id'
+    this.type = 'repo_language'
+  }
+
+  relationships(){
+    return []
   }
 
   // private

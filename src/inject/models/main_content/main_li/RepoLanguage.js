@@ -3,12 +3,18 @@
 import Base from './Base'
 
 export default class RepoLanguage extends Base {
-  setProperties () {
-    let data = this.data.data
-    this.mainLanguage = this.mainLanguage(data)
+  constructor (id, data) {
+    super(id, data)
+
+    this.setProperties()
   }
 
-  mainLanguage(data){
+  setProperties () {
+    this.mainLanguage = this.createMainLanguage()
+  }
+
+  createMainLanguage(){
+    let data = this.data
     let bytes = Object.values(data)
     let maxByte = Math.max.apply(null, bytes)
     let result = Object.keys(data).filter(key => { return data[key] === maxByte })[0]

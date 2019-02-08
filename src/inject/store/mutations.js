@@ -1,6 +1,9 @@
 'use strict'
 
+import Vue from 'vue'
 import * as types from './mutation-types'
+
+var ObjectToArray
 
 export default {
   [types.FETCH_COMMENT_DATA] (state, payload) {

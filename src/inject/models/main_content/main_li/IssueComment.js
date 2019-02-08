@@ -11,8 +11,11 @@ export default class IssueComment extends Base {
     this.repoName = data.repoName
     // foreign key
     this.repo_language_id = this.data.repo_language_id
+
+    this.setProperties()
   }
-  
+
+  // private
   setProperties () {
     this.setPostUserCommentProperties()
     this.setRepoLanguageProperties()
@@ -21,7 +24,6 @@ export default class IssueComment extends Base {
   // private
   setPostUserCommentProperties(){
     let postUserComment = new PostUserComment(this.data)
-    this.postUserComment = postUserComment
 
     this.postUserName = postUserComment.userName
     this.postUserAvatarURL = postUserComment.avatarURL
@@ -33,10 +35,8 @@ export default class IssueComment extends Base {
 
   // private
   setRepoLanguageProperties(){
-    let repoLanguage = new RepoLanguage(this.repo_language_id, this.data.relationships.repo_language)
-    repoLanguage.setProperties()
+    let repoLanguage = new RepoLanguage(this.repo_language_id, this.data.relationships.repo_language.data)
 
-    this.repoLanguage = repoLanguage
     this.mainLanguage = repoLanguage.mainLanguage
   }
 }
@@ -44,7 +44,14 @@ export default class IssueComment extends Base {
 // private class
 class PostUserComment {
   constructor (commentData) {
-    let data = commentData.data
+    this.data = commentData.data
+
+    this.setProperties()
+  }
+
+  setProperties(){
+    let data = this.data
+
     this.userName = data.user.login
     this.avatarURL = data.user.avatar_url
     this.gravatarId = data.user.gravatar_id

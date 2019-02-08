@@ -1,6 +1,7 @@
 'use strict'
 
 import Base from './Base'
+import RepoLanguage from './RepoLanguage'
 
 export default class Issue extends Base {
   constructor (params) {
@@ -10,6 +11,11 @@ export default class Issue extends Base {
     this.issueId = params.issueId
     this.resourceName = 'issue'
     this.foreignKey = 'issue_id'
+    this.repoLanguage = new RepoLanguage(this.params)
+  }
+
+  relationships(){
+    return [this.repoLanguage]
   }
 
   // private
@@ -17,7 +23,6 @@ export default class Issue extends Base {
     return `${params.repoUserName}-${params.repoName}-${params.issueId}-${params.type}-${params.commentId}`
   }
 
-  // private
   dataFromOctokit () {
     return this.authClient.issues.get({
       owner: `${this.repoUserName}`,
@@ -25,7 +30,6 @@ export default class Issue extends Base {
       number: `${Number(this.issueId)}`
     }).then(result => {
       this.data = result
-      this.data.type = this.type
     })
   }
 }

@@ -1,6 +1,7 @@
 'use strict'
 
 import Base from './Base'
+import RepoLanguage from './RepoLanguage'
 
 export default class IssueComment extends Base {
   constructor (params) {
@@ -10,6 +11,11 @@ export default class IssueComment extends Base {
     this.commentId = params.commentId
     this.resourceName = 'issuecomment'
     this.foreignKey = 'issuecomment_id'
+    this.repoLanguage = new RepoLanguage(this.params)
+  }
+
+  relationships(){
+    return [this.repoLanguage]
   }
 
   // private
@@ -24,7 +30,6 @@ export default class IssueComment extends Base {
       comment_id: `${Number(this.commentId)}`
     }).then(result => {
       this.data = result
-      this.data.type = this.type
     })
   }
 }
