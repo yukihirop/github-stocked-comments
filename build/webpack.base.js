@@ -4,6 +4,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 const ChromeReloadPlugin = require('wcer')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { cssLoaders, htmlPage } = require('./tools')
+require('dotenv').config()
 
 const rootDir = path.resolve(__dirname, '..')
 
@@ -16,6 +17,7 @@ module.exports = {
     options: resolve('./options'),
     content: resolve('./content'),
     background: resolve('./background'),
+    inject: resolve('./inject')
   },
   output: {
     path: path.join(rootDir, 'dist'),
@@ -86,12 +88,30 @@ module.exports = {
     }]
   },
   plugins: [
-		new CleanWebpackPlugin(['*'], { root: path.join(rootDir, 'dist') }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        'CLIENT_ID': JSON.stringify(process.env.CLIENT_ID),
+        'CLIENT_SECRET': JSON.stringify(process.env.CLIENT_SECRET)
+      }
+    }),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery'
+    }),
+    new CopyWebpackPlugin(
+      [{
+        from: path.join(__dirname, 'src', 'assets', 'css', '**/*'),
+        to: path.join(__dirname, 'dist'),
+        context: 'css'
+      }]
+    ),
+    new CleanWebpackPlugin(['*'], { root: path.join(rootDir, 'dist') }),
     // Customize your extension structure.
-    htmlPage('home', 'app', ['manifest', 'vendor', 'tab']),
-    htmlPage('popup', 'popup', ['manifest', 'vendor', 'popup']),
-    htmlPage('options', 'options', ['manifest', 'vendor', 'options']),
-    htmlPage('background', 'background', ['manifest', 'vendor', 'background']),
+    htmlPage('home', 'app', ['vendor', 'tab']),
+    htmlPage('popup', 'popup', ['vendor', 'popup']),
+    htmlPage('options', 'options', ['vendor', 'options']),
+    htmlPage('background', 'background', ['vendor', 'background']),
     // End customize
     new CopyWebpackPlugin([{ from: path.join(rootDir, 'static') }]),
     new ChromeReloadPlugin({
@@ -109,10 +129,6 @@ module.exports = {
           ) === 0
         )
       }
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'manifest',
-      chunks: ['vendor']
     })
   ],
   performance: { hints: false }
