@@ -21,6 +21,9 @@ export default {
     })
     commit(types.SEARCH_COMMENT_DATA, { data: data, searchText: text })
   },
+  allCommentData ({ commit, state }) {
+    commit(types.ALL_COMMENT_DATA)
+  },
   sortRecentlyComments({ commit, state }) {
     let sortData = state.commentData.sort((a, b) => {
       if(a.createdAt < b.createdAt) return 1

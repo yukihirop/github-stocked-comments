@@ -8,6 +8,7 @@ export const paginateCallback = (store, paginate) => {
     switch(mutation.type){
       case types.FETCH_COMMENT_DATA:
       case types.SEARCH_COMMENT_DATA:
+      case types.ALL_COMMENT_DATA:
         paginate.resetPage(state.currentCommentData)
         state.eventHub.$emit('build-page')
         break
