@@ -6,12 +6,13 @@ import RepoLanguage from './RepoLanguage'
 export default class Issue extends Base {
   constructor (params) {
     super(params)
-    this.id = this.createId(params)
-    this.type = params.type
-    this.issueId = params.issueId
-    this.resourceName = 'issue'
-    this.foreignKey = 'issue_id'
+    this.repoUserName = this.params.repoUserName
+    this.repoName = this.params.repoName
+    this.issueId = this.params.issueId
     this.repoLanguage = new RepoLanguage(this.params)
+    // override
+    this.type = this.params.type
+    this.id = this.createId(this.params)
   }
 
   relationships(){
@@ -30,6 +31,8 @@ export default class Issue extends Base {
       number: `${Number(this.issueId)}`
     }).then(result => {
       this.data = result
+    }).catch(error => {
+      console.log(error)
     })
   }
 }

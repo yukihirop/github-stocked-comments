@@ -6,12 +6,13 @@ import RepoLanguage from './RepoLanguage'
 export default class IssueComment extends Base {
   constructor (params) {
     super(params)
-    this.id = this.createId(params)
-    this.type = params.type
-    this.commentId = params.commentId
-    this.resourceName = 'issuecomment'
-    this.foreignKey = 'issuecomment_id'
+    this.repoUserName = this.params.repoUserName
+    this.repoName = this.params.repoName
+    this.commentId = this.params.commentId
     this.repoLanguage = new RepoLanguage(this.params)
+    // override
+    this.type = this.params.type
+    this.id = this.createId(params)
   }
 
   relationships(){
@@ -30,6 +31,8 @@ export default class IssueComment extends Base {
       comment_id: `${Number(this.commentId)}`
     }).then(result => {
       this.data = result
+    }).catch(error => {
+      console.log(error)
     })
   }
 }

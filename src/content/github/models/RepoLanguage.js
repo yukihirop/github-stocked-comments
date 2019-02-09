@@ -5,10 +5,11 @@ import Base from './Base'
 export default class RepoLanguage extends Base {
   constructor (params) {
     super(params)
-    this.id = this.createId(params)
-    this.resourceName = 'repo_language'
-    this.foreignKey = 'repo_language_id'
+    this.repoUserName = this.params.repoUserName
+    this.repoName = this.params.repoName
+    // override
     this.type = 'repo_language'
+    this.id = this.createId(this.params)
   }
 
   relationships(){
@@ -17,7 +18,7 @@ export default class RepoLanguage extends Base {
 
   // private
   createId(params){
-    return params.repoUserName + '-' + params.repoName
+    return `${params.repoUserName}-${params.repoName}-${this.type}`
   }
 
   dataFromOctokit () {
@@ -26,6 +27,8 @@ export default class RepoLanguage extends Base {
       repo: `${this.repoName}`,
     }).then(result => {
       this.data = result
+    }).catch(error => {
+      console.log(error)
     })
   }
 }

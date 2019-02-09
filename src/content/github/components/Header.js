@@ -1,13 +1,25 @@
 'use strict'
 
+import LoginUserInfo from '@/content/github/apis/LoginUserInfo'
+
 export default class Header {
   constructor () {
     this.$head = $('head')
     this.$headerUl = $('header nav ul')
+    this.loginUserName = $('details-menu[role=menu]').find('a:contains("Signed in as")').children().text()
   }
 
   attachStockedCommentsLink () {
     this.$headerUl.append(this.stockedCommentsLinkLi())
+  }
+
+  saveLoginUserName(){
+    let params = { userName: this.loginUserName }
+    let user = new LoginUserInfo(params)
+    user.saveData((error, isSave) => {
+      if (error) throw error
+      if (isSave) console.log('Save data success')
+    })
   }
 
   // private

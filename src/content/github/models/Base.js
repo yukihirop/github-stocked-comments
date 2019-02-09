@@ -3,18 +3,26 @@
 import createOctokitAuthClient from '@/content/authClient'
 
 export default class Base {
-  constructor (params) {
+  constructor (params, options = {}) {
+    Object.assign(params, options)
     this.params = params
-    this.repoUserName = params.repoUserName
-    this.repoName = params.repoName
     this.authClient = createOctokitAuthClient()
     this.data = {}
-    this.resourceName = 'base'
+    // Please override in inherit class
     this.type = 'base'
+    this.id = 0
   }
 
   get name(){
-    return this.resourceName
+    return this.type
+  }
+
+  get resourceName(){
+    return this.type
+  }
+
+  get foreignKey(){
+    return `${this.type}_id`
   }
 
   linkedResources(){
@@ -38,6 +46,15 @@ export default class Base {
   dataFromOctokit () {
     let error = new Error('Implement inherit class')
     throw error
+  }
+
+  updateProperties(params = {}){
+    if (params === {}) {
+      this.id = this.createId(this.params)
+    } else {
+      let error = new Error('Implement inherit class')
+      throw error
+    }
   }
 
   dataFromOctokitWithRelations(){
