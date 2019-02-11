@@ -1,7 +1,12 @@
 <template>
   <span>
     <h3 class="h4 mb-2">Jump to a friend</h3>
-    <div data-pjax="">
+    <div>
+      <span v-for="avatarURL in followingAvatarURLList" id="avatarURL.id" >
+        <a aria-label="chimame" class="avatar-group-item tooltipped-n" href="/stars/chimame">
+          <img class="avatar ghh-user-x tooltipstered" src="https://avatars2.githubusercontent.com/u/7520815?s=84&amp;v=4" width="42" height="42" alt="@chimame" style="box-shadow: transparent 0px 0px;">
+        </a>
+      </span>
       <a aria-label="chimame" class="avatar-group-item tooltipped-n" href="/stars/chimame">
         <img class="avatar ghh-user-x tooltipstered" src="https://avatars2.githubusercontent.com/u/7520815?s=84&amp;v=4" width="42" height="42" alt="@chimame" style="box-shadow: transparent 0px 0px;">
       </a>
@@ -49,7 +54,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
-  name: 'JumpToaFriend'
+  name: 'JumpToaFriend',
+  computed: {
+    ...mapState('sidebar',[
+      'followingAvatarURLList'
+    ])
+  }
 }
 </script>

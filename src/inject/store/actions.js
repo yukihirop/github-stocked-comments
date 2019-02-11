@@ -6,13 +6,25 @@ import Issue from '@/models/github/Issue'
 import IssueComment from '@/models/github/IssueComment'
 
 export default {
+  updateCurrentCommentData({ commit, state }, payload) {
+    commit(types.UPDATE_CURRENT_COMMENT_DATA, { data: payload })
+  },
+  initialize({ commit, dispatch, state }) {
+    let promises = [dispatch('fetchDataFromStorage'), dispatch('sidebar/fetchLoginUserData')]
+    Promise.all(promises).then(() => {
+      dispatch('sidebar/initializeFilterList')
+    })
+  },
   fetchDataFromStorage ({ commit, state }) {
-    let api = new StockedComment()
-    let issue = new Issue()
-    let issuecomment = new IssueComment()
-    api.fetchData([issuecomment, issue], (error, payload) => {
-      if (error) throw error
-      commit(types.FETCH_COMMENT_DATA, { data: payload })
+    return new Promise((resolve, reject) => {
+      let api = new StockedComment()
+      let issue = new Issue()
+      let issuecomment = new IssueComment()
+      api.fetchData([issuecomment, issue], (error, payload) => {
+        if (error) throw error
+        commit(types.FETCH_COMMENT_DATA, { data: payload })
+        resolve()
+      })
     })
   },
   searchCommentData ({ commit, state }, text) {
@@ -20,9 +32,6 @@ export default {
       return comment.body.toLowerCase().includes(text.toLowerCase())
     })
     commit(types.SEARCH_COMMENT_DATA, { data: data, searchText: text })
-  },
-  allCommentData ({ commit, state }) {
-    commit(types.ALL_COMMENT_DATA)
   },
   sortRecentlyComments({ commit, state }) {
     let sortData = state.commentData.sort((a, b) => {

@@ -19,20 +19,28 @@ export default {
     SidebarContent: SidebarContent
   },
   created(){
-    console.log("ExploreContainar#created")
-    this.fetchDataFromStorage()
+    this.initialize()
     chrome.storage.onChanged.addListener((changes, namespace) => {
       Object.keys(changes).forEach((key) => {
-        if ((key === 'github-stocked-comments.github.issue') || (key === 'github-stocked-comments.github.issuecomment')){
-          this.fetchDataFromStorage()
+        switch(key){
+          case 'github-stocked-comments.github.issue':
+          case 'github-stocked-comments.github.issuecomment':
+            this.initialize()
+            break
+          case 'github-stocked-comments.github.followings':
+            this.fetchLoginUserData()
+            break
         }
       })
     })
   },
   methods: {
     ...mapActions([
-      'fetchDataFromStorage'
+      'initialize'
     ]),
+    ...mapActions('sidebar', [
+      'fetchLoginUserData'
+    ])
   }
 }
 </script>
