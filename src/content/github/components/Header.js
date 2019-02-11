@@ -1,6 +1,6 @@
 'use strict'
 
-import LoginUserInfo from '@/content/github/apis/LoginUserInfo'
+import LoginUserInfo from '@/apis/github/LoginUserInfo'
 
 export default class Header {
   constructor () {
@@ -15,8 +15,8 @@ export default class Header {
 
   saveLoginUserName(){
     let params = { userName: this.loginUserName }
-    let user = new LoginUserInfo(params)
-    user.saveData((error, isSave) => {
+    let user = new LoginUserInfo()
+    user.saveData(params, (error, isSave) => {
       if (error) throw error
       if (isSave) console.log('Save data success')
     })

@@ -8,7 +8,7 @@ var convertFromResourceToStorageKey = resourceName => {
     'repo_language': 'github-stocked-comments.github.repo_language',
     'user':          'github-stocked-comments.github.user',
     'followers':     'github-stocked-comments.github.followers',
-    'following':     'github-stocked-comments.github.following',
+    'followings':    'github-stocked-comments.github.followings',
     'liked':         'github-stocked-comments.extension.liked'
   }
 
