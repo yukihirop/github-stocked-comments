@@ -31,12 +31,6 @@ export default class Issue extends BaseModel {
     }
   }
 
-  outer_fields(){
-    return {
-      mainLanguage: this.repo_language.mainLanguage
-    }
-  }
-
   /*****************/
   /*** Save Func ***/
   /*****************/
@@ -64,14 +58,14 @@ export default class Issue extends BaseModel {
   /******************/
 
   setProperties (id, data) {
+    this.id = id
+    this.data = data
     this.setSelfProperties(id, data)
     this.setPostUserIssueProperties(id, data)
   }
 
   // private
   setSelfProperties(id, data){
-    this.id = id
-    this.data = data
     this.repoUserName = data.repoUserName
     this.repoName = data.repoName
     // foreign key

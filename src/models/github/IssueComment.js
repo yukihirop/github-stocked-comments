@@ -31,12 +31,6 @@ export default class IssueComment extends BaseModel {
     }
   }
 
-  outer_fields(){
-    return {
-      mainLanguage: this.repo_language.mainLanguage
-    }
-  }
-
   /*****************/
   /*** Save Func ***/
   /*****************/
@@ -65,13 +59,13 @@ export default class IssueComment extends BaseModel {
 
   // private
   setProperties (id, data) {
+    this.id = id
+    this.data = data
     this.setSelfProperties(id, data)
     this.setPostUserCommentProperties(id, data)
   }
 
   setSelfProperties(id, data) {
-    this.id = id
-    this.data = data
     this.repoUserName = data.repoUserName
     this.repoName = data.repoName
     // foreign key

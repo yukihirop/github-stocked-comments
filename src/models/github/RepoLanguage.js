@@ -47,13 +47,15 @@ export default class RepoLanguage extends BaseModel {
   /******************/
 
   setProperties (id, data) {
+    this.id = id
+    this.data = data
     this.mainLanguage = this.createMainLanguage(data)
   }
 
   createMainLanguage(data){
-    let bytes = Object.values(data)
+    let bytes = Object.values(data['data'])
     let maxByte = Math.max.apply(null, bytes)
-    let result = Object.keys(data).filter(key => { return data[key] === maxByte })[0]
+    let result = Object.keys(data['data']).filter(key => { return data['data'][key] === maxByte })[0]
     return result
   }
 }

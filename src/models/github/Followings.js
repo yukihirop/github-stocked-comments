@@ -19,8 +19,7 @@ export default class Followings extends BaseModel {
   fields(){
     return {
       id: this.id,
-      type: this.type,
-      userName: this.userName
+      data: this.data['data']
     }
   }
 
@@ -56,7 +55,6 @@ export default class Followings extends BaseModel {
           case 'userGithubId':
             this.userGithubId = value
             this.id = this.createId(params)
-            
             break
           default:
             this.id = this.createId(params)
@@ -74,7 +72,5 @@ export default class Followings extends BaseModel {
   setProperties(id, data){
     this.id = id
     this.data = data
-    this.userName = data.login
-    this.avatarURL = data.avatar_url
   }
 }

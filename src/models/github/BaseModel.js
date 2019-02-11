@@ -36,10 +36,6 @@ export default class BaseModel {
     throw error
   }
 
-  outer_fields(){
-    return {}
-  }
-
   /*****************/
   /*** Save Func ***/
   /*****************/
@@ -82,7 +78,7 @@ export default class BaseModel {
 
   buildSaveData(params){
     let result = {}
-    this.appendForeignKeys(this.relationships)
+    this.appendForeignKeys()
     this.data.id = this.id
     this.data.type = this.type
     this.data.repoUserName = params.repoUserName
@@ -91,9 +87,10 @@ export default class BaseModel {
     return result
   }
 
-  appendForeignKeys(models){
-    if (models === undefined) return
-    models.forEach(model => {
+  // private
+  appendForeignKeys(){
+    if (this.relationships === undefined) return
+    this.relationships.forEach(model => {
       this.data[model.foreignKey] = model.id
     })
   }
@@ -102,40 +99,9 @@ export default class BaseModel {
   /*** Fetch Func ***/
   /******************/
 
-  buildFetchData(id, dataWithRelationship){
-    let relationshipsData = dataWithRelationship.relationships
-    this.setProperties(id, dataWithRelationship)
-    this.relationships.forEach(relationship => {
-      let relationship_data = relationshipsData[relationship.name]
-      let relationship_id = relationship_data.id
-      relationship.buildFetchData(relationship_id, relationship_data)
-    })
-    let fields = this.fields()
-    let outer_fields = this.outer_fields()
-    Object.assign(fields, outer_fields)
-    return fields
-  }
-
-  createDataWithRelationship(dataFromStorage){
-    let merged = this.mergedData(dataFromStorage)
-    let baseData = merged[this.name]
-
-    if(baseData === undefined) return {}
-
-    Object.keys(baseData).forEach(key => {
-      let unitResource = baseData[key]
-      unitResource.relationships = {}
-
-      this.relationships.forEach(relationship => {
-        let foreignKeyValue = unitResource[relationship.foreignKey]
-        let relationshipData = merged[relationship.name][foreignKeyValue].data
-        unitResource.relationships[relationship.name] = relationshipData
-      })
-
-      baseData[key] = unitResource
-    })
-
-    return baseData
+  buildFetchData(id, data){
+    this.setProperties(id, data)
+    return this.fields()
   }
 
   // private
@@ -148,7 +114,7 @@ export default class BaseModel {
   }
 
   setProperties (id, data) {
-    let error = new Error('Override in extends class')
+    let error = new Error('Implement inherit class')
     throw error
   }
 }

@@ -73,16 +73,9 @@ export default class BaseApi {
       this.fetchResourceData(resource)
         .then(dataFromStorage => {
 
-          let dataWithRelationships = resource.createDataWithRelationship(dataFromStorage)
-
-          Object.keys(dataWithRelationships).forEach((id, index) => {
-            let data = dataWithRelationships[id]
-            let json = resource.buildFetchData(id, data)
-            
-            this.payload.push(json)
+          this.buildFetchData(resource, dataFromStorage).forEach(unitData => {
+            this.payload.push(unitData)
           })
-
-
 
           resolve()
         })
@@ -90,6 +83,58 @@ export default class BaseApi {
           setTimeout(_ => callback(error))
         })
       })
+  }
+
+  buildFetchData(resource, dataFromStorage){
+    let repository = this.resourcesRepositoryWithRelationships(resource, dataFromStorage)
+    let resourceData = repository[resource.name]
+    return resourceData.map(unitData => {
+      resource.relationships.forEach(relationship => {
+        let relationshipId = unitData[relationship.foreignKey]
+        let relationshipName = relationship.name
+        unitData[relationshipName] = repository[relationshipName].filter(data => { return data.id === relationshipId })
+      })
+      return unitData
+    })
+  }
+
+  // private
+  resourcesRepositoryWithRelationships(resource, dataFromStorage) {
+    let resources = []
+    let result = {}
+
+    // mergedData example:
+    // { 'issue': { .... }, 'repo_language': { ... }}
+    let mergedData = this.mergedData(dataFromStorage)
+    Object.keys(mergedData).forEach((type) => {
+      let data = mergedData[type]
+      if (resource.type === type ){
+        // unitData example:
+        // pomber-git-history-29-issuecomment-461114609: {status: 200, url: "https://api.github.com/repos/pomber/git-history/is…t_secret=3c1e238e2eb028c90d397ccfab0fc2b2554b51c1", headers: {…}, data: {…}, repo_language_id: "pomber-git-history-repo_language", …}
+        Object.values(data).forEach(unitData => {
+          let fetchData = resource.buildFetchData(unitData['id'], unitData)
+          resources.push(fetchData)
+        })
+      } else {
+        resource.relationships.forEach(relationship => {
+          if(relationship.type === type) {
+            let relationships = this.resourcesRepositoryWithRelationships(relationship, dataFromStorage)
+            result[relationship.name] = relationships[relationship.name]
+          }
+        })
+      }
+    })
+    result[resource.name] = resources
+    return result
+  }
+
+  // private
+  mergedData(dataFromStorage){
+    let result = dataFromStorage.reduce((base, data) => {
+      Object.assign(base, data)
+      return base
+    },{})
+    return result
   }
 
   // private

@@ -19,8 +19,7 @@ export default class Followers extends BaseModel {
   fields(){
     return {
       id: this.id,
-      type: this.type,
-      userName: this.userName
+      data: this.data['data']
     }
   }
 
@@ -74,7 +73,5 @@ export default class Followers extends BaseModel {
   setProperties(id, data){
     this.id = id
     this.data = data
-    this.userName = data.login
-    this.avatarURL = data.avatar_url
   }
 }

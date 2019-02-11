@@ -1,27 +1,26 @@
 'use strict'
 
 import BaseModel from './BaseModel'
-import Followers  from './Followers'
 import Followings from './Followings'
 
 export default class LoginUser extends BaseModel {
   constructor() {
     super()
-    this.followers = new Followers()
     this.followings = new Followings()
     // override
     this.type = 'user'
   }
 
   get relationships(){
-    return [this.followers, this.followings]
+    return [this.followings]
   }
 
   fields(){
     return {
       id: this.id,
       type: this.type,
-      userName: this.userName
+      userName: this.userName,
+      followings_id: this.followings_id
     }
   }
 
@@ -42,7 +41,6 @@ export default class LoginUser extends BaseModel {
       
       let update_params = { userGithubId: result.data.id }
       this.updateProperties(params, update_params)
-      this.followers.updateProperties(params, update_params)
       this.followings.updateProperties(params, update_params)
     }).catch(error => {
       console.log(error)
@@ -51,7 +49,7 @@ export default class LoginUser extends BaseModel {
 
   buildSaveData(params){
     let result = {}
-    this.appendForeignKeys(this.relationships)
+    this.appendForeignKeys()
     this.data.id = this.id
     this.data.repoUserName = params.repoUserName
     this.data.repoName = params.repoName
@@ -88,13 +86,9 @@ export default class LoginUser extends BaseModel {
   /******************/
 
   setProperties (id, data) {
-    this.setSelfProperties(id, data)
-  }
-
-  // private
-  setSelfProperties(id, data){
     this.id = id
     this.data = data
-    this.userName = data.login
+    this.userName = data['data'].login
+    this.followings_id = data.followings_id
   }
 }
