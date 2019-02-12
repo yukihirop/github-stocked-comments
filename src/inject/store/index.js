@@ -6,7 +6,7 @@ import { paginateCallback } from '@/inject/store/plugins/paginateCallback'
 import * as getters from './getters'
 import actions from './actions'
 import mutations from './mutations'
-import sidebar from './modules/sidebar/index'
+import sidebar_filter from './modules/sidebar_filter/index'
 
 Vue.use(Vuex)
 
@@ -27,7 +27,7 @@ export default new Vuex.Store({
   actions,
   mutations,
   modules: {
-    sidebar
+    sidebar_filter
   },
   plugins: [
     PaginatePlugin(

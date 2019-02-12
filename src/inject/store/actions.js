@@ -10,10 +10,10 @@ export default {
     commit(types.UPDATE_CURRENT_COMMENT_DATA, { data: payload })
   },
   initialize({ commit, dispatch, state }) {
-    let promises = [dispatch('fetchDataFromStorage'), dispatch('sidebar/fetchLoginUserData')]
+    let promises = [dispatch('fetchDataFromStorage'), dispatch('sidebar_filter/fetchLoginUserData')]
     Promise.all(promises).then(() => {
-      dispatch('sidebar/initializeFilterList')
-      dispatch('sidebar/initializeLanguageFilterList')
+      dispatch('sidebar_filter/initializeFilterList')
+      dispatch('sidebar_filter/initializeLanguageFilterList')
     })
   },
   fetchDataFromStorage ({ commit, state }) {

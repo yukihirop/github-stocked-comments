@@ -59,7 +59,7 @@ import { mapState } from 'vuex'
 export default {
   name: 'JumpToaFriend',
   computed: {
-    ...mapState('sidebar',[
+    ...mapState('sidebar_filter',[
       'followingAvatarURLList'
     ])
   }

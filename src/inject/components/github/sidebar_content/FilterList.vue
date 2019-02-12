@@ -33,14 +33,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('sidebar', [
+    ...mapGetters('sidebar_filter', [
       'allCommentsCount',
       'loginUserCommentsCount',
       'otherUserCommentsCount',
     ])
   },
   methods: {
-    ...mapActions('sidebar', [
+    ...mapActions('sidebar_filter', [
       'filterToAllCommentData',
       'filterToLoginUserCommentData',
       'filterToOtherUserCommentData'

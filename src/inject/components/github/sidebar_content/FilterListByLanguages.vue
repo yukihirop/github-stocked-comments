@@ -34,12 +34,12 @@ export default {
     }
   },
   computed: {
-    ...mapState('sidebar',[
+    ...mapState('sidebar_filter',[
       'languageList'
     ])
   },
   methods: {
-    ...mapActions('sidebar',[
+    ...mapActions('sidebar_filter',[
       'getTiedLanguageTagCommentData',
       'getAllFilteredCommentData'
     ]),
