@@ -6,7 +6,9 @@ const initialState = {
   loginUserName: '',
   allCommentData: [],
   loginUserCommentData: [],
-  otherUserCommentData: []
+  otherUserCommentData: [],
+  filteredCommentData: [],
+  languageList: {}
 }
 
 export default {

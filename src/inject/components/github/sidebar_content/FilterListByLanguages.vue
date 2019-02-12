@@ -1,67 +1,71 @@
 <template>
   <span>
     <h3 class="h4 mb-2">Filter by languages</h3>
-    <ul class="filter-list small" data-pjax="">
-      <li class="language">
-        <span class="bar" style="width: 28%;"></span>
-        <a class="filter-item" href="https://github.com/stars?language=javascript">
-          <span class="count">14 </span>JavaScript
-        </a>
-      </li>
-      <li class="language">
-        <span class="bar" style="width: 28%;"></span>
-        <a class="filter-item" href="https://github.com/stars?language=ruby">
-          <span class="count">14 </span>Ruby
-        </a>
-      </li>
-      <li class="language">
-        <span class="bar" style="width: 2px;"></span>
-        <a class="filter-item" href="https://github.com/stars?language=c%2B%2B">
-          <span class="count">1 </span>C++
-        </a>
-      </li>
-      <li class="language">
-        <span class="bar" style="width: 8%;"></span>
-        <a class="filter-item" href="https://github.com/stars?language=python">
-          <span class="count">4 </span>Python
-        </a>
-      </li>
-      <li class="language">
-        <span class="bar" style="width: 12%;"></span>
-        <a class="filter-item" href="https://github.com/stars?language=go">
-          <span class="count">6 </span>Go
-        </a>
-      </li>
-      <li class="language">
-        <span class="bar" style="width: 6%;"></span>
-        <a class="filter-item" href="https://github.com/stars?language=typescript">
-          <span class="count">3 </span>TypeScript
-        </a>
-      </li>
-      <li class="language">
-        <span class="bar" style="width: 2px;"></span>
-        <a class="filter-item" href="https://github.com/stars?language=css">
-          <span class="count">1 </span>CSS
-        </a>
-      </li>
-      <li class="language">
-        <span class="bar" style="width: 4%;"></span>
-        <a class="filter-item" href="https://github.com/stars?language=html">
-          <span class="count">2 </span>HTML
-        </a>
-      </li>
-      <li class="language">
-        <span class="bar" style="width: 4%;"></span>
-        <a class="filter-item" href="https://github.com/stars?language=vue">
-          <span class="count">2 </span>Vue
-        </a>
-      </li>
+    <ul class="filter-list small">
+      <span v-for="(count, language) in languageList">
+        <li class="language">
+          <span class="bar"></span>
+          <a :class="['filter-item', clickClass(language)]" :value="language" @click="clickLanguageTag($event)">
+            <span class="count">{{ count }}</span>{{ language }}
+            <span v-if="displayDeleteButton(language)">
+              <span @click.stop="clickDeleteButton($event)" :value="language">
+                <!-- from github -->
+                <svg class="octicon octicon-x" viewBox="0 0 12 16" version="1.1" width="12" height="16" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48L7.48 8z"></path>
+                </svg>
+              </span>
+            </span>
+          </a>
+        </li>
+      </span>
     </ul>
   </span>
 </template>
 
 <script>
+import Vue from 'vue'
+import { mapState, mapActions } from 'vuex'
+
 export default {
-  name: 'FilterListByLanguages'
+  name: 'FilterListByLanguages',
+  data(){
+    return {
+      clickClassData: {}
+    }
+  },
+  computed: {
+    ...mapState('sidebar',[
+      'languageList'
+    ])
+  },
+  methods: {
+    ...mapActions('sidebar',[
+      'getTiedLanguageTagCommentData',
+      'getAllFilteredCommentData'
+    ]),
+    clickLanguageTag(event){
+      let language = event.currentTarget.getAttribute('value')
+      this.getTiedLanguageTagCommentData(language)
+      this._resetClickClass()
+      this.$set(this.clickClassData, language, 'selected')
+    },
+    clickDeleteButton(event){
+      let language = event.currentTarget.getAttribute('value')
+      this.getAllFilteredCommentData()
+      this.$set(this.clickClassData, language, '')
+    },
+    clickClass(language){
+      return this.clickClassData[language]
+    },
+    displayDeleteButton(language) {
+      return this.clickClassData[language] === 'selected'
+    },
+    _resetClickClass(){
+      this.clickClassData = Object.keys(this.clickClassData).reduce((base, language) => {
+        base[language] = ''
+        return base
+      }, {})
+    }
+  }
 }
 </script>

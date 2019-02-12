@@ -13,6 +13,7 @@ export default {
     let promises = [dispatch('fetchDataFromStorage'), dispatch('sidebar/fetchLoginUserData')]
     Promise.all(promises).then(() => {
       dispatch('sidebar/initializeFilterList')
+      dispatch('sidebar/initializeLanguageFilterList')
     })
   },
   fetchDataFromStorage ({ commit, state }) {
