@@ -1,16 +1,14 @@
 import * as types from './mutation-types'
-import LoginUserInfo from '@/apis/github/LoginUserInfo'
-import LoginUser from '@/models/github/LoginUser'
 
 const createLoginUserCommentData = (state, rootState) => {
   return rootState.commentData.filter(comment => {
-    return comment.repoUserName === state.loginUserName
+    return comment.repoUserName === rootState.sidebar_friend.loginUserName
   })
 }
 
 const createOtherUserCommentData = (state, rootState) => {
   return rootState.commentData.filter(comment => {
-    return comment.repoUserName !== state.loginUserName
+    return comment.repoUserName !== rootState.sidebar_friend.loginUserName
   })
 }
 
@@ -33,17 +31,6 @@ const createTiedLanguageTagCommentData = (state, language) => {
 }
 
 export default {
-  fetchLoginUserData({ state, commit }){
-    return new Promise((resolve, reject) => {
-      let api = new LoginUserInfo()
-      let login_user = new LoginUser()
-      api.fetchData([login_user],(error, payload) => {
-        if (error) throw error
-        commit(types.FETCH_LOGIN_USER_DATA, { data: payload })
-        resolve()
-      })
-    })
-  },
   initializeFilterList({ state, commit, rootState }) {
     let allCommentData = rootState.commentData
     let loginUserCommentData = createLoginUserCommentData(state, rootState)

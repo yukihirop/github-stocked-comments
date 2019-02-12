@@ -1,10 +1,6 @@
 import * as types from './mutation-types'
 
 export default {
-  [types.FETCH_LOGIN_USER_DATA](state, payload){
-    let loginUserData = payload.data[0]
-    state.loginUserName = loginUserData.userName
-  },
   [types.INITIALIZE_FILTER_LIST] (state, payload) {
     state.allCommentData = payload.data.allCommentData
     state.loginUserCommentData = payload.data.loginUserCommentData
