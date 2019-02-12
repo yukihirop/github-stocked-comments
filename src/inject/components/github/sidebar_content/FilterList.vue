@@ -1,30 +1,70 @@
 <template>
-  <ul class="filter-list" data-pjax="">
+  <ul class="filter-list">
     <li>
-      <a href="https://github.com/stars?direction=desc&amp;sort=created" class="filter-item selected" rel="public, li.private">
-        <span class="count">50</span>All comments
+      <a @click="clickAllComments()" :class="['filter-item', clickClass['all']]">
+        <span class="count">{{ allCommentsCount }}</span>All comments
       </a>
     </li>
     <li>
-      <a href="https://github.com/stars?direction=desc&amp;filter=yours&amp;sort=created" class="filter-item " rel="Yours">
-        <span class="count">1</span>Your repositories
+      <a @click="clickYourComments()" :class="['filter-item', clickClass['your']]">
+        <span class="count">{{ loginUserCommentsCount }}</span>Your comments
       </a>
     </li>
     <li>
-      <a href="https://github.com/stars?direction=desc&amp;filter=others&amp;sort=created" class="filter-item " rel="others">
-        <span class="count">49</span>Others’ repositories
-      </a>
-    </li>
-    <li>
-      <a href="https://github.com/stars?direction=desc&amp;filter=topics&amp;sort=created" class="filter-item " rel="others">
-        <span class="count">0</span>Topics
+      <a @click="clickOthersComments()" :class="['filter-item', clickClass['other']]">
+        <span class="count">{{ otherUserCommentsCount }}</span>Other's comments
       </a>
     </li>
   </ul>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
-  name: 'FilterList'
+  name: 'FilterList',
+  data(){
+    return {
+      clickClass: {
+        all: 'selected',
+        your: '',
+        other: ''
+      }
+    }
+  },
+  computed: {
+    ...mapGetters('sidebar_filter', [
+      'allCommentsCount',
+      'loginUserCommentsCount',
+      'otherUserCommentsCount',
+    ])
+  },
+  methods: {
+    ...mapActions('sidebar_filter', [
+      'filterToAllCommentData',
+      'filterToLoginUserCommentData',
+      'filterToOtherUserCommentData'
+    ]),
+    resetClickClass(){
+      Object.keys(this.clickClass).forEach(key => {
+        this.clickClass[key] = ''
+      })
+    },
+    clickAllComments(){
+      this.filterToAllCommentData()
+      this.resetClickClass()
+      this.clickClass.all = 'selected'
+    },
+    clickYourComments(){
+      this.filterToLoginUserCommentData()
+      this.resetClickClass()
+      this.clickClass.your = 'selected'
+    },
+    clickOthersComments(){
+      this.filterToOtherUserCommentData()
+      this.resetClickClass()
+      this.clickClass.other = 'selected'
+    }
+  }
 }
 </script>

@@ -1,6 +1,6 @@
 'use strict'
 
-import StockedComment from '@/content/github/apis/StockedComment'
+import StockedComment from '@/apis/github/StockedComment'
 
 export default class IssueComment {
   constructor () {
@@ -32,8 +32,8 @@ export default class IssueComment {
       let commentData = new IssueCommentData($this)
       var params = commentData.params()
 
-      let api = new StockedComment(params)
-      api.saveData((error, isSave) => {
+      let api = new StockedComment()
+      api.saveData(params, (error, isSave) => {
         if (error) throw error
         if (isSave) console.log('Save data success')
       })

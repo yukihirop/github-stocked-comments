@@ -8,6 +8,7 @@ $(() => {
     let comment = new IssueComment()
 
     header.attachStockedCommentsLink()
+    header.saveLoginUserName()
     comment.attachStockedCommentsButton()
 
     resolve()

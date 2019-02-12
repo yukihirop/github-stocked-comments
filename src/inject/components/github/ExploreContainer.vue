@@ -10,12 +10,37 @@
 <script>
 import MainContent from '@/inject/components/github/MainContent'
 import SidebarContent from '@/inject/components/github/SidebarContent'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'ExploreContainar',
   components: {
     MainContent: MainContent,
     SidebarContent: SidebarContent
+  },
+  created(){
+    this.initialize()
+    chrome.storage.onChanged.addListener((changes, namespace) => {
+      Object.keys(changes).forEach((key) => {
+        switch(key){
+          case 'github-stocked-comments.github.issue':
+          case 'github-stocked-comments.github.issuecomment':
+            this.initialize()
+            break
+          case 'github-stocked-comments.github.followings':
+            this.fetchLoginUserData()
+            break
+        }
+      })
+    })
+  },
+  methods: {
+    ...mapActions([
+      'initialize'
+    ]),
+    ...mapActions('sidebar', [
+      'fetchLoginUserData'
+    ])
   }
 }
 </script>

@@ -10,7 +10,6 @@
 <script>
 import AvatarImage from '@/inject/components/github/main_content/main_li/shared/AvatarImage'
 import CommentArea from '@/inject/components/github/main_content/main_li/shared/CommentArea'
-import IssueValidator from '@/inject/validators/main_content/main_li/IssueValidator'
 
 export default {
   name: 'Issue',
@@ -21,10 +20,7 @@ export default {
   props: {
     issue: {
       type: Object,
-      required: true,
-      validator (val) {
-        return IssueValidator.isValid(val)
-      }
+      required: true
     }
   },
   data () {

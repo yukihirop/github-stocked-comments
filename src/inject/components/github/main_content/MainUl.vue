@@ -19,7 +19,7 @@ import MainLi from '@/inject/components/github/main_content/MainLi'
 import Paginate from '@/inject/components/github/main_content/Paginate'
 import SorryPanel from '@/inject/components/github/main_content/SorryPanel'
 import Storage from '@/ext/Storage'
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import Mark from 'mark.js'
 
 export default {
@@ -36,23 +36,10 @@ export default {
       'eventHub'
     ])
   },
-  created () {
-    this.fetchDataFromStorage()
-    chrome.storage.onChanged.addListener((changes, namespace) => {
-      Object.keys(changes).forEach((key) => {
-        if ((key === 'github-stocked-comments.github.issue') || (key === 'github-stocked-comments.github.issuecomment')){
-          this.fetchDataFromStorage()
-        }
-      })
-    })
-  },
   mounted () {
     this.eventHub.$on('text-highlight', this.setTextHighlight)
   },
   methods: {
-    ...mapActions([
-      'fetchDataFromStorage'
-    ]),
     isDisplaySorryPanel(){
       return this.currentCommentData.length === 0
     },
