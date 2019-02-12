@@ -2,8 +2,6 @@
 
 import * as types from './mutation-types'
 import StockedComment from '@/apis/github/StockedComment'
-import Issue from '@/models/github/Issue'
-import IssueComment from '@/models/github/IssueComment'
 
 export default {
   updateCurrentCommentData({ commit, state }, payload) {
@@ -19,9 +17,7 @@ export default {
   fetchDataFromStorage ({ commit, state }) {
     return new Promise((resolve, reject) => {
       let api = new StockedComment()
-      let issue = new Issue()
-      let issuecomment = new IssueComment()
-      api.fetchData([issuecomment, issue], (error, payload) => {
+      api.setModelWhenFetch().fetchData((error, payload) => {
         if (error) throw error
         commit(types.FETCH_COMMENT_DATA, { data: payload })
         resolve()

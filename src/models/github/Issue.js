@@ -18,6 +18,7 @@ export default class Issue extends BaseModel {
   fields(){
     return {
       id: this.id,
+      user_id: this.user_id,
       type: this.type,
       repoUserName: this.repoUserName,
       repoName: this.repoName,
@@ -70,6 +71,7 @@ export default class Issue extends BaseModel {
     this.repoName = data.repoName
     // foreign key
     this.repo_language_id = data.repo_language_id
+    this.user_id = data.user_id
   }
 
   // private

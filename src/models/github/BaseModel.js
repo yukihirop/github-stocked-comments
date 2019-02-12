@@ -1,6 +1,7 @@
 'use strict'
 
 import createOctokitAuthClient from '@/content/authClient'
+import memory from '@/ext/Memory'
 
 export default class BaseModel {
   constructor () {
@@ -9,6 +10,7 @@ export default class BaseModel {
     // Please override in inherit class
     this.type = 'base'
     this.id = 0
+    this._relationships = []
   }
 
   get name(){
@@ -20,7 +22,11 @@ export default class BaseModel {
   }
 
   get relationships(){
-    return []
+    return this._relationships || []
+  }
+
+  set relationships(value) {
+    this._relationships = value
   }
 
   linkedResources(){
@@ -93,6 +99,7 @@ export default class BaseModel {
     this.relationships.forEach(model => {
       this.data[model.foreignKey] = model.id
     })
+    this.data['user_id'] = memory.get('user_id')
   }
 
   /******************/
