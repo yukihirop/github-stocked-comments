@@ -3,7 +3,8 @@ import mutations from './mutations'
 
 const initialState = {
   loginUserName: '',
-  followingsData: []
+  followingsData: [],
+  displayJumpToaFriend: false
 }
 
 export default {

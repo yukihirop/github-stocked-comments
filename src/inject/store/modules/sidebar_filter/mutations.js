@@ -9,6 +9,9 @@ export default {
   },
   [types.INITIALIZE_LANGUAGE_FILTER_LIST] (state, payload) {
     state.languageList = payload.data
+     if (Object.keys(state.languageList).length !== 0){
+      state.displayFilterListByLanguages = true
+     }
   },
   [types.FILTER_TO_ALL_COMMENT_DATA] (state, payload) {
     state.allCommentData = payload.data

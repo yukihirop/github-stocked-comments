@@ -7,7 +7,8 @@ const initialState = {
   loginUserCommentData: [],
   otherUserCommentData: [],
   filteredCommentData: [],
-  languageList: {}
+  languageList: {},
+  displayFilterListByLanguages: false
 }
 
 export default {
