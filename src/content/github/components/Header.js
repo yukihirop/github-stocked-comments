@@ -15,8 +15,9 @@ export default class Header {
 
   saveLoginUserName(){
     let params = { userName: this.loginUserName }
-    let user = new LoginUserInfo()
-    user.saveData(params, (error, isSave) => {
+    let api = new LoginUserInfo(null, params)
+
+    api.setModelWhenSave().saveData((error, isSave) => {
       if (error) throw error
       if (isSave) console.log('Save data success')
     })

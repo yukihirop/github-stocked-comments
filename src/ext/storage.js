@@ -85,13 +85,24 @@ export default class Storage {
         } else {
           let datadontExist = Object.keys(result).length === 0
           if(datadontExist) {
-            resolve(result)
+            resolve({ [this.resourceName]: {}})
           } else {
-            let data = { [this.resourceName]: JSON.parse(result[this.storageKey]) }
+            let dataFromStorage = JSON.parse(result[this.storageKey])
+            let data = { [this.resourceName]: dataFromStorage }
             resolve(data)
           }
         }
       })
     })
   }
+
+  // filterLoginUserData(data){
+  //   let keys = Object.keys(data).filter(key => {
+  //     return data[key].user_id === this.user_id
+  //   })
+  //   return keys.reduce((base, key) => {
+  //     base[key] = data[key]
+  //     return base
+  //   },{})
+  // }
 }
