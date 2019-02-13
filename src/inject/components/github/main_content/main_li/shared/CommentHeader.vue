@@ -7,7 +7,7 @@
       <strong class="css-truncate"></strong>
       <a class="author text-inherit css-truncate-target ghh-user-x tooltipstered" :href="href" style="box-shadow: transparent 0px 0px;">{{ userName }}</a>
       commented
-      <a href="#issuecomment-457553163" id="issuecomment-457553163-permalink" class="timestamp js-timestamp ghh-comment-x tooltipstered" style="box-shadow: transparent 0px 0px;"><span :datetime="createdAt" :title="createdAt">{{ createdAt }}</span></a>
+      <a @click.stop="" :href="originURL" target="_blank" ref="noreferrer noopener" class="timestamp js-timestamp ghh-comment-x tooltipstered" style="box-shadow: transparent 0px 0px;">{{ createdAt }}</a>
       <span class="js-comment-fragment">
         <div class="js-comment-edit-history d-inline">
         </div>
@@ -25,6 +25,10 @@ export default {
       default: ''
     },
     createdAt: {
+      type: String,
+      default: ''
+    },
+    originURL: {
       type: String,
       default: ''
     }

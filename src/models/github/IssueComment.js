@@ -27,6 +27,7 @@ export default class IssueComment extends BaseModel {
       postUserName: this.postUserName,
       postUserAvatarURL: this.postUserAvatarURL,
       postUserUserURL: this.postUserUserURL,
+      postOriginURL: this.postOriginURL,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     }
@@ -87,6 +88,7 @@ export default class IssueComment extends BaseModel {
     this.postUserName = postUserComment.userName
     this.postUserAvatarURL = postUserComment.avatarURL
     this.postUserUserURL = postUserComment.userURL
+    this.postOriginURL = postUserComment.html_url
     this.body = postUserComment.body
     this.createdAt = postUserComment.createdAt
     this.updatedAt = postUserComment.updatedAt
@@ -112,5 +114,6 @@ class PostUserComment {
     this.body = data.body
     this.createdAt = data.created_at
     this.updatedAt = data.updated_at
+    this.html_url = data.html_url
   }
 }

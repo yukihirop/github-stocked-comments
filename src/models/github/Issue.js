@@ -27,6 +27,7 @@ export default class Issue extends BaseModel {
       postUserName: this.postUserName,
       postUserAvatarURL: this.postUserAvatarURL,
       postUserUserURL: this.postUserUserURL,
+      postOriginURL: this.postOriginURL,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     }
@@ -87,6 +88,7 @@ export default class Issue extends BaseModel {
     this.postUserName = postUserIssue.userName
     this.postUserAvatarURL = postUserIssue.avatarURL
     this.postUserUserURL = postUserIssue.userURL
+    this.postOriginURL = postUserIssue.html_url
     this.body = postUserIssue.body
     this.createdAt = postUserIssue.createdAt
     this.updatedAt = postUserIssue.updatedAt
@@ -113,5 +115,6 @@ class PostUserIssue {
     this.body = data.body
     this.createdAt = data.created_at
     this.updatedAt = data.updated_at
+    this.html_url = data.html_url
   }
 }
