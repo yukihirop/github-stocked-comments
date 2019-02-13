@@ -6,7 +6,7 @@ export default {
     return new Promise((resolve, reject) => {
       let api = new LoginUserInfo()
 
-      api.setModelWhenFetch().fetchData((error, payload) => {
+      api.fetchData((error, payload) => {
         if (error) throw error
         commit(types.FETCH_LOGIN_USER_DATA, { data: payload })
         resolve()

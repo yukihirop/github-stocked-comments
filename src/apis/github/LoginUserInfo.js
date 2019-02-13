@@ -8,19 +8,19 @@ import memory from '@/ext/Memory'
 import Storage from '@/ext/Storage'
 
 export default class LoginUserInfo extends BaseApi {
-  // private
-  get targets() {
-    return this.model.linkedResources()
-  }
-
   /******************/
   /*** Save Func  ***/
   /******************/
 
+  saveData (callback) {
+    this.configureWhenSave()
+    super.saveData(callback)
+  }
+
   // private
   dataFromOctokit(){
     return new Promise(resolve => {
-      this.model.dataFromOctokitWithRelations(this.params).then(() => {
+      Promise.all(this.model.dataFromOctokitWithRelations(this.params)).then(() => {
         if (this.model instanceof LoginUser) {
           memory.set('user_id', this.model.id)
         }
@@ -29,16 +29,22 @@ export default class LoginUserInfo extends BaseApi {
     })
   }
 
-  setModelWhenSave(){
+  configureWhenSave(){
     let followers = new Followers()
     let followings = new Followings()
     this.model.relationships = [followers, followings]
+    this.targets = this.model.linkedResources()
     return this
   }
 
   /*******************/
   /*** Fetch Func  ***/
   /*******************/
+
+  fetchData (callback) {
+    this.configureWhenFetch()
+    super.fetchData(callback)
+  }
 
   // private
   isCurrentModelData(data) {
@@ -47,9 +53,10 @@ export default class LoginUserInfo extends BaseApi {
     }
   }
 
-  setModelWhenFetch(){
+  configureWhenFetch(){
     let followings = new Followings()
     this.model.relationships = [followings]
+    this.targets = this.model.linkedResources()
     return this
   }
 }

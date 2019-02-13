@@ -10,17 +10,12 @@ export default class StockedComment extends BaseApi {
   /*** Save Func  ***/
   /******************/
 
-  //private
-  dataFromOctokit(params){
-    this.setModel(params)
-    return new Promise(resolve => {
-      this.model.dataFromOctokitWithRelations(params).then(() => {
-        resolve(this.model)
-      })
-    })
+  saveData (callback) {
+    this.configureWhenSave()
+    super.saveData(callback)
   }
 
-  setModelWhenSave(){
+  configureWhenSave(){
     if (this.params.type === 'issue') {
       let issue = new Issue()
       this.model.relationships = [issue]
@@ -28,12 +23,19 @@ export default class StockedComment extends BaseApi {
       let issuecomment = new IssueComment()
       this.model.relationships = [issuecomment]
     }
+    this.targets = this.model.allDepthRelationships()
     return this
   }
 
   /*******************/
   /*** Fetch Func  ***/
   /*******************/
+
+  
+  fetchData (callback) {
+    this.configureWhenFetch()
+    super.fetchData(callback)
+  }
 
   // private
   isCurrentModelData(data) {
@@ -42,10 +44,11 @@ export default class StockedComment extends BaseApi {
     }
   }
 
-  setModelWhenFetch(){
+  configureWhenFetch(){
     let issue = new Issue()
     let issuecomment = new IssueComment()
     this.model.relationships = [issue, issuecomment]
+    this.targets = this.model.relationships
     return this
   }
 }
