@@ -1,6 +1,7 @@
 'use strict'
 
 import BaseApi from './BaseApi'
+import LoginUser from '@/models/github/LoginUser'
 import Issue from '@/models/github/Issue'
 import IssueComment from '@/models/github/IssueComment'
 
@@ -11,20 +12,40 @@ export default class StockedComment extends BaseApi {
 
   //private
   dataFromOctokit(params){
-    this.setBaseModel(params)
+    this.setModel(params)
     return new Promise(resolve => {
-      this.baseModel.dataFromOctokitWithRelations(params).then(() => {
-        resolve(this.baseModel)
+      this.model.dataFromOctokitWithRelations(params).then(() => {
+        resolve(this.model)
       })
     })
   }
 
-  // private
-  setBaseModel(params){
-    if (params.type === 'issue') {
-      this.baseModel = new Issue(params)
-    } else if (params.type === 'issuecomment') {
-      this.baseModel = new IssueComment(params)
+  setModelWhenSave(){
+    if (this.params.type === 'issue') {
+      let issue = new Issue()
+      this.model.relationships = [issue]
+    } else if (this.params.type === 'issuecomment') {
+      let issuecomment = new IssueComment()
+      this.model.relationships = [issuecomment]
     }
+    return this
+  }
+
+  /*******************/
+  /*** Fetch Func  ***/
+  /*******************/
+
+  // private
+  isCurrentModelData(data) {
+    if (this.model instanceof LoginUser){
+      return this.model.id === data.user_id
+    }
+  }
+
+  setModelWhenFetch(){
+    let issue = new Issue()
+    let issuecomment = new IssueComment()
+    this.model.relationships = [issue, issuecomment]
+    return this
   }
 }

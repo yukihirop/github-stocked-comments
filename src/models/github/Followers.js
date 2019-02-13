@@ -66,6 +66,14 @@ export default class Followers extends BaseModel {
     }
   }
 
+  // private
+  appendForeignKeys(){
+    if (this.relationships === undefined) return
+    this.relationships.forEach(model => {
+      this.data[model.foreignKey] = model.id
+    })
+  }
+
   /******************/
   /*** Fetch Func ***/
   /******************/
@@ -73,5 +81,7 @@ export default class Followers extends BaseModel {
   setProperties(id, data){
     this.id = id
     this.data = data
+    // foreign key
+    this.user_id = data.user_id
   }
 }

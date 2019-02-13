@@ -26,7 +26,11 @@ const createLanguageList = (state, rootState) => {
 
 const createTiedLanguageTagCommentData = (state, language) => {
   return state.filteredCommentData.filter(comment => {
-    return comment.repo_language[0].mainLanguage === language
+    if(language === 'undefined'){
+      return comment.repo_language[0].mainLanguage === undefined
+    } else {
+      return comment.repo_language[0].mainLanguage === language
+    }
   })
 }
 

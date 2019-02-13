@@ -1,40 +1,53 @@
 'use strict'
 
 import Storage from '@/ext/Storage'
+import LoginUser from '@/models/github/LoginUser'
 
 export default class BaseApi {
-  constructor () {
+  constructor (model = null, params = {}) {
     // Please override in inherit class
-    this.baseModel = null
+    this.model = (model === null) ?  new LoginUser() : model
     this.payload = []
+    this.params = params
+  }
+
+  // private
+  get targets() {
+    return this.model.relationships
   }
 
   /*****************/
   /*** Save Func ***/
   /*****************/
 
-  saveData (params, callback) {
-    this.dataFromOctokit(params)
-      .then((resource) => {
-        this.saveResourceData(params, resource, callback)
+  setModelWhenSave(){
+    let error = new Error('Implement inherit class')
+    throw error
+  }
+
+  saveData (callback) {
+    this.dataFromOctokit()
+      .then(() => {
+        this.saveModelData(callback)
       })
   }
 
   //private
-  dataFromOctokit(params){
+  dataFromOctokit(){
     return new Promise(resolve => {
-      this.baseModel.dataFromOctokitWithRelations(params).then(() => {
-        resolve(this.baseModel)
+      this.model.dataFromOctokitWithRelations(this.params).then(() => {
+        resolve()
       })
     })
   }
 
   //private
   // https://medium.com/datafire-io/es6-promises-patterns-and-anti-patterns-bbb21a5d0918
-  saveResourceData(params, resource, callback){
-    resource.linkedResources().forEach(resource => {
-      let storage = new Storage(resource.name)
-      let data = resource.buildSaveData(params)
+  saveModelData(callback){
+    // exclude model
+    this.targets.forEach(target => {
+      let storage = new Storage(target.name)
+      let data = target.buildSaveData(this.params)
 
       storage.saveData(data)
         .then(dataFromStorage => {
@@ -51,29 +64,36 @@ export default class BaseApi {
   /*** Fetch Func ***/
   /******************/
 
-  fetchData (resources, callback) {
+  setModelWhenFetch(){
+    let error = new Error('Implement inherit class')
+    throw error
+  }
+
+  fetchData (callback) {
     this.payload = []
 
-    resources.reduce((promise, resource, index) => {
+    let fetchDataSize = this.model.relationships.length
+    // exclude model
+    this.targets.reduce((promise, target, index) => {
       return promise.then(() => {
-        if (index === resources.length - 1) {
-          this.createFetchResoruceDataPromise(resource, callback).then(() => {
+        if (index === fetchDataSize - 1) {
+          this.createFetchResoruceDataPromise(target, callback).then(() => {
             setTimeout(_ => callback(null, this.payload))
           })
         } else {
-          this.createFetchResoruceDataPromise(resource, callback)
+          this.createFetchResoruceDataPromise(target, callback)
         }
       })
     },Promise.resolve())
   }
 
   // private
-  createFetchResoruceDataPromise(resource, callback){
+  createFetchResoruceDataPromise(target, callback){
     return new Promise((resolve, reject) => {
-      this.fetchResourceData(resource)
+      this.fetchModelData(target)
         .then(dataFromStorage => {
 
-          this.buildFetchData(resource, dataFromStorage).forEach(unitData => {
+          this.buildFetchData(target, dataFromStorage).forEach(unitData => {
             this.payload.push(unitData)
           })
 
@@ -85,22 +105,25 @@ export default class BaseApi {
       })
   }
 
-  buildFetchData(resource, dataFromStorage){
-    let repository = this.resourcesRepositoryWithRelationships(resource, dataFromStorage)
-    let resourceData = repository[resource.name]
-    return resourceData.map(unitData => {
-      resource.relationships.forEach(relationship => {
+  buildFetchData(target, dataFromStorage){
+    let repository = this.modelsRepositoryWithRelationships(target, dataFromStorage)
+    let targetData = repository[target.name]
+    return targetData.map(unitData => {
+      target.relationships.forEach(relationship => {
         let relationshipId = unitData[relationship.foreignKey]
         let relationshipName = relationship.name
         unitData[relationshipName] = repository[relationshipName].filter(data => { return data.id === relationshipId })
       })
       return unitData
     })
+    // .filter(unitData => {
+    //   return this.isCurrentModelData(unitData)
+    // })
   }
 
   // private
-  resourcesRepositoryWithRelationships(resource, dataFromStorage) {
-    let resources = []
+  modelsRepositoryWithRelationships(target, dataFromStorage) {
+    let targets = []
     let result = {}
 
     // mergedData example:
@@ -108,23 +131,23 @@ export default class BaseApi {
     let mergedData = this.mergedData(dataFromStorage)
     Object.keys(mergedData).forEach((type) => {
       let data = mergedData[type]
-      if (resource.type === type ){
+      if (target.type === type ){
         // unitData example:
         // pomber-git-history-29-issuecomment-461114609: {status: 200, url: "https://api.github.com/repos/pomber/git-history/is…t_secret=3c1e238e2eb028c90d397ccfab0fc2b2554b51c1", headers: {…}, data: {…}, repo_language_id: "pomber-git-history-repo_language", …}
         Object.values(data).forEach(unitData => {
-          let fetchData = resource.buildFetchData(unitData['id'], unitData)
-          resources.push(fetchData)
+          let fetchData = target.buildFetchData(unitData['id'], unitData)
+          targets.push(fetchData)
         })
       } else {
-        resource.relationships.forEach(relationship => {
+        target.relationships.forEach(relationship => {
           if(relationship.type === type) {
-            let relationships = this.resourcesRepositoryWithRelationships(relationship, dataFromStorage)
+            let relationships = this.modelsRepositoryWithRelationships(relationship, dataFromStorage)
             result[relationship.name] = relationships[relationship.name]
           }
         })
       }
     })
-    result[resource.name] = resources
+    result[target.name] = targets
     return result
   }
 
@@ -138,9 +161,9 @@ export default class BaseApi {
   }
 
   // private
-  fetchResourceData(resource) {
-    let promises = this.fetchResourcesName(resource).reduce((base, resourceName) => {
-      let storage = new Storage(resourceName)
+  fetchModelData(target) {
+    let promises = this.fetchModelsName(target).reduce((base, modelName) => {
+      let storage = new Storage(modelName)
       base.push(storage.fetchData())
       return base
     },[])
@@ -149,10 +172,16 @@ export default class BaseApi {
   }
 
   // private
-  fetchResourcesName(resource){
+  fetchModelsName(target){
     let result = []
-    result.push(resource.name)
-    resource.relationships.forEach(relationship => { result.push(relationship.name) })
+    result.push(target.name)
+    target.relationships.forEach(relationship => { result.push(relationship.name) })
     return result
+  }
+
+  // private
+  isCurrentModelData(data) {
+    let error = new Error('Implement inherit class')
+    throw error
   }
 }

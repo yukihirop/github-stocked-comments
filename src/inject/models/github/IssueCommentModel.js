@@ -8,6 +8,7 @@ export default class IssueCommentModel {
   }
 
   get mainLanguage(){
-    return this.repo_language[0].mainLanguage
+    let mainLanguage = this.repo_language[0].mainLanguage
+    return (mainLanguage === undefined) ? '' : mainLanguage
   }
 }

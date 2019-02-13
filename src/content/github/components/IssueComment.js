@@ -32,8 +32,8 @@ export default class IssueComment {
       let commentData = new IssueCommentData($this)
       var params = commentData.params()
 
-      let api = new StockedComment()
-      api.saveData(params, (error, isSave) => {
+      let api = new StockedComment(null, params)
+      api.setModelWhenSave().saveData((error, isSave) => {
         if (error) throw error
         if (isSave) console.log('Save data success')
       })

@@ -6,13 +6,8 @@ import Followings from './Followings'
 export default class LoginUser extends BaseModel {
   constructor() {
     super()
-    this.followings = new Followings()
     // override
     this.type = 'user'
-  }
-
-  get relationships(){
-    return [this.followings]
   }
 
   fields(){
@@ -41,7 +36,9 @@ export default class LoginUser extends BaseModel {
       
       let update_params = { userGithubId: result.data.id }
       this.updateProperties(params, update_params)
-      this.followings.updateProperties(params, update_params)
+      this.relationships.forEach(relationhip => {
+        relationhip.updateProperties(params, update_params)
+      })
     }).catch(error => {
       console.log(error)
     })
@@ -57,6 +54,14 @@ export default class LoginUser extends BaseModel {
     this.data.loginUser = true
     result[this.id] = this.data
     return result
+  }
+
+  // private
+  appendForeignKeys(){
+    if (this.relationships === undefined) return
+    this.relationships.forEach(model => {
+      this.data[model.foreignKey] = model.id
+    })
   }
 
   updateProperties(params, update_params = {}){
