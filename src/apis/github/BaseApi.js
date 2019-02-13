@@ -9,11 +9,7 @@ export default class BaseApi {
     this.model = (model === null) ?  new LoginUser() : model
     this.payload = []
     this.params = params
-  }
-
-  // private
-  get targets() {
-    return this.model.relationships
+    this.targets = this.model.allDepthRelationships()
   }
 
   /*****************/
@@ -35,7 +31,7 @@ export default class BaseApi {
   //private
   dataFromOctokit(){
     return new Promise(resolve => {
-      this.model.dataFromOctokitWithRelations(this.params).then(() => {
+      Promise.all(this.model.dataFromOctokitWithRelations(this.params)).then(() => {
         resolve()
       })
     })

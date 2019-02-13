@@ -36,6 +36,20 @@ export default class BaseModel {
     return result
   }
 
+  allDepthRelationships(){
+    let relationships = this.relationships.reduce((parent, target) => {
+      if (target.relationships.length !== 0) {
+        target.allDepthRelationships().reduce((base, children) => {
+          Object.assign(base, { [children.name]: children })
+          return base
+        }, parent)
+      }
+      Object.assign(parent,{ [target.name]: target })
+      return parent
+    },{})
+    return Object.values(relationships)
+  }
+
   // Please override in inherit class
   fields(){
     let error = new Error('Implement inherit class')
@@ -71,15 +85,23 @@ export default class BaseModel {
     let promises = []
 
     if (this.relationships !== []) {
-      promises = this.relationships.reduce((base, relationship) => {
-        base.push(relationship.dataFromOctokit(params))
-        return base
+      promises = this.relationships.reduce((parent, target) => {
+        if (target.relationships !== []) {
+          let children = target.dataFromOctokitWithRelations(params)
+          children.reduce((base, child) => {
+            base.push(child)
+            return base
+          }, parent)
+        } else {
+          parent.push(target.dataFromOctokit(params))
+        }
+        return parent
       },[this.dataFromOctokit(params)])
     } else {
       promises = [this.dataFromOctokit(params)]
     }
 
-    return Promise.all(promises)
+    return promises
   }
 
   buildSaveData(params){

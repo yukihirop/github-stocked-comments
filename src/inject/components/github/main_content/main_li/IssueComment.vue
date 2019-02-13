@@ -24,6 +24,8 @@ export default {
     }
   },
   data () {
+    console.log("IssueComment")
+    console.log(this.issueComment)
     return {
       src: this.issueComment.postUserAvatarURL,
       userName: this.issueComment.postUserName

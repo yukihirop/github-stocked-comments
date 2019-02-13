@@ -17,7 +17,7 @@ export default {
   fetchDataFromStorage ({ commit, state }) {
     return new Promise((resolve, reject) => {
       let api = new StockedComment()
-      api.setModelWhenFetch().fetchData((error, payload) => {
+      api.fetchData((error, payload) => {
         if (error) throw error
         commit(types.FETCH_COMMENT_DATA, { data: payload })
         resolve()

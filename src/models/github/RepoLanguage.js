@@ -42,6 +42,12 @@ export default class RepoLanguage extends BaseModel {
     })
   }
 
+  updateProperties(params, update_params = {}){
+    if (Object.keys(update_params).length === 0) {
+      this.id = this.createId(params)
+    }
+  }
+
   /******************/
   /*** Fetch Func ***/
   /******************/
