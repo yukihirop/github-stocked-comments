@@ -2,7 +2,7 @@
   <span v-if="loading">
     <span v-if="!isDisplaySorryPanel()">
       <ul class="repo-list list-style-none js-navigation-container js-active-navigation-container">
-        <span v-for="(data, _) in currentCommentData" :key="data.id" >
+        <span v-for="(data, _) in currentCommentData" :id="data.id" >
           <li class="py-4 public source "><main-li :comment-data="data" /></li>
         </span>
       </ul>

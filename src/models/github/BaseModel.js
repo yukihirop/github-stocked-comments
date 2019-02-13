@@ -111,6 +111,7 @@ export default class BaseModel {
     this.data.type = this.type
     this.data.repoUserName = params.repoUserName
     this.data.repoName = params.repoName
+    this.data.issueTitle = params.issueTitle
     result[this.id] = this.data
     return result
   }

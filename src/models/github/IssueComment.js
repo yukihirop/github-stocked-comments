@@ -21,6 +21,7 @@ export default class IssueComment extends BaseModel {
       user_id: this.user_id,
       type: this.type,
       repoUserName: this.repoUserName,
+      issueTitle: this.issueTitle,
       repoName: this.repoName,
       repo_language_id: this.repo_language_id,
       body: this.body,
@@ -76,6 +77,7 @@ export default class IssueComment extends BaseModel {
   setSelfProperties(id, data) {
     this.repoUserName = data.repoUserName
     this.repoName = data.repoName
+    this.issueTitle = data.issueTitle
     // foreign key
     this.repo_language_id = data.repo_language_id
     this.user_id = data.user_id

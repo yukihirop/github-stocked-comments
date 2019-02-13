@@ -50,6 +50,7 @@ class IssueCommentData {
   constructor (el) {
     this.userRepoName = $('a[data-pjax="#js-repo-pjax-container"]').attr('href')
     this.issueHashNum = $('span.gh-header-number').text()
+    this.issueTitle = $('span.js-issue-title').text()
     this.commentAreaHashId = el.parents('div.timeline-comment-group.js-minimizable-comment-group.js-targetable-comment').attr('id')
   }
 
@@ -65,6 +66,7 @@ class IssueCommentData {
       repoUserName: `${repoUserName}`,
       repoName: `${repoName}`,
       issueId: `${issueId}`,
+      issueTitle: `${this.issueTitle}`,
       type: `${type}`,
       commentId: `${commentId}`
     }
