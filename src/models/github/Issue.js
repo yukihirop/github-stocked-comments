@@ -15,6 +15,10 @@ export default class Issue extends BaseModel {
     return [this.repo_language]
   }
 
+  get deleteDependencies(){
+    return []
+  }
+
   fields(){
     return {
       id: this.id,

@@ -15,14 +15,18 @@ export default class IssueComment extends BaseModel {
     return [this.repo_language]
   }
 
+  get deleteDependencies(){
+    return []
+  }
+
   fields(){
     return {
       id: this.id,
       user_id: this.user_id,
       type: this.type,
       repoUserName: this.repoUserName,
-      issueTitle: this.issueTitle,
       repoName: this.repoName,
+      issueTitle: this.issueTitle,
       repo_language_id: this.repo_language_id,
       body: this.body,
       postUserName: this.postUserName,

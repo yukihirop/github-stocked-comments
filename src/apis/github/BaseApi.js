@@ -12,11 +12,85 @@ export default class BaseApi {
     this.targets = this.model.allDepthRelationships()
   }
 
+  // private
+  mergedData(dataFromStorage){
+    let result = dataFromStorage.reduce((base, data) => {
+      Object.assign(base, data)
+      return base
+    },{})
+    return result
+  }
+
+  /*******************/
+  /*** Delete Func ***/
+  /*******************/
+  configureWhenDelete(){
+    let error = new Error('Implement inherit class')
+    throw error
+  }
+
+  deleteData(id, callback){
+    this.payload = []
+
+    let deleteDataSize = this.targets.length
+    console.log("BaseApi#deleteData")
+    console.log(deleteDataSize)
+    // exclude model
+    this.targets.reduce((promise, target, index) => {
+      return promise.then(() => {
+        if (index === deleteDataSize - 1) {
+          this.createDeleteModelDataPromise(target, id, callback).then(() => {
+            setTimeout(_ => callback(null, this.payload))
+          })
+        } else {
+          this.createDeleteModelDataPromise(target, id, callback)
+        }
+      })
+    },Promise.resolve())
+  }
+
+  // private
+  createDeleteModelDataPromise(target, id, callback){
+    return new Promise((resolve, reject) => {
+      this.deleteModelData(target, id)
+        .then(dataFromStorage => {
+
+          Object.values(this.mergedData(dataFromStorage)).forEach(unitData => {
+            this.payload.push(unitData)
+          })
+
+          resolve()
+        })
+        .catch((error) => {
+          setTimeout(_ => callback(error))
+        })
+      })
+  }
+
+  // private
+  deleteModelData(target, id) {
+    let promises = this.deleteModelsName(target).reduce((base, modelName) => {
+      let storage = new Storage(modelName)
+      base.push(storage.deleteData(id))
+      return base
+    },[])
+
+    return Promise.all(promises)
+  }
+
+  // private
+  deleteModelsName(target){
+    let result = []
+    result.push(target.name)
+    target.deleteDependencies.forEach(dependency => { result.push(dependency.name) })
+    return result
+  }
+
   /*****************/
   /*** Save Func ***/
   /*****************/
 
-  setModelWhenSave(){
+  configureWhenSave(){
     let error = new Error('Implement inherit class')
     throw error
   }
@@ -45,7 +119,7 @@ export default class BaseApi {
       let storage = new Storage(target.name)
       let data = target.buildSaveData(this.params)
 
-      storage.saveData(data)
+      storage.addData(data)
         .then(dataFromStorage => {
           console.log(dataFromStorage)
           setTimeout(_ => callback(null, true))
@@ -60,7 +134,7 @@ export default class BaseApi {
   /*** Fetch Func ***/
   /******************/
 
-  setModelWhenFetch(){
+  configureWhenFetch(){
     let error = new Error('Implement inherit class')
     throw error
   }
@@ -68,23 +142,23 @@ export default class BaseApi {
   fetchData (callback) {
     this.payload = []
 
-    let fetchDataSize = this.model.relationships.length
+    let fetchDataSize = this.targets.length
     // exclude model
     this.targets.reduce((promise, target, index) => {
       return promise.then(() => {
         if (index === fetchDataSize - 1) {
-          this.createFetchResoruceDataPromise(target, callback).then(() => {
+          this.createFetchModelDataPromise(target, callback).then(() => {
             setTimeout(_ => callback(null, this.payload))
           })
         } else {
-          this.createFetchResoruceDataPromise(target, callback)
+          this.createFetchModelDataPromise(target, callback)
         }
       })
     },Promise.resolve())
   }
 
   // private
-  createFetchResoruceDataPromise(target, callback){
+  createFetchModelDataPromise(target, callback){
     return new Promise((resolve, reject) => {
       this.fetchModelData(target)
         .then(dataFromStorage => {
@@ -144,15 +218,6 @@ export default class BaseApi {
       }
     })
     result[target.name] = targets
-    return result
-  }
-
-  // private
-  mergedData(dataFromStorage){
-    let result = dataFromStorage.reduce((base, data) => {
-      Object.assign(base, data)
-      return base
-    },{})
     return result
   }
 

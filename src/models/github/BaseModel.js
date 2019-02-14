@@ -29,6 +29,14 @@ export default class BaseModel {
     this._relationships = value
   }
 
+  get deleteDependencies(){
+    return this._deleteDependencies || []
+  }
+
+  set deleteDependencies(value) {
+    this._deleteDependencies = value
+  }
+
   linkedResources(){
     let result = []
     result.push(this)

@@ -34,7 +34,6 @@ export default class LoginUserInfo extends BaseApi {
     let followings = new Followings()
     this.model.relationships = [followers, followings]
     this.targets = this.model.linkedResources()
-    return this
   }
 
   /*******************/
@@ -57,6 +56,5 @@ export default class LoginUserInfo extends BaseApi {
     let followings = new Followings()
     this.model.relationships = [followings]
     this.targets = this.model.linkedResources()
-    return this
   }
 }

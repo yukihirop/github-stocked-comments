@@ -38,7 +38,7 @@ export default {
     ...mapActions([
       'initialize'
     ]),
-    ...mapActions('sidebar', [
+    ...mapActions('sidebar_friend', [
       'fetchLoginUserData'
     ])
   }

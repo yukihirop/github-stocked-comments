@@ -2,7 +2,7 @@
   <div class="timeline-comment-group js-minimizable-comment-group js-targetable-comment">
     <div class="unminimized-comment comment previewable-edit js-comment js-task-list-container timeline-comment reorderable-task-lists" >
       <issue-title :issue-title="issueTitle" />
-      <comment-header :userName="postUserName" :createdAt="postCreatedAt" :originURL="postOriginURL"/>
+      <comment-header :userName="postUserName" :createdAt="postCreatedAt" :originURL="postOriginURL" :resource-id="ResourceId" :type="type"/>
       <div class="edit-comment-hide">
         <comment-content :body="postBody" />
       </div>
@@ -34,8 +34,6 @@ export default {
     }
   },
   data () {
-    console.log("CommnetArea")
-    console.log(this.commentObject.issueTitle)
     return {
       postUserName: this.commentObject.postUserName,
       postCreatedAt: this.commentObject.createdAt,
@@ -44,7 +42,9 @@ export default {
       repoUserName: this.commentObject.repoUserName,
       repoName: this.commentObject.repoName,
       mainLanguage: this.commentObject.mainLanguage,
-      issueTitle: this.commentObject.issueTitle
+      issueTitle: this.commentObject.issueTitle,
+      ResourceId: this.commentObject.id,
+      type: this.commentObject.type
     }
   }
 }

@@ -2,6 +2,11 @@
   <div class="timeline-comment-header clearfix" >
     <!-- 絵文字のボタンとか -->
     <div class="timeline-comment-actions" >
+      <span class="timeline-comment-label text-bold tooltipped tooltipped-multiline tooltipped-s" aria-label="Delete Button" @click="clickDelete" style="box-shadow: transparent 0px 0px;">
+        Delete
+      </span>
+    </div>
+    <div class="timeline-comment-actions" >
       <span class="timeline-comment-label text-bold tooltipped tooltipped-multiline tooltipped-s" :aria-label="originURL">
         <a class="author text-inherit css-truncate-target ghh-user-x tooltipstered" :href="originURL" target="_blank" ref="noreferrer noopener" style="box-shadow: transparent 0px 0px;">Go to</a>
       </span>
@@ -20,9 +25,20 @@
 </template>
 
 <script>
+import StockedComment from '@/apis/github/StockedComment'
+import { mapActions } from 'vuex'
+
 export default {
   name: 'CommentHeader',
   props: {
+    resourceId: {
+      type: String,
+      default: ''
+    },
+    type: {
+      type: String,
+      default: ''
+    },
     userName: {
       type: String,
       default: ''
@@ -39,6 +55,15 @@ export default {
   data () {
     return {
       href: '/' + this.userName
+    }
+  },
+  methods: {
+    ...mapActions('main_ext',[
+      'deleteCommentDataById'
+    ]),
+    clickDelete(){
+      let params = { id: this.resourceId, type: this.type }
+      this.deleteCommentDataById(params)
     }
   }
 }

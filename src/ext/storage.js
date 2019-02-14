@@ -44,7 +44,27 @@ export default class Storage {
     })
   }
 
-  saveData(data){
+  addData(data){
+    return this.saveData(data, (dataFromStorage, data) => {
+      Object.assign(dataFromStorage, data)
+      return dataFromStorage
+    })
+  }
+
+  deleteData(id){
+    return new Promise((resolve, reject) => {
+      this.fetchData().then((result) => {
+        delete result[this.resourceName][id]
+        this.saveData(result[this.resourceName], (dataFromStorage, data) => {
+          return data
+        }).then(result => {
+          resolve(result)
+        })
+      })
+    })
+  }
+
+  saveData(data, handler){
     return new Promise((resolve, reject) => {
       this.storage.get(this.storageKey, (result) => {
         if (chrome.runtime.lastError) {
@@ -59,7 +79,7 @@ export default class Storage {
       })
     }).then((dataFromStorage) => {
       return new Promise((resolve, reject) => {
-        Object.assign(dataFromStorage, data)
+        dataFromStorage = handler(dataFromStorage, data)
         this.storage.set({ [this.storageKey]: JSON.stringify(dataFromStorage) }, () => {
           if (chrome.runtime.lastError) {
             reject(chrome.runtime.lastError)
@@ -95,14 +115,4 @@ export default class Storage {
       })
     })
   }
-
-  // filterLoginUserData(data){
-  //   let keys = Object.keys(data).filter(key => {
-  //     return data[key].user_id === this.user_id
-  //   })
-  //   return keys.reduce((base, key) => {
-  //     base[key] = data[key]
-  //     return base
-  //   },{})
-  // }
 }
