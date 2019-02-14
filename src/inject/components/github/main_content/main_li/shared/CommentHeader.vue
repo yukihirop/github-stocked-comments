@@ -59,11 +59,12 @@ export default {
   },
   methods: {
     ...mapActions('main_ext',[
-      'deleteCommentDataById'
+      'showDeleteModal'
     ]),
     clickDelete(){
+      console.log("呼ばれた")
       let params = { id: this.resourceId, type: this.type }
-      this.deleteCommentDataById(params)
+      this.showDeleteModal(params)
     }
   }
 }
