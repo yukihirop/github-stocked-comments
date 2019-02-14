@@ -8,7 +8,8 @@ const initialState = {
   otherUserCommentData: [],
   filteredCommentData: [],
   languageList: {},
-  displayFilterListByLanguages: false
+  displayFilterListByLanguages: false,
+  selectedLanguage: ''
 }
 
 export default {

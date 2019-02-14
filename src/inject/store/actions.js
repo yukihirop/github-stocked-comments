@@ -7,11 +7,15 @@ export default {
   updateCurrentCommentData({ commit, state }, payload) {
     commit(types.UPDATE_CURRENT_COMMENT_DATA, { data: payload })
   },
-  initialize({ commit, dispatch, state }) {
+  initialize({ commit, dispatch, state, rootState }) {
     let promises = [dispatch('fetchDataFromStorage'), dispatch('sidebar_friend/fetchLoginUserData')]
     Promise.all(promises).then(() => {
       dispatch('sidebar_filter/initializeFilterList')
       dispatch('sidebar_filter/initializeLanguageFilterList')
+      let language = rootState.sidebar_filter.selectedLanguage
+      if (language !== '') {
+        dispatch('sidebar_filter/getTiedLanguageTagCommentData', language)
+      }
     })
   },
   fetchDataFromStorage ({ commit, state }) {
