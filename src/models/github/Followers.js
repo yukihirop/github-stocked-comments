@@ -1,6 +1,7 @@
 'use strict'
 
 import BaseModel from './BaseModel'
+import Storage from '@/ext/Storage'
 
 const FIXED_PAGE = 1
 
@@ -10,6 +11,7 @@ export default class Followers extends BaseModel {
     this.userGithubId = 0
     // override
     this.type = 'followers'
+    this.storage = new Storage(this.name)
   }
 
   get relationships(){
@@ -19,6 +21,7 @@ export default class Followers extends BaseModel {
   fields(){
     return {
       id: this.id,
+      user_id: this.user_id,
       data: this.data['data']
     }
   }
@@ -66,17 +69,13 @@ export default class Followers extends BaseModel {
     }
   }
 
-  // private
-  appendForeignKeys(){
-    if (this.relationships === undefined) return
-    this.relationships.forEach(model => {
-      this.data[model.foreignKey] = model.id
-    })
-  }
-
   /******************/
   /*** Fetch Func ***/
   /******************/
+  fetchData(){
+    this.storage.where({ user_id: this.user_id })
+    return this.storage.fetchData()
+  }
 
   setProperties(id, data){
     this.id = id

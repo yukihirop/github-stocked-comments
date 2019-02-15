@@ -2,10 +2,7 @@
 
 import BaseApi from './BaseApi'
 import LoginUser from '@/models/github/LoginUser'
-import Followers from '@/models/github/Followers'
-import Followings from '@/models/github/Followings'
 import memory from '@/ext/Memory'
-import Storage from '@/ext/Storage'
 
 export default class LoginUserInfo extends BaseApi {
   /******************/
@@ -30,8 +27,8 @@ export default class LoginUserInfo extends BaseApi {
   }
 
   configureWhenSave(){
-    let followers = new Followers()
-    let followings = new Followings()
+    let followers = this.model.build_followers()
+    let followings = this.model.build_followings()
     this.model.relationships = [followers, followings]
     this.targets = this.model.linkedResources()
   }
@@ -45,15 +42,8 @@ export default class LoginUserInfo extends BaseApi {
     super.fetchData(callback)
   }
 
-  // private
-  isCurrentModelData(data) {
-    if (this.model instanceof LoginUser){
-      return this.model.id === data.user_id
-    }
-  }
-
   configureWhenFetch(){
-    let followings = new Followings()
+    let followings = this.model.build_followings()
     this.model.relationships = [followings]
     this.targets = this.model.linkedResources()
   }

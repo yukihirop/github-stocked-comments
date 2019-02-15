@@ -2,8 +2,6 @@
 
 import BaseApi from './BaseApi'
 import LoginUser from '@/models/github/LoginUser'
-import Issue from '@/models/github/Issue'
-import IssueComment from '@/models/github/IssueComment'
 
 export default class StockedComment extends BaseApi {
   /********************/
@@ -16,10 +14,10 @@ export default class StockedComment extends BaseApi {
 
   configureWhenDelete(){
     if (this.params.type === 'issue') {
-      let issue = new Issue()
+      let issue = this.model.build_issue()
       this.model.relationships = [issue]
     } else if (this.params.type === 'issuecomment') {
-      let issuecomment = new IssueComment()
+      let issuecomment = this.model.build_issuecomment()
       this.model.relationships = [issuecomment]
     }
     this.targets = this.model.relationships
@@ -36,10 +34,10 @@ export default class StockedComment extends BaseApi {
 
   configureWhenSave(){
     if (this.params.type === 'issue') {
-      let issue = new Issue()
+      let issue = this.model.build_issue()
       this.model.relationships = [issue]
     } else if (this.params.type === 'issuecomment') {
-      let issuecomment = new IssueComment()
+      let issuecomment = this.model.build_issuecomment()
       this.model.relationships = [issuecomment]
     }
     this.targets = this.model.allDepthRelationships()
@@ -55,16 +53,9 @@ export default class StockedComment extends BaseApi {
     super.fetchData(callback)
   }
 
-  // private
-  isCurrentModelData(data) {
-    if (this.model instanceof LoginUser){
-      return this.model.id === data.user_id
-    }
-  }
-
   configureWhenFetch(){
-    let issue = new Issue()
-    let issuecomment = new IssueComment()
+    let issue = this.model.build_issue()
+    let issuecomment = this.model.build_issuecomment()
     this.model.relationships = [issue, issuecomment]
     this.targets = this.model.relationships
   }

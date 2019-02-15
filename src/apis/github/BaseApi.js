@@ -33,8 +33,6 @@ export default class BaseApi {
     this.payload = []
 
     let deleteDataSize = this.targets.length
-    console.log("BaseApi#deleteData")
-    console.log(deleteDataSize)
     // exclude model
     this.targets.reduce((promise, target, index) => {
       return promise.then(() => {
@@ -186,9 +184,6 @@ export default class BaseApi {
       })
       return unitData
     })
-    // .filter(unitData => {
-    //   return this.isCurrentModelData(unitData)
-    // })
   }
 
   // private
@@ -223,26 +218,11 @@ export default class BaseApi {
 
   // private
   fetchModelData(target) {
-    let promises = this.fetchModelsName(target).reduce((base, modelName) => {
-      let storage = new Storage(modelName)
-      base.push(storage.fetchData())
+    let promises = target.linkedResources().reduce((base, model) => {
+      base.push(model.fetchData())
       return base
     },[])
 
     return Promise.all(promises)
-  }
-
-  // private
-  fetchModelsName(target){
-    let result = []
-    result.push(target.name)
-    target.relationships.forEach(relationship => { result.push(relationship.name) })
-    return result
-  }
-
-  // private
-  isCurrentModelData(data) {
-    let error = new Error('Implement inherit class')
-    throw error
   }
 }

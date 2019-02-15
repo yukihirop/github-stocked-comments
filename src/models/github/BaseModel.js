@@ -2,6 +2,7 @@
 
 import createOctokitAuthClient from '@/content/authClient'
 import memory from '@/ext/Memory'
+import Storage from '@/ext/Storage'
 
 export default class BaseModel {
   constructor () {
@@ -136,6 +137,10 @@ export default class BaseModel {
   /******************/
   /*** Fetch Func ***/
   /******************/
+  fetchData(){
+    let error = new Error('Implement inherit class')
+    throw error
+  }
 
   buildFetchData(id, data){
     this.setProperties(id, data)

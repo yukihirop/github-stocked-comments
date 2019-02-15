@@ -2,6 +2,7 @@
 
 import BaseModel from './BaseModel'
 import RepoLanguage from './RepoLanguage'
+import Storage from '@/ext/Storage'
 
 export default class IssueComment extends BaseModel {
   constructor () {
@@ -9,6 +10,7 @@ export default class IssueComment extends BaseModel {
     this.repo_language = new RepoLanguage()
     // override
     this.type = 'issuecomment'
+    this.storage = new Storage(this.name)
   }
 
   get relationships(){
@@ -83,6 +85,12 @@ export default class IssueComment extends BaseModel {
   /******************/
   /*** Fetch Func ***/
   /******************/
+  fetchData(){
+    console.log("IssueComment#fetchData")
+    console.log(this.user_id)
+    this.storage.where({ user_id: this.user_id })
+    return this.storage.fetchData()
+  }
 
   // private
   setProperties (id, data) {

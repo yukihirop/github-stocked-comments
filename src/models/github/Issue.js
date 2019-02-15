@@ -2,6 +2,7 @@
 
 import BaseModel from './BaseModel'
 import RepoLanguage from './RepoLanguage'
+import Storage from '@/ext/Storage'
 
 export default class Issue extends BaseModel {
   constructor () {
@@ -9,6 +10,7 @@ export default class Issue extends BaseModel {
     this.repo_language = new RepoLanguage()
     // override
     this.type = 'issue'
+    this.storage = new Storage(this.name)
   }
 
   get relationships(){
@@ -83,6 +85,10 @@ export default class Issue extends BaseModel {
   /******************/
   /*** Fetch Func ***/
   /******************/
+  fetchData(){
+    this.storage.where({ user_id: this.user_id })
+    return this.storage.fetchData()
+  }
 
   setProperties (id, data) {
     this.id = id

@@ -36,12 +36,22 @@ export default class Storage {
     this.resourceName = resourceName
     this.storageKey = convertFromResourceToStorageKey(resourceName)
     this.storage = chrome.storage.local
+    this.whereParams = {}
   }
 
   onChangeData (callback) {
     chrome.storage.onChanged.addListener((changes, namespace) => {
       callback(changes, namespace)
     })
+  }
+
+  where(params){
+    if (Object.keys(params).length !== 1) {
+      let error = new Error ('Do not support params size')
+    } else {
+      this.whereParams = params
+      return this
+    }
   }
 
   addData(data){
@@ -108,11 +118,26 @@ export default class Storage {
             resolve({ [this.resourceName]: {}})
           } else {
             let dataFromStorage = JSON.parse(result[this.storageKey])
-            let data = { [this.resourceName]: dataFromStorage }
+            let data = { [this.resourceName]: this.filterWhereParams(dataFromStorage) }
             resolve(data)
           }
         }
       })
     })
+  }
+
+  filterWhereParams(dataFromStorage){
+    let filterKeys = Object.keys(this.whereParams)
+    if (filterKeys.length === 0) return dataFromStorage
+    return Object.keys(dataFromStorage).reduce((base, unitDataKey) => {
+      let unitData = dataFromStorage[unitDataKey]
+      filterKeys.forEach((key) => {
+        if (unitData[key] === this.whereParams[key]) {
+          base[unitDataKey] = {}
+          Object.assign(base[unitDataKey], unitData)
+        }
+      })
+      return base
+    },{})
   }
 }

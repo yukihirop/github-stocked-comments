@@ -1,12 +1,14 @@
 'use strict'
 
 import BaseModel from './BaseModel'
+import Storage from '@/ext/Storage'
 
 export default class RepoLanguage extends BaseModel {
   constructor () {
     super()
     // override
     this.type = 'repo_language'
+    this.storage = new Storage(this.name)
   }
 
   get relationships(){
@@ -51,6 +53,10 @@ export default class RepoLanguage extends BaseModel {
   /******************/
   /*** Fetch Func ***/
   /******************/
+
+  fetchData(){
+    return this.storage.fetchData()
+  }
 
   setProperties (id, data) {
     this.id = id
