@@ -68,7 +68,8 @@ class IssueCommentData {
       issueId: `${issueId}`,
       issueTitle: `${this.issueTitle}`,
       type: `${type}`,
-      commentId: `${commentId}`
+      commentId: `${commentId}`,
+      stockedAt: new Date()
     }
   }
 }

@@ -27,6 +27,7 @@ export default class IssueComment extends BaseModel {
       repoUserName: this.repoUserName,
       repoName: this.repoName,
       issueTitle: this.issueTitle,
+      stockedAt: this.stockedAt,
       repo_language_id: this.repo_language_id,
       body: this.body,
       postUserName: this.postUserName,
@@ -66,6 +67,19 @@ export default class IssueComment extends BaseModel {
     }
   }
 
+  buildSaveData(params){
+    let result = {}
+    this.appendForeignKeys()
+    this.data.id = this.id
+    this.data.type = this.type
+    this.data.repoUserName = params.repoUserName
+    this.data.repoName = params.repoName
+    this.data.issueTitle = params.issueTitle
+    this.data.stockedAt = params.stockedAt
+    result[this.id] = this.data
+    return result
+  }
+
   /******************/
   /*** Fetch Func ***/
   /******************/
@@ -82,6 +96,7 @@ export default class IssueComment extends BaseModel {
     this.repoUserName = data.repoUserName
     this.repoName = data.repoName
     this.issueTitle = data.issueTitle
+    this.stockedAt = data.stockedAt
     // foreign key
     this.repo_language_id = data.repo_language_id
     this.user_id = data.user_id

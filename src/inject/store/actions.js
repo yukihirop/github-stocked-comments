@@ -10,6 +10,7 @@ export default {
   initialize({ commit, dispatch, state, rootState }) {
     let promises = [dispatch('fetchDataFromStorage'), dispatch('sidebar_friend/fetchLoginUserData')]
     Promise.all(promises).then(() => {
+      dispatch('sortRecentlyStockedComments')
       dispatch('sidebar_filter/initializeFilterList')
       dispatch('sidebar_filter/initializeLanguageFilterList')
       let language = rootState.sidebar_filter.selectedLanguage
@@ -23,7 +24,7 @@ export default {
       let api = new StockedComment()
       api.fetchData((error, payload) => {
         if (error) throw error
-        commit(types.FETCH_COMMENT_DATA, { data: payload })
+        commit(types.FETCH_COMMENT_DATA, { data: payload.reverse() })
         resolve()
       })
     })
@@ -34,7 +35,15 @@ export default {
     })
     commit(types.SEARCH_COMMENT_DATA, { data: data, searchText: text })
   },
-  sortRecentlyComments({ commit, state }) {
+  sortRecentlyStockedComments({ commit, state }) {
+    let sortData = state.commentData.sort((a, b) => {
+      if(a.stockedAt < b.stockedAt) return 1
+      if(a.stockedAt > b.stockedAt) return -1
+      return 0
+    })
+    commit(types.FETCH_COMMENT_DATA, { data: sortData })
+  },
+  sortRecentlyPostedComments({ commit, state }) {
     let sortData = state.commentData.sort((a, b) => {
       if(a.createdAt < b.createdAt) return 1
       if(a.createdAt > b.createdAt) return -1
