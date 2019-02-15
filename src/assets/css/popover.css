@@ -1,0 +1,16 @@
+.popover,
+.arrow {
+  background: black;
+  padding: 0px 6px 6px 6px !important;
+  margin: 0px;
+  border-radius: 3px;
+}
+
+.popover-body {
+  color: white;
+  font-size: 12;
+}
+
+.popover.bottom .arrow:after {
+  border-bottom-color: black;
+}

@@ -7,6 +7,7 @@ $(() => {
     let header = new Header()
     let comment = new IssueComment()
 
+    header.loadStyleSheet()
     header.attachStockedCommentsLink()
     header.saveLoginUserName()
     comment.attachStockedCommentsButton()

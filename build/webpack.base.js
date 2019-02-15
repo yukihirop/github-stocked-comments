@@ -10,6 +10,9 @@ const rootDir = path.resolve(__dirname, '..')
 
 let resolve = (dir) => path.join(rootDir, 'src', dir)
 
+console.log(path.join(__dirname, '../src', 'assets', 'css', '*'))
+console.log(path.join(__dirname, '../dist'))
+
 module.exports = {
   entry: {
     popup: resolve('./popup'),
@@ -101,9 +104,9 @@ module.exports = {
     }),
     new CopyWebpackPlugin(
       [{
-        from: path.join(__dirname, 'src', 'assets', 'css', '**/*'),
-        to: path.join(__dirname, 'dist'),
-        context: 'css'
+        from: path.join(__dirname, '../src', 'assets', 'css', '*'),
+        to: path.join(__dirname, '../dist'),
+        context: 'src'
       }]
     ),
     new CleanWebpackPlugin(['*'], { root: path.join(rootDir, 'dist') }),

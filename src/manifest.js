@@ -40,6 +40,7 @@ module.exports = {
   content_security_policy: `script-src 'self' ${(process.env.NODE_ENV === 'development') ? '\'unsafe-eval\'' : ''}; object-src 'self'"`,
   web_accessible_resources: [
     'js/content.js',
-    'js/inject.js'
+    'js/inject.js',
+    'assets/css/*.css'
   ]
 }
