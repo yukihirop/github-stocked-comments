@@ -13,7 +13,7 @@
     </div>
     <h3 class="timeline-comment-header-text f5 text-normal">
       <strong class="css-truncate"></strong>
-      <a class="author text-inherit css-truncate-target ghh-user-x tooltipstered" :href="href" style="box-shadow: transparent 0px 0px;">{{ userName }}</a>
+      <a class="author text-inherit css-truncate-target ghh-user-x tooltipstered" :href="href" style="box-shadow: transparent 0px 0px;" target="_blank" ref="noreferrer noopener">{{ userName }}</a>
       commented
       <a @click.stop="" :href="originURL" :aria-label="originURL" target="_blank" ref="noreferrer noopener" class="timestamp js-timestamp ghh-comment-x tooltipstered" style="box-shadow: transparent 0px 0px;">{{ createdAt }}</a>
       <span class="js-comment-fragment">
