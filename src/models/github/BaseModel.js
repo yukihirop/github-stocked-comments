@@ -13,6 +13,7 @@ export default class BaseModel {
     this.id = 0
     this._relationships = []
     this._deleteDependencies = []
+    this.storage = null
   }
 
   get name(){
@@ -69,6 +70,9 @@ export default class BaseModel {
   /*****************/
   /*** Save Func ***/
   /*****************/
+  addData(data){
+    return this.storage.addData(data)
+  }
 
   // private
   createId(params){

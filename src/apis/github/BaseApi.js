@@ -1,6 +1,5 @@
 'use strict'
 
-import Storage from '@/ext/Storage'
 import LoginUser from '@/models/github/LoginUser'
 
 export default class BaseApi {
@@ -105,10 +104,9 @@ export default class BaseApi {
   saveModelData(callback){
     // exclude model
     this.targets.forEach(target => {
-      let storage = new Storage(target.name)
       let data = target.buildSaveData(this.params)
 
-      storage.addData(data)
+      target.addData(data)
         .then(dataFromStorage => {
           console.log(dataFromStorage)
           setTimeout(_ => callback(null, true))
