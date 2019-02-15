@@ -3,6 +3,7 @@
 import BaseModel from './BaseModel'
 import RepoLanguage from './RepoLanguage'
 import Storage from '@/ext/Storage'
+import memory from '@/ext/Memory'
 
 export default class Issue extends BaseModel {
   constructor () {
@@ -11,14 +12,6 @@ export default class Issue extends BaseModel {
     // override
     this.type = 'issue'
     this.storage = new Storage(this.name)
-  }
-
-  get relationships(){
-    return [this.repo_language]
-  }
-
-  get deleteDependencies(){
-    return []
   }
 
   fields(){
@@ -47,7 +40,7 @@ export default class Issue extends BaseModel {
 
   // private
   createId(params){
-    return `${params.repoUserName}-${params.repoName}-${params.issueId}-${params.type}-${params.commentId}`
+    return `${this.user_id}-${params.repoUserName}-${params.repoName}-${params.issueId}-${params.type}-${params.commentId}`
   }
 
   dataFromOctokit (params) {
@@ -66,6 +59,20 @@ export default class Issue extends BaseModel {
   updateProperties(params, update_params = {}){
     if (Object.keys(update_params).length === 0) {
       this.id = this.createId(params)
+    } else {
+      Object.keys(update_params).forEach(key => {
+        let value = update_params[key]
+        switch(key){
+          case 'user_id':
+            this.user_id = value
+            this.id = this.createId(params)
+            break
+          default:
+            this.id = this.createId(params)
+
+            break
+        }
+      })
     }
   }
 
@@ -119,6 +126,13 @@ export default class Issue extends BaseModel {
     this.body = postUserIssue.body
     this.createdAt = postUserIssue.createdAt
     this.updatedAt = postUserIssue.updatedAt
+  }
+
+  /*******************/
+  /*** Delete Func ***/
+  /*******************/
+  deleteData(id){
+    return this.storage.deleteData(id)
   }
 }
 

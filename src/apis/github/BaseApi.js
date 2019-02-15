@@ -67,21 +67,12 @@ export default class BaseApi {
 
   // private
   deleteModelData(target, id) {
-    let promises = this.deleteModelsName(target).reduce((base, modelName) => {
-      let storage = new Storage(modelName)
-      base.push(storage.deleteData(id))
+    let promises = target.linkedResources().reduce((base, model) => {
+      base.push(model.deleteData(id))
       return base
     },[])
 
     return Promise.all(promises)
-  }
-
-  // private
-  deleteModelsName(target){
-    let result = []
-    result.push(target.name)
-    target.deleteDependencies.forEach(dependency => { result.push(dependency.name) })
-    return result
   }
 
   /*****************/

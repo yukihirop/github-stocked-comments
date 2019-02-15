@@ -14,10 +14,6 @@ export default class Followers extends BaseModel {
     this.storage = new Storage(this.name)
   }
 
-  get relationships(){
-    return []
-  }
-
   fields(){
     return {
       id: this.id,
@@ -31,7 +27,7 @@ export default class Followers extends BaseModel {
   /*****************/
 
   createId(params){
-    return `${params.userName}-${this.userGithubId}-${this.type}`
+    return `${this.user_id}-${this.type}`
   }
 
   dataFromOctokit(params){
@@ -55,8 +51,8 @@ export default class Followers extends BaseModel {
       Object.keys(update_params).forEach(key => {
         let value = update_params[key]
         switch(key){
-          case 'userGithubId':
-            this.userGithubId = value
+          case 'user_id':
+            this.user_id = value
             this.id = this.createId(params)
             
             break

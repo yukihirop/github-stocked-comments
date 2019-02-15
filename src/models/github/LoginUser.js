@@ -64,9 +64,9 @@ export default class LoginUser extends BaseModel {
       username: `${params.userName}`
     }).then(result => {
       this.data = result
+      this.updateProperties(params, { userGithubId: result.data.id })
       
-      let update_params = { userGithubId: result.data.id }
-      this.updateProperties(params, update_params)
+      let update_params = { user_id: this.id }
       this.relationships.forEach(relationhip => {
         relationhip.updateProperties(params, update_params)
       })
@@ -100,13 +100,11 @@ export default class LoginUser extends BaseModel {
       this.id = this.createId(params)
     } else {
       Object.keys(update_params).forEach(key => {
-
         let value = update_params[key]
         switch(key){
           case 'userGithubId':
             this.userGithubId = value
             this.id = this.createId(params)
-            
             break
           default:
             this.id = this.createId(params)

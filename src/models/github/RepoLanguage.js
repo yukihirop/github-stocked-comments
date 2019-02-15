@@ -11,10 +11,6 @@ export default class RepoLanguage extends BaseModel {
     this.storage = new Storage(this.name)
   }
 
-  get relationships(){
-    return []
-  }
-
   fields(){
     return {
       id: this.id,

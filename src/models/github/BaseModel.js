@@ -12,6 +12,7 @@ export default class BaseModel {
     this.type = 'base'
     this.id = 0
     this._relationships = []
+    this._deleteDependencies = []
   }
 
   get name(){
@@ -90,7 +91,8 @@ export default class BaseModel {
     }
   }
 
-  dataFromOctokitWithRelations(params){
+  dataFromOctokitWithRelations(params, isIncludeSelf = true){
+    let initialPromises = isIncludeSelf ? [this.dataFromOctokit(params)] : []
     let promises = []
 
     if (this.relationships !== []) {
@@ -105,9 +107,9 @@ export default class BaseModel {
           parent.push(target.dataFromOctokit(params))
         }
         return parent
-      },[this.dataFromOctokit(params)])
+      },initialPromises)
     } else {
-      promises = [this.dataFromOctokit(params)]
+      promises = initialPromises
     }
 
     return promises
@@ -158,6 +160,14 @@ export default class BaseModel {
 
   setProperties (id, data) {
     let error = new Error('Implement inherit class')
+    throw error
+  }
+
+  /*******************/
+  /*** Delete Func ***/
+  /*******************/
+  deleteData(){
+    let error = new Error(`Do not support delete ${this.constructor.name}`)
     throw error
   }
 }

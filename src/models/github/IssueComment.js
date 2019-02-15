@@ -13,14 +13,6 @@ export default class IssueComment extends BaseModel {
     this.storage = new Storage(this.name)
   }
 
-  get relationships(){
-    return [this.repo_language]
-  }
-
-  get deleteDependencies(){
-    return []
-  }
-
   fields(){
     return {
       id: this.id,
@@ -47,7 +39,7 @@ export default class IssueComment extends BaseModel {
 
   // private
   createId(params){
-    return `${params.repoUserName}-${params.repoName}-${params.issueId}-${params.type}-${params.commentId}`
+    return `${this.user_id}-${params.repoUserName}-${params.repoName}-${params.issueId}-${params.type}-${params.commentId}`
   }
 
   dataFromOctokit (params) {
@@ -66,6 +58,20 @@ export default class IssueComment extends BaseModel {
   updateProperties(params, update_params = {}){
     if (Object.keys(update_params).length === 0) {
       this.id = this.createId(params)
+    } else {
+      Object.keys(update_params).forEach(key => {
+        let value = update_params[key]
+        switch(key){
+          case 'user_id':
+            this.user_id = value
+            this.id = this.createId(params)
+            break
+          default:
+            this.id = this.createId(params)
+
+            break
+        }
+      })
     }
   }
 
@@ -86,8 +92,6 @@ export default class IssueComment extends BaseModel {
   /*** Fetch Func ***/
   /******************/
   fetchData(){
-    console.log("IssueComment#fetchData")
-    console.log(this.user_id)
     this.storage.where({ user_id: this.user_id })
     return this.storage.fetchData()
   }
@@ -121,6 +125,13 @@ export default class IssueComment extends BaseModel {
     this.body = postUserComment.body
     this.createdAt = postUserComment.createdAt
     this.updatedAt = postUserComment.updatedAt
+  }
+
+  /*******************/
+  /*** Delete Func ***/
+  /*******************/
+  deleteData(id){
+    return this.storage.deleteData(id)
   }
 }
 
