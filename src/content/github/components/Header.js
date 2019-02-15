@@ -7,6 +7,7 @@ export default class Header {
     this.$head = $('head')
     this.$headerUl = $('header nav ul')
     this.loginUserName = $('details-menu[role=menu]').find('a:contains("Signed in as")').children().text()
+    this.isAfterSignIn = !($("a[href='/join?source=header-home']").length > 0)
   }
 
   attachStockedCommentsLink () {
