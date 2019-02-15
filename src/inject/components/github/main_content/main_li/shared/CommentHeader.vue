@@ -2,12 +2,12 @@
   <div class="timeline-comment-header clearfix" >
     <!-- 絵文字のボタンとか -->
     <div class="timeline-comment-actions" >
-      <span class="timeline-comment-label text-bold tooltipped tooltipped-multiline tooltipped-s" aria-label="Delete Button" @click="clickDelete" style="box-shadow: transparent 0px 0px;">
+      <span class="btn btn-sm btn-primary float-right timeline-comment-label" aria-label="Delete Button" @click="clickDelete" style="box-shadow: transparent 0px 0px;">
         Delete
       </span>
     </div>
     <div class="timeline-comment-actions" >
-      <span class="timeline-comment-label text-bold tooltipped tooltipped-multiline tooltipped-s" :aria-label="originURL">
+      <span class="btn btn-sm btn-primary float-right timeline-comment-label" :aria-label="originURL">
         <a class="author text-inherit css-truncate-target ghh-user-x tooltipstered" :href="originURL" target="_blank" ref="noreferrer noopener" style="box-shadow: transparent 0px 0px;">Go to</a>
       </span>
     </div>
