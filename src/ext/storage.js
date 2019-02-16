@@ -8,8 +8,7 @@ var convertFromResourceToStorageKey = resourceName => {
     'repo_language': 'github-stocked-comments.github.repo_language',
     'user':          'github-stocked-comments.github.user',
     'followers':     'github-stocked-comments.github.followers',
-    'followings':    'github-stocked-comments.github.followings',
-    'liked':         'github-stocked-comments.extension.liked'
+    'followings':    'github-stocked-comments.github.followings'
   }
 
   if (data[resourceName] === undefined){
@@ -29,7 +28,17 @@ var convertFromResourceToStorageKey = resourceName => {
 * ・github-stocked-comments.github.issue
 * ・github-stocked-comments.github.issuecomment
 * ・github-stocked-comments.github.repo_language
-* ・github-stocked-comments.extension.liked
+* ・github-stocked-comments.github.user
+* ・github-stocked-comments.github.followers
+* ・github-stocked-comments.github.followings
+*
+* #TODO:
+*
+* plan to support the following:
+*
+* ・github-stocked-comments.extension.like
+* ・github-stocked-comments.extension.memo
+* ・github-stocked-comments.extension.tag
 */
 export default class Storage {
   constructor(resourceName){
