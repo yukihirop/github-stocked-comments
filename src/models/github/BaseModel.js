@@ -2,6 +2,7 @@
 
 import createOctokitAuthClient from '@/content/authClient'
 import memory from '@/ext/Memory'
+import Storage from '@/ext/Storage'
 
 export default class BaseModel {
   constructor () {
@@ -11,6 +12,8 @@ export default class BaseModel {
     this.type = 'base'
     this.id = 0
     this._relationships = []
+    this._deleteDependencies = []
+    this.storage = null
   }
 
   get name(){
@@ -27,6 +30,14 @@ export default class BaseModel {
 
   set relationships(value) {
     this._relationships = value
+  }
+
+  get deleteDependencies(){
+    return this._deleteDependencies || []
+  }
+
+  set deleteDependencies(value) {
+    this._deleteDependencies = value
   }
 
   linkedResources(){
@@ -59,6 +70,9 @@ export default class BaseModel {
   /*****************/
   /*** Save Func ***/
   /*****************/
+  addData(data){
+    return this.storage.addData(data)
+  }
 
   // private
   createId(params){
@@ -81,7 +95,8 @@ export default class BaseModel {
     }
   }
 
-  dataFromOctokitWithRelations(params){
+  dataFromOctokitWithRelations(params, isIncludeSelf = true){
+    let initialPromises = isIncludeSelf ? [this.dataFromOctokit(params)] : []
     let promises = []
 
     if (this.relationships !== []) {
@@ -96,9 +111,9 @@ export default class BaseModel {
           parent.push(target.dataFromOctokit(params))
         }
         return parent
-      },[this.dataFromOctokit(params)])
+      },initialPromises)
     } else {
-      promises = [this.dataFromOctokit(params)]
+      promises = initialPromises
     }
 
     return promises
@@ -111,6 +126,7 @@ export default class BaseModel {
     this.data.type = this.type
     this.data.repoUserName = params.repoUserName
     this.data.repoName = params.repoName
+    this.data.issueTitle = params.issueTitle
     result[this.id] = this.data
     return result
   }
@@ -127,6 +143,10 @@ export default class BaseModel {
   /******************/
   /*** Fetch Func ***/
   /******************/
+  fetchData(){
+    let error = new Error('Implement inherit class')
+    throw error
+  }
 
   buildFetchData(id, data){
     this.setProperties(id, data)
@@ -144,6 +164,14 @@ export default class BaseModel {
 
   setProperties (id, data) {
     let error = new Error('Implement inherit class')
+    throw error
+  }
+
+  /*******************/
+  /*** Delete Func ***/
+  /*******************/
+  deleteData(){
+    let error = new Error(`Do not support delete ${this.constructor.name}`)
     throw error
   }
 }

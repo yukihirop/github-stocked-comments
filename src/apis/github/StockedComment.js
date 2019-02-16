@@ -2,10 +2,28 @@
 
 import BaseApi from './BaseApi'
 import LoginUser from '@/models/github/LoginUser'
-import Issue from '@/models/github/Issue'
-import IssueComment from '@/models/github/IssueComment'
+import RepoLanguage from '@/models/github/RepoLanguage'
 
 export default class StockedComment extends BaseApi {
+  /********************/
+  /*** Delete Func  ***/
+  /********************/
+  deleteData (id, callback){
+    this.configureWhenDelete()
+    super.deleteData(id, callback)
+  }
+
+  configureWhenDelete(){
+    if (this.params.type === 'issue') {
+      let issue = this.model.build_issue()
+      this.model.relationships = [issue]
+    } else if (this.params.type === 'issuecomment') {
+      let issuecomment = this.model.build_issuecomment()
+      this.model.relationships = [issuecomment]
+    }
+    this.targets = this.model.relationships
+  }
+
   /******************/
   /*** Save Func  ***/
   /******************/
@@ -16,15 +34,27 @@ export default class StockedComment extends BaseApi {
   }
 
   configureWhenSave(){
+    let repo_language = new RepoLanguage()
+
     if (this.params.type === 'issue') {
-      let issue = new Issue()
+      let issue = this.model.build_issue()
+      issue.relationships = [repo_language]
       this.model.relationships = [issue]
     } else if (this.params.type === 'issuecomment') {
-      let issuecomment = new IssueComment()
+      let issuecomment = this.model.build_issuecomment()
+      issuecomment.relationships = [repo_language]
       this.model.relationships = [issuecomment]
     }
     this.targets = this.model.allDepthRelationships()
-    return this
+  }
+
+  //private
+  dataFromOctokit(){
+    return new Promise(resolve => {
+      Promise.all(this.model.dataFromOctokitWithRelations(this.params, false)).then(() => {
+        resolve()
+      })
+    })
   }
 
   /*******************/
@@ -37,18 +67,16 @@ export default class StockedComment extends BaseApi {
     super.fetchData(callback)
   }
 
-  // private
-  isCurrentModelData(data) {
-    if (this.model instanceof LoginUser){
-      return this.model.id === data.user_id
-    }
-  }
-
   configureWhenFetch(){
-    let issue = new Issue()
-    let issuecomment = new IssueComment()
+    let repo_language = new RepoLanguage()
+
+    let issue = this.model.build_issue()
+    issue.relationships = [repo_language]
+
+    let issuecomment = this.model.build_issuecomment()
+    issuecomment.relationships = [repo_language]
+
     this.model.relationships = [issue, issuecomment]
     this.targets = this.model.relationships
-    return this
   }
 }

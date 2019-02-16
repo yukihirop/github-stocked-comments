@@ -2,12 +2,19 @@
 
 import BaseModel from './BaseModel'
 import Followings from './Followings'
+import Followers from './Followers'
+import Issue from './Issue'
+import IssueComment from './IssueComment'
+import Storage from '@/ext/Storage'
+import memory from '@/ext/Memory'
 
 export default class LoginUser extends BaseModel {
   constructor() {
     super()
     // override
     this.type = 'user'
+    this.id = memory.get('user_id')
+    this.storage = new Storage(this.name)
   }
 
   fields(){
@@ -17,6 +24,30 @@ export default class LoginUser extends BaseModel {
       userName: this.userName,
       followings_id: this.followings_id
     }
+  }
+
+  build_issue(){
+    let instance = new Issue()
+    instance.user_id = this.id
+    return instance
+  }
+
+  build_issuecomment(){
+    let instance = new IssueComment()
+    instance.user_id = this.id
+    return instance
+  }
+
+  build_followings(){
+    let instance = new Followings()
+    instance.user_id = this.id
+    return instance
+  }
+
+  build_followers(){
+    let instance = new Followers()
+    instance.user_id = this.id
+    return instance
   }
 
   /*****************/
@@ -33,9 +64,9 @@ export default class LoginUser extends BaseModel {
       username: `${params.userName}`
     }).then(result => {
       this.data = result
+      this.updateProperties(params, { userGithubId: result.data.id })
       
-      let update_params = { userGithubId: result.data.id }
-      this.updateProperties(params, update_params)
+      let update_params = { user_id: this.id }
       this.relationships.forEach(relationhip => {
         relationhip.updateProperties(params, update_params)
       })
@@ -69,13 +100,11 @@ export default class LoginUser extends BaseModel {
       this.id = this.createId(params)
     } else {
       Object.keys(update_params).forEach(key => {
-
         let value = update_params[key]
         switch(key){
           case 'userGithubId':
             this.userGithubId = value
             this.id = this.createId(params)
-            
             break
           default:
             this.id = this.createId(params)
@@ -89,9 +118,12 @@ export default class LoginUser extends BaseModel {
   /******************/
   /*** Fetch Func ***/
   /******************/
+  fetchData(){
+    this.storage.where({ id: this.id })
+    return this.storage.fetchData()
+  }
 
-  setProperties (id, data) {
-    this.id = id
+  setProperties (_, data) {
     this.data = data
     this.userName = data['data'].login
     this.followings_id = data.followings_id

@@ -61,12 +61,14 @@ export default {
     commit(types.FILTER_TO_OTHER_USER_COMMENT_DATA, { data: payload })
     dispatch('updateCurrentCommentData', payload, { root: true })
   },
-  getTiedLanguageTagCommentData({ state, dispatch }, language) {
+  getTiedLanguageTagCommentData({ state, commit, dispatch }, language) {
     let payload = createTiedLanguageTagCommentData(state, language)
+    commit(types.GET_TIED_LANGUAGE_TAG_COMMENT_DATA, { language: language })
     dispatch('updateCurrentCommentData', payload, { root: true })
   },
-  getAllFilteredCommentData({ state, dispatch }) {
+  getAllFilteredCommentData({ state, commit, dispatch }) {
     let payload = state.filteredCommentData
+    commit(types.GET_ALL_FILTERED_COMMENT_DATA)
     dispatch('updateCurrentCommentData', payload, { root: true})
   }
 }

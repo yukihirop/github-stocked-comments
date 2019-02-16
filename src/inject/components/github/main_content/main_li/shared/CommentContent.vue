@@ -1,5 +1,5 @@
 <template>
-  <div disabled="" sortable="">
+  <div>
     <table class="d-block">
       <tbody class="d-block">
         <tr class="d-block">

@@ -24,5 +24,11 @@ export default {
   [types.FILTER_TO_OTHER_USER_COMMENT_DATA] (state, payload, rootState) {
     state.otherUserCommentData = payload.data
     state.filteredCommentData = payload.data
+  },
+  [types.GET_TIED_LANGUAGE_TAG_COMMENT_DATA] (state, payload) {
+    state.selectedLanguage = payload.language
+  },
+  [types.GET_ALL_FILTERED_COMMENT_DATA] (state) {
+    state.selectedLanguage = ''
   }
 }

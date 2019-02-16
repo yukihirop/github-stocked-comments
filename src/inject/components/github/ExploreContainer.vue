@@ -38,9 +38,18 @@ export default {
     ...mapActions([
       'initialize'
     ]),
-    ...mapActions('sidebar', [
+    ...mapActions('sidebar_friend', [
       'fetchLoginUserData'
     ])
   }
 }
 </script>
+
+<style>
+.container-lg {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1012px !important;
+
+}
+</style>

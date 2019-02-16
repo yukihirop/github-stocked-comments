@@ -1,6 +1,8 @@
 'use strict'
 
 import StockedComment from '@/apis/github/StockedComment'
+import 'bootstrap'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 
 export default class IssueComment {
   constructor () {
@@ -16,10 +18,22 @@ export default class IssueComment {
 
   // private
   createStockedCommentsButton () {
-    this.$stockedCommentsButton = $('<button>', {
-      class: 'details-overlay details-reset position-relative d-inline-block',
-      text: 'Stocked Comments'
+    let $stockedCommentsButtonContent = $('<span>', {
+      class: "btn btn-sm btn-primary float-right timeline-comment-label",
+      text: "Stocked"
     })
+
+    this.$stockedCommentsButton = $(`
+    <div
+      class="timeline-comment-actions"
+      container="body"
+      title=""
+      data-placement="top"
+      data-content="Stocked Complete!"
+    />`)
+
+    this.$stockedCommentsButton.append($stockedCommentsButtonContent)
+
     return this
   }
 
@@ -35,7 +49,12 @@ export default class IssueComment {
       let api = new StockedComment(null, params)
       api.saveData((error, isSave) => {
         if (error) throw error
-        if (isSave) console.log('Save data success')
+        if (isSave) {
+          console.log('Save data success')
+          // https://stackoverflow.com/questions/37452086/what-is-the-best-way-to-load-bootstrap-with-an-es6-import
+          $this.popover('show');
+          new Promise((resolve) => { setTimeout(() => { $this.popover('hide') }, 1000) })
+        }
       })
     })
   }
@@ -50,6 +69,7 @@ class IssueCommentData {
   constructor (el) {
     this.userRepoName = $('a[data-pjax="#js-repo-pjax-container"]').attr('href')
     this.issueHashNum = $('span.gh-header-number').text()
+    this.issueTitle = $('span.js-issue-title').text()
     this.commentAreaHashId = el.parents('div.timeline-comment-group.js-minimizable-comment-group.js-targetable-comment').attr('id')
   }
 
@@ -65,8 +85,10 @@ class IssueCommentData {
       repoUserName: `${repoUserName}`,
       repoName: `${repoName}`,
       issueId: `${issueId}`,
+      issueTitle: `${this.issueTitle}`,
       type: `${type}`,
-      commentId: `${commentId}`
+      commentId: `${commentId}`,
+      stockedAt: new Date()
     }
   }
 }

@@ -8,8 +8,7 @@ var convertFromResourceToStorageKey = resourceName => {
     'repo_language': 'github-stocked-comments.github.repo_language',
     'user':          'github-stocked-comments.github.user',
     'followers':     'github-stocked-comments.github.followers',
-    'followings':    'github-stocked-comments.github.followings',
-    'liked':         'github-stocked-comments.extension.liked'
+    'followings':    'github-stocked-comments.github.followings'
   }
 
   if (data[resourceName] === undefined){
@@ -29,13 +28,24 @@ var convertFromResourceToStorageKey = resourceName => {
 * ・github-stocked-comments.github.issue
 * ・github-stocked-comments.github.issuecomment
 * ・github-stocked-comments.github.repo_language
-* ・github-stocked-comments.extension.liked
+* ・github-stocked-comments.github.user
+* ・github-stocked-comments.github.followers
+* ・github-stocked-comments.github.followings
+*
+* #TODO:
+*
+* plan to support the following:
+*
+* ・github-stocked-comments.extension.like
+* ・github-stocked-comments.extension.memo
+* ・github-stocked-comments.extension.tag
 */
 export default class Storage {
   constructor(resourceName){
     this.resourceName = resourceName
     this.storageKey = convertFromResourceToStorageKey(resourceName)
     this.storage = chrome.storage.local
+    this.whereParams = {}
   }
 
   onChangeData (callback) {
@@ -44,7 +54,36 @@ export default class Storage {
     })
   }
 
-  saveData(data){
+  where(params){
+    if (Object.keys(params).length !== 1) {
+      let error = new Error ('Do not support params size')
+    } else {
+      this.whereParams = params
+      return this
+    }
+  }
+
+  addData(data){
+    return this.saveData(data, (dataFromStorage, data) => {
+      Object.assign(dataFromStorage, data)
+      return dataFromStorage
+    })
+  }
+
+  deleteData(id){
+    return new Promise((resolve, reject) => {
+      this.fetchData().then((result) => {
+        delete result[this.resourceName][id]
+        this.saveData(result[this.resourceName], (dataFromStorage, data) => {
+          return data
+        }).then(result => {
+          resolve(result)
+        })
+      })
+    })
+  }
+
+  saveData(data, handler){
     return new Promise((resolve, reject) => {
       this.storage.get(this.storageKey, (result) => {
         if (chrome.runtime.lastError) {
@@ -59,7 +98,7 @@ export default class Storage {
       })
     }).then((dataFromStorage) => {
       return new Promise((resolve, reject) => {
-        Object.assign(dataFromStorage, data)
+        dataFromStorage = handler(dataFromStorage, data)
         this.storage.set({ [this.storageKey]: JSON.stringify(dataFromStorage) }, () => {
           if (chrome.runtime.lastError) {
             reject(chrome.runtime.lastError)
@@ -88,7 +127,7 @@ export default class Storage {
             resolve({ [this.resourceName]: {}})
           } else {
             let dataFromStorage = JSON.parse(result[this.storageKey])
-            let data = { [this.resourceName]: dataFromStorage }
+            let data = { [this.resourceName]: this.filterWhereParams(dataFromStorage) }
             resolve(data)
           }
         }
@@ -96,13 +135,18 @@ export default class Storage {
     })
   }
 
-  // filterLoginUserData(data){
-  //   let keys = Object.keys(data).filter(key => {
-  //     return data[key].user_id === this.user_id
-  //   })
-  //   return keys.reduce((base, key) => {
-  //     base[key] = data[key]
-  //     return base
-  //   },{})
-  // }
+  filterWhereParams(dataFromStorage){
+    let filterKeys = Object.keys(this.whereParams)
+    if (filterKeys.length === 0) return dataFromStorage
+    return Object.keys(dataFromStorage).reduce((base, unitDataKey) => {
+      let unitData = dataFromStorage[unitDataKey]
+      filterKeys.forEach((key) => {
+        if (unitData[key] === this.whereParams[key]) {
+          base[unitDataKey] = {}
+          Object.assign(base[unitDataKey], unitData)
+        }
+      })
+      return base
+    },{})
+  }
 }

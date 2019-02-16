@@ -2,8 +2,8 @@
   <span v-if="loading">
     <span v-if="!isDisplaySorryPanel()">
       <ul class="repo-list list-style-none js-navigation-container js-active-navigation-container">
-        <span v-for="(data, _) in currentCommentData" :key="data.id" >
-          <li class="py-4 public source "><main-li :comment-data="data" /></li>
+        <span v-for="(data, index) in currentCommentData" :key="uniqueKey(data.id, index)">
+          <li class="py-4 public source"><main-li :comment-data="data" /></li>
         </span>
       </ul>
       <paginate />
@@ -40,6 +40,9 @@ export default {
     this.eventHub.$on('text-highlight', this.setTextHighlight)
   },
   methods: {
+    uniqueKey(id, index){
+      return `${id}-${index}`
+    },
     isDisplaySorryPanel(){
       return this.currentCommentData.length === 0
     },

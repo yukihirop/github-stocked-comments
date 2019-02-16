@@ -7,6 +7,7 @@ export default class Header {
     this.$head = $('head')
     this.$headerUl = $('header nav ul')
     this.loginUserName = $('details-menu[role=menu]').find('a:contains("Signed in as")').children().text()
+    this.isAfterSignIn = !($("a[href='/join?source=header-home']").length > 0)
   }
 
   attachStockedCommentsLink () {
@@ -21,6 +22,15 @@ export default class Header {
       if (error) throw error
       if (isSave) console.log('Save data success')
     })
+  }
+
+  loadStyleSheet(){
+    let $head = this.$head
+
+    $head.append($("<link>", {
+      rel: "stylesheet",
+      href: chrome.extension.getURL("../assets/css/popover.css")
+    }))
   }
 
   // private

@@ -1,6 +1,5 @@
 'use strict'
 
-import Storage from '@/ext/Storage'
 import LoginUser from '@/models/github/LoginUser'
 
 export default class BaseApi {
@@ -12,11 +11,74 @@ export default class BaseApi {
     this.targets = this.model.allDepthRelationships()
   }
 
+  // private
+  mergedData(dataFromStorage){
+    let result = dataFromStorage.reduce((base, data) => {
+      Object.assign(base, data)
+      return base
+    },{})
+    return result
+  }
+
+  /*******************/
+  /*** Delete Func ***/
+  /*******************/
+  configureWhenDelete(){
+    let error = new Error('Implement inherit class')
+    throw error
+  }
+
+  deleteData(id, callback){
+    this.payload = []
+
+    let deleteDataSize = this.targets.length
+    // exclude model
+    this.targets.reduce((promise, target, index) => {
+      return promise.then(() => {
+        if (index === deleteDataSize - 1) {
+          this.createDeleteModelDataPromise(target, id, callback).then(() => {
+            setTimeout(_ => callback(null, this.payload))
+          })
+        } else {
+          this.createDeleteModelDataPromise(target, id, callback)
+        }
+      })
+    },Promise.resolve())
+  }
+
+  // private
+  createDeleteModelDataPromise(target, id, callback){
+    return new Promise((resolve, reject) => {
+      this.deleteModelData(target, id)
+        .then(dataFromStorage => {
+
+          Object.values(this.mergedData(dataFromStorage)).forEach(unitData => {
+            this.payload.push(unitData)
+          })
+
+          resolve()
+        })
+        .catch((error) => {
+          setTimeout(_ => callback(error))
+        })
+      })
+  }
+
+  // private
+  deleteModelData(target, id) {
+    let promises = target.linkedResources().reduce((base, model) => {
+      base.push(model.deleteData(id))
+      return base
+    },[])
+
+    return Promise.all(promises)
+  }
+
   /*****************/
   /*** Save Func ***/
   /*****************/
 
-  setModelWhenSave(){
+  configureWhenSave(){
     let error = new Error('Implement inherit class')
     throw error
   }
@@ -42,10 +104,9 @@ export default class BaseApi {
   saveModelData(callback){
     // exclude model
     this.targets.forEach(target => {
-      let storage = new Storage(target.name)
       let data = target.buildSaveData(this.params)
 
-      storage.saveData(data)
+      target.addData(data)
         .then(dataFromStorage => {
           console.log(dataFromStorage)
           setTimeout(_ => callback(null, true))
@@ -60,7 +121,7 @@ export default class BaseApi {
   /*** Fetch Func ***/
   /******************/
 
-  setModelWhenFetch(){
+  configureWhenFetch(){
     let error = new Error('Implement inherit class')
     throw error
   }
@@ -68,23 +129,23 @@ export default class BaseApi {
   fetchData (callback) {
     this.payload = []
 
-    let fetchDataSize = this.model.relationships.length
+    let fetchDataSize = this.targets.length
     // exclude model
     this.targets.reduce((promise, target, index) => {
       return promise.then(() => {
         if (index === fetchDataSize - 1) {
-          this.createFetchResoruceDataPromise(target, callback).then(() => {
+          this.createFetchModelDataPromise(target, callback).then(() => {
             setTimeout(_ => callback(null, this.payload))
           })
         } else {
-          this.createFetchResoruceDataPromise(target, callback)
+          this.createFetchModelDataPromise(target, callback)
         }
       })
     },Promise.resolve())
   }
 
   // private
-  createFetchResoruceDataPromise(target, callback){
+  createFetchModelDataPromise(target, callback){
     return new Promise((resolve, reject) => {
       this.fetchModelData(target)
         .then(dataFromStorage => {
@@ -112,9 +173,6 @@ export default class BaseApi {
       })
       return unitData
     })
-    // .filter(unitData => {
-    //   return this.isCurrentModelData(unitData)
-    // })
   }
 
   // private
@@ -148,36 +206,12 @@ export default class BaseApi {
   }
 
   // private
-  mergedData(dataFromStorage){
-    let result = dataFromStorage.reduce((base, data) => {
-      Object.assign(base, data)
-      return base
-    },{})
-    return result
-  }
-
-  // private
   fetchModelData(target) {
-    let promises = this.fetchModelsName(target).reduce((base, modelName) => {
-      let storage = new Storage(modelName)
-      base.push(storage.fetchData())
+    let promises = target.linkedResources().reduce((base, model) => {
+      base.push(model.fetchData())
       return base
     },[])
 
     return Promise.all(promises)
-  }
-
-  // private
-  fetchModelsName(target){
-    let result = []
-    result.push(target.name)
-    target.relationships.forEach(relationship => { result.push(relationship.name) })
-    return result
-  }
-
-  // private
-  isCurrentModelData(data) {
-    let error = new Error('Implement inherit class')
-    throw error
   }
 }

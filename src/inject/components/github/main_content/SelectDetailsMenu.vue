@@ -9,7 +9,8 @@
         <span class="select-menu-title">Sort options</span>
       </div>
       <div class="select-menu-list">
-        <sort-option :selected-class="isSortRecentlyComments ? 'selected' : ''" :option-name="'Recently comments'" :sort-func="sortRecentlyComments" />
+        <sort-option :selected-class="isSortRecentlyStockedComments ? 'selected' : ''" :option-name="'Recently Stocked comments'" :sort-func="sortRecentlyStockedComments" />
+        <sort-option :selected-class="isSortRecentlyPostedComments ? 'selected' : ''" :option-name="'Recently Posted comments'" :sort-func="sortRecentlyPostedComments" />
         <sort-option :selected-class="isSortLongestBodyComments ? 'selected' : ''" :option-name="'Longest comments'" :sort-func="sortLongestBodyComments" />
       </div>
     </div>
@@ -27,25 +28,36 @@ export default {
   },
   data(){
     return {
-      isSortRecentlyComments: true,
+      isSortRecentlyStockedComments: true,
+      isSortRecentlyPostedComments: false,
       isSortLongestBodyComments: false,
-      selectOptionName: "Recently comments"
+      selectOptionName: "Recently Stocked comments"
     }
   },
   methods: {
     ...mapActions({
-      _sortRecentlyComments: 'sortRecentlyComments',
+      _sortRecentlyStockedComments: 'sortRecentlyStockedComments',
+      _sortRecentlyPostedComments: 'sortRecentlyPostedComments',
       _sortLongestBodyComments: 'sortLongestBodyComments'
     }),
-    sortRecentlyComments(){
-      this._sortRecentlyComments()
-      this.isSortRecentlyComments = true
+    sortRecentlyStockedComments(){
+      this._sortRecentlyStockedComments()
+      this.isSortRecentlyStockedComments = true
+      this.isSortRecentlyPostedComments = false
       this.isSortLongestBodyComments = false
-      this.selectOptionName = "Recently comments"
+      this.selectOptionName = "Recently Stocked comments"
+    },
+    sortRecentlyPostedComments(){
+      this._sortRecentlyPostedComments()
+      this.isSortRecentlyStockedComments = false
+      this.isSortRecentlyPostedComments = true
+      this.isSortLongestBodyComments = false
+      this.selectOptionName = "Recently Posted comments"
     },
     sortLongestBodyComments(){
       this._sortLongestBodyComments()
-      this.isSortRecentlyComments = false
+      this.isSortRecentlyStockedComments = false
+      this.isSortRecentlyPostedComments = false
       this.isSortLongestBodyComments = true
       this.selectOptionName = "Longest comments"
     },

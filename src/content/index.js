@@ -7,9 +7,12 @@ $(() => {
     let header = new Header()
     let comment = new IssueComment()
 
-    header.attachStockedCommentsLink()
-    header.saveLoginUserName()
-    comment.attachStockedCommentsButton()
+    if (header.isAfterSignIn) {
+      header.loadStyleSheet()
+      header.attachStockedCommentsLink()
+      header.saveLoginUserName()
+      comment.attachStockedCommentsButton()
+    }
 
     resolve()
   })

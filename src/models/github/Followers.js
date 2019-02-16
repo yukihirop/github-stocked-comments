@@ -1,6 +1,7 @@
 'use strict'
 
 import BaseModel from './BaseModel'
+import Storage from '@/ext/Storage'
 
 const FIXED_PAGE = 1
 
@@ -10,15 +11,13 @@ export default class Followers extends BaseModel {
     this.userGithubId = 0
     // override
     this.type = 'followers'
-  }
-
-  get relationships(){
-    return []
+    this.storage = new Storage(this.name)
   }
 
   fields(){
     return {
       id: this.id,
+      user_id: this.user_id,
       data: this.data['data']
     }
   }
@@ -28,7 +27,7 @@ export default class Followers extends BaseModel {
   /*****************/
 
   createId(params){
-    return `${params.userName}-${this.userGithubId}-${this.type}`
+    return `${this.user_id}-${this.type}`
   }
 
   dataFromOctokit(params){
@@ -52,8 +51,8 @@ export default class Followers extends BaseModel {
       Object.keys(update_params).forEach(key => {
         let value = update_params[key]
         switch(key){
-          case 'userGithubId':
-            this.userGithubId = value
+          case 'user_id':
+            this.user_id = value
             this.id = this.createId(params)
             
             break
@@ -66,17 +65,13 @@ export default class Followers extends BaseModel {
     }
   }
 
-  // private
-  appendForeignKeys(){
-    if (this.relationships === undefined) return
-    this.relationships.forEach(model => {
-      this.data[model.foreignKey] = model.id
-    })
-  }
-
   /******************/
   /*** Fetch Func ***/
   /******************/
+  fetchData(){
+    this.storage.where({ user_id: this.user_id })
+    return this.storage.fetchData()
+  }
 
   setProperties(id, data){
     this.id = id
