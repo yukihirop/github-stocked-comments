@@ -1,14 +1,12 @@
 const path = require('path')
 const webpack = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-const ChromeReloadPlugin = require('wcer')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { cssLoaders, htmlPage } = require('./tools')
 require('dotenv').config()
 
 const rootDir = path.resolve(__dirname, '..')
 const resolve = (dir) => path.join(rootDir, 'src', dir)
-const PACKAGE_VERSION = require('../package.json').version
 
 module.exports = {
   entry: {
@@ -91,8 +89,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': {
         'CLIENT_ID': JSON.stringify(process.env.CLIENT_ID),
-        'CLIENT_SECRET': JSON.stringify(process.env.CLIENT_SECRET),
-        'PACKAGE_VERSION': JSON.stringify(PACKAGE_VERSION)
+        'CLIENT_SECRET': JSON.stringify(process.env.CLIENT_SECRET)
       }
     }),
     new webpack.ProvidePlugin({
@@ -120,10 +117,6 @@ module.exports = {
     htmlPage('background', 'background', ['vendor', 'background']),
     // End customize
     new CopyWebpackPlugin([{ from: path.join(rootDir, 'static') }]),
-    new ChromeReloadPlugin({
-      port: 9090,
-      manifest: path.join(rootDir, 'src', 'manifest.js')
-    }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks: function (module) {
