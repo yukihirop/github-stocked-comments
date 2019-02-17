@@ -1,3 +1,7 @@
+import Header from '@/content/github/components/Header'
+import IssueComment from '@/content/github/components/IssueComment'
+import githubInjection from 'github-injection'
+
 export var addOnLoadListener = () => {
   window.addEventListener('load', (event) => {
     if (window.location.hash === '#Stocked_Comments') {
@@ -6,6 +10,18 @@ export var addOnLoadListener = () => {
   })
 }
 
+export var addGitHubInjection = () => {
+  githubInjection(() => {
+    if(new RegExp("issues").test(window.location.pathname)) {
+      let header = new Header()
+      let comment = new IssueComment
+      header.loadStyleSheet()
+      comment.attachStockedCommentsButton()
+    }
+  })
+}
+
+// As addBrowserReloadListener works properly
 export var addStockedCommentsClickListener = () => {
   $('a[href="#Stocked_Comments"]').on('click', (event) => {
   })
