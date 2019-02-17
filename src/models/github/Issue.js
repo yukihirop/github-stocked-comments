@@ -3,7 +3,6 @@
 import BaseModel from './BaseModel'
 import RepoLanguage from './RepoLanguage'
 import Storage from '@/ext/Storage'
-import memory from '@/ext/Memory'
 
 export default class Issue extends BaseModel {
   constructor () {

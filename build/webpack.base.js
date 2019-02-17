@@ -7,11 +7,8 @@ const { cssLoaders, htmlPage } = require('./tools')
 require('dotenv').config()
 
 const rootDir = path.resolve(__dirname, '..')
-
-let resolve = (dir) => path.join(rootDir, 'src', dir)
-
-console.log(path.join(__dirname, '../src', 'assets', 'css', '*'))
-console.log(path.join(__dirname, '../dist'))
+const resolve = (dir) => path.join(rootDir, 'src', dir)
+const PACKAGE_VERSION = require('../package.json').version
 
 module.exports = {
   entry: {
@@ -72,7 +69,7 @@ module.exports = {
       loader: 'url-loader',
       options: {
         limit: 10000,
-        name: 'img/[name].[hash:7].[ext]'
+        name: 'assets/img/[name].[ext]'
       }
     }, {
       test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
@@ -94,7 +91,8 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': {
         'CLIENT_ID': JSON.stringify(process.env.CLIENT_ID),
-        'CLIENT_SECRET': JSON.stringify(process.env.CLIENT_SECRET)
+        'CLIENT_SECRET': JSON.stringify(process.env.CLIENT_SECRET),
+        'PACKAGE_VERSION': JSON.stringify(PACKAGE_VERSION)
       }
     }),
     new webpack.ProvidePlugin({
@@ -105,6 +103,11 @@ module.exports = {
     new CopyWebpackPlugin(
       [{
         from: path.join(__dirname, '../src', 'assets', 'css', '*'),
+        to: path.join(__dirname, '../dist'),
+        context: 'src'
+      },
+      {
+        from: path.join(__dirname, '../src', 'assets', 'webfonts', '*'),
         to: path.join(__dirname, '../dist'),
         context: 'src'
       }]
