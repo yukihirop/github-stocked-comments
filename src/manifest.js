@@ -25,7 +25,7 @@ module.exports = {
    * @see {@link https://developer.chrome.com/extensions/declare_permissions}
    */
   permissions: [
-    '*://*/*',
+    'https://github.com/*',
     'activeTab',
     'tabs',
     'storage'
