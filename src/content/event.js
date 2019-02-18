@@ -13,28 +13,6 @@ export var addGitHubInjection = () => {
   })
 }
 
-// As addBrowserReloadListener works properly
-export var addStockedCommentsClickListener = () => {
-  $('a[href="#Stocked_Comments"]').on('click', (event) => {
-  })
-}
-
-// export var addHashChangeListener = () => {
-//   window.onhashchange = (event) => {
-//     var urlHash = window.location.hash
-//     if (urlHash === '#Stocked_Comments') {
-//       var mainContent = '<div id="github-stocked-comments"></div>'
-
-//       $('.application-main').empty()
-//       $('.application-main').append(mainContent)
-
-//       chrome.runtime.sendMessage({message: 'executeInjectScript'}, function (response) {
-//         console.log(response.farewell)
-//       })
-//     }
-//   }
-// }
-
 export var addBrowserBackHandleListener = () => {
   if("onhashchange" in window){
     $(window).on('hashchange', function(event){
@@ -51,10 +29,17 @@ export var addHashChangeListener = () => {
   chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     let isLoadStockedComments = request.isLoadStockedComments
     if (isLoadStockedComments){
-      var mainContent = '<div id="github-stocked-comments"></div>'
-
-      $('.application-main').empty()
-      $('.application-main').append(mainContent)
+      let mainContent = '<div id="github-stocked-comments"></div>'
+      let footerContent = '<div id="github-stocked-comments-footer"></div>'
+      let firstDiv = $('body').children()[0]
+      let secondDiv = $('body').children()[1]
+      let thirdDiv = $('body').children()[2]
+      $('body').empty()
+      $('body').append(firstDiv)
+      $('body').append(secondDiv)
+      $('body').append(thirdDiv)
+      $('body').append('<div role="main" class="application-main">').append(mainContent)
+      $('body').append('<div role="contentinfo" class="application-footer">').append(footerContent)
 
       sendResponse({farewell: "call executeInjectScript (background)"})
       chrome.runtime.sendMessage({message: 'executeInjectScript'}, function (response) {
@@ -73,6 +58,12 @@ export var addBrowserReloadListener = () => {
       }
     }
   }, false)
+}
+
+// As addBrowserReloadListener works properly
+export var addStockedCommentsClickListener = () => {
+  $('a[href="#Stocked_Comments"]').on('click', (event) => {
+  })
 }
 
 export var addOnLoadListener = () => {
