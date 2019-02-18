@@ -17,6 +17,7 @@ $(() => {
     event.addGitHubInjection()
     event.addHashChangeListener()
     event.addBrowserReloadListener()
+    event.addBrowserBackHandleListener()
     event.addStockedCommentsClickListener()
     event.addOnLoadListener()
   })
