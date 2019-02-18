@@ -13,7 +13,7 @@ export default class LoginUser extends BaseModel {
     super()
     // override
     this.type = 'user'
-    this.id = memory.get('user_id')
+    this.id = memory.get('login_user_id')
     this.storage = new Storage(this.name)
   }
 

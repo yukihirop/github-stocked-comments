@@ -1,17 +1,12 @@
 const path = require('path')
 const webpack = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-const ChromeReloadPlugin = require('wcer')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { cssLoaders, htmlPage } = require('./tools')
 require('dotenv').config()
 
 const rootDir = path.resolve(__dirname, '..')
-
-let resolve = (dir) => path.join(rootDir, 'src', dir)
-
-console.log(path.join(__dirname, '../src', 'assets', 'css', '*'))
-console.log(path.join(__dirname, '../dist'))
+const resolve = (dir) => path.join(rootDir, 'src', dir)
 
 module.exports = {
   entry: {
@@ -72,7 +67,7 @@ module.exports = {
       loader: 'url-loader',
       options: {
         limit: 10000,
-        name: 'img/[name].[hash:7].[ext]'
+        name: 'assets/img/[name].[ext]'
       }
     }, {
       test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
@@ -107,6 +102,11 @@ module.exports = {
         from: path.join(__dirname, '../src', 'assets', 'css', '*'),
         to: path.join(__dirname, '../dist'),
         context: 'src'
+      },
+      {
+        from: path.join(__dirname, '../src', 'assets', 'webfonts', '*'),
+        to: path.join(__dirname, '../dist'),
+        context: 'src'
       }]
     ),
     new CleanWebpackPlugin(['*'], { root: path.join(rootDir, 'dist') }),
@@ -117,10 +117,6 @@ module.exports = {
     htmlPage('background', 'background', ['vendor', 'background']),
     // End customize
     new CopyWebpackPlugin([{ from: path.join(rootDir, 'static') }]),
-    new ChromeReloadPlugin({
-      port: 9090,
-      manifest: path.join(rootDir, 'src', 'manifest.js')
-    }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks: function (module) {

@@ -19,7 +19,8 @@ export default class LoginUserInfo extends BaseApi {
     return new Promise(resolve => {
       Promise.all(this.model.dataFromOctokitWithRelations(this.params)).then(() => {
         if (this.model instanceof LoginUser) {
-          memory.set('user_id', this.model.id)
+          let login_user_id = this.model.id
+          memory.set('login_user_id', login_user_id)
         }
         resolve()
       })

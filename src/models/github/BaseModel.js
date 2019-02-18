@@ -137,7 +137,7 @@ export default class BaseModel {
     this.relationships.forEach(model => {
       this.data[model.foreignKey] = model.id
     })
-    this.data['user_id'] = memory.get('user_id')
+    this.data['user_id'] = memory.get('login_user_id')
   }
 
   /******************/

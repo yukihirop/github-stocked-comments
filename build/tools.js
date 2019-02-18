@@ -56,3 +56,19 @@ exports.styleLoaders = function (options) {
   }
   return output
 }
+
+
+var fs = require('fs')
+var Module = require('module')
+
+exports.requirePath = function (filename) {
+  if(!fs.existsSync(filename)) {
+    throw new TypeError('Not found manifest file!')
+  }
+  let code = fs.readFileSync(filename, 'utf8')
+  let mod = new Module(filename)
+  mod.filename = filename
+  mod._compile(code, filename)
+  mod.paths = Module._nodeModulePaths(filename)
+  return mod.exports
+}

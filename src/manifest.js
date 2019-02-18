@@ -7,8 +7,9 @@ module.exports = {
   author: 'yukihirop <te108186@gmail.com>',
   version: '1.0.0',
   icons: {
-    '16': 'icons/16.png',
-    '128': 'icons/128.png'
+    '16': 'icons/gsc_icon16.png',
+    '48': 'icons/gsc_icon48.png',
+    '128': 'icons/gsc_icon128.png'
   },
   background: {
     scripts: [
@@ -17,11 +18,14 @@ module.exports = {
     ],
     persistent: false
   },
+  browser_action: {
+    default_popup: 'pages/popup.html'
+  },
   /**
    * @see {@link https://developer.chrome.com/extensions/declare_permissions}
    */
   permissions: [
-    '*://*/*',
+    'https://github.com/*',
     'activeTab',
     'tabs',
     'storage'
@@ -37,10 +41,10 @@ module.exports = {
     ]
   }],
   manifest_version: 2,
-  content_security_policy: `script-src 'self' ${(process.env.NODE_ENV === 'development') ? '\'unsafe-eval\'' : ''}; object-src 'self'"`,
+  content_security_policy: "script-src 'self' 'unsafe-eval'; object-src 'self'",
   web_accessible_resources: [
     'js/content.js',
     'js/inject.js',
-    'assets/css/*.css'
+    '*.css'
   ]
 }
