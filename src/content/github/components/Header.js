@@ -7,7 +7,7 @@ export default class Header {
     this.$head = $('head')
     this.$headerUl = $('header nav ul')
     this.loginUserName = $('details-menu[role=menu]').find('a:contains("Signed in as")').children().text()
-    this.isAfterSignIn = !($("a[href='/join?source=header-home']").length > 0)
+    this.isAfterSignIn = this.checkAfterSignIn()
   }
 
   attachStockedCommentsLink () {
@@ -31,6 +31,11 @@ export default class Header {
       rel: "stylesheet",
       href: chrome.extension.getURL("../assets/css/popover.css")
     }))
+  }
+
+  // private
+  checkAfterSignIn(){
+    return !($("a[href='/join?source=header-home']").length > 0 || $("a[href='/join?source=header']").length > 0)
   }
 
   // private
