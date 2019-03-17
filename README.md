@@ -52,7 +52,7 @@ $ yarn build # for production
 Register `Oauth App` for Authorization from [here](https://github.com/settings/developers)
 
 ## License
-The gem is available as open source under the terms of the MIT License.
+The chrome extension is available as open source under the terms of the MIT License.
 
 ## Declaration
 The author is not responsible for any damage caused by using this chrome extension.
