@@ -22,7 +22,7 @@ like this:
 
 ## Install
 
-Install the extension from [Chrome Web Store](https://chrome.google.com/webstore/detail/github-stocked-comments/cnmddkochdamgioikdfkkkojmdfoianf?utm_source=chrome-ntp-icon).
+Install the extension from [Chrome Web Store](https://chrome.google.com/webstore/detail/github-stocked-comments/hgnmlljbpcdmllcmelmaadkkcknloclf?hl=ja&gl=JP).
 
 ## Usage
 
@@ -55,7 +55,7 @@ Register `Oauth App` for Authorization from [here](https://github.com/settings/d
 The gem is available as open source under the terms of the MIT License.
 
 ## Declaration
-The author is not responsible for any damage caused by using this gem.
+The author is not responsible for any damage caused by using this chrome extension.
 Please use at your own risk.
 
 ## Contributing
