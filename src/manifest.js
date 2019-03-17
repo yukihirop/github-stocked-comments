@@ -2,9 +2,9 @@
  * @see {@link https://developer.chrome.com/extensions/manifest}
  */
 module.exports = {
-  name: 'github-stocked-comments',
-  description: 'A Chrome extension project with Vue.js',
-  author: 'yukihirop <te108186@gmail.com>',
+  name: 'GitHub Stocked Comments',
+  description: 'This app to be able to stock issue comments in GitHub.',
+  author: 'yukihirop',
   version: '1.0.0',
   icons: {
     '16': 'icons/gsc_icon16.png',
