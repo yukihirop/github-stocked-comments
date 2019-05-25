@@ -5,7 +5,7 @@ module.exports = {
   name: 'GitHub Stocked Comments',
   description: 'This app to be able to stock issue comments in GitHub.',
   author: 'yukihirop',
-  version: '1.0.0',
+  version: '1.0.1',
   icons: {
     '16': 'icons/gsc_icon16.png',
     '48': 'icons/gsc_icon48.png',
