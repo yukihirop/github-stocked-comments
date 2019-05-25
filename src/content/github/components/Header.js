@@ -5,7 +5,7 @@ import LoginUserInfo from '@/apis/github/LoginUserInfo'
 export default class Header {
   constructor () {
     this.$head = $('head')
-    this.$headerUl = $('header nav ul')
+    this.$headerUl = $('header nav')
     this.loginUserName = $('details-menu[role=menu]').find('a:contains("Signed in as")').children().text()
     this.isAfterSignIn = this.checkAfterSignIn()
   }
@@ -40,6 +40,6 @@ export default class Header {
 
   // private
   stockedCommentsLinkLi () {
-    return '<li><a class="js-selected-navigation-item HeaderNavlink px-lg-2 py-2 py-lg-0" href="#Stocked_Comments">&thinsp;Stocked Comments</a></li>'
+    return '<a class="js-selected-navigation-item Header-link mr-3" href="#Stocked_Comments">&thinsp;Stocked Comments</a>'
   }
 }
